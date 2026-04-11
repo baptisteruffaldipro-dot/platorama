@@ -198,6 +198,7 @@ const Admin = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState<"menu" | "stats" | "settings">("menu");
+  const [compressing, setCompressing] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
