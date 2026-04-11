@@ -111,7 +111,11 @@ const Admin = () => {
 
     setSaving(false);
     if (error) {
-      toast.error("Erreur : " + error.message);
+      if (error.message.includes("dishes_sort_order_unique")) {
+        toast.error("Ce numéro d'ordre est déjà utilisé par un autre plat");
+      } else {
+        toast.error("Erreur : " + error.message);
+      }
     } else {
       toast.success(isNew ? "Plat ajouté" : "Plat modifié");
       setDialogOpen(false);
