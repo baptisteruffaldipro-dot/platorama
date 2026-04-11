@@ -24,6 +24,12 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
   const prev = () => onSelect(activeIndex > 0 ? activeIndex - 1 : dishes.length - 1);
   const next = () => onSelect(activeIndex < dishes.length - 1 ? activeIndex + 1 : 0);
 
+  // Only load 3D models for active item and its immediate neighbors
+  const shouldLoad3D = (index: number) => {
+    const diff = Math.abs(index - activeIndex);
+    return diff <= 1 || diff === dishes.length - 1; // neighbors + wrap-around
+  };
+
   return (
     <div className="flex items-center gap-1 px-2">
       <button onClick={prev} className="shrink-0 p-2 text-muted-foreground active:text-foreground transition-colors" aria-label="Previous dish">
@@ -44,25 +50,32 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
                   : "w-[56px] h-[56px] opacity-60"
               }`}
             >
-              {/* @ts-ignore */}
-              <model-viewer
-                src={dish.model_android}
-                alt={dish.name}
-                camera-controls={false}
-                auto-rotate
-                auto-rotate-delay="0"
-                rotation-per-second="12deg"
-                interaction-prompt="none"
-                shadow-intensity="0"
-                exposure="1.2"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  backgroundColor: "transparent",
-                  "--poster-color": "transparent",
-                  pointerEvents: "none",
-                } as React.CSSProperties}
-              />
+              {shouldLoad3D(i) ? (
+                /* @ts-ignore */
+                <model-viewer
+                  src={dish.model_android}
+                  alt={dish.name}
+                  camera-controls={false}
+                  auto-rotate
+                  auto-rotate-delay="0"
+                  rotation-per-second="12deg"
+                  interaction-prompt="none"
+                  shadow-intensity="0"
+                  exposure="1.2"
+                  loading="lazy"
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "transparent",
+                    "--poster-color": "transparent",
+                    pointerEvents: "none",
+                  } as React.CSSProperties}
+                />
+              ) : (
+                <div className="w-full h-full bg-muted/30 flex items-center justify-center">
+                  <span className="text-[8px] text-muted-foreground">{dish.name.charAt(0)}</span>
+                </div>
+              )}
             </div>
             <span
               className={`text-center leading-tight transition-all duration-300 max-w-[80px] ${
