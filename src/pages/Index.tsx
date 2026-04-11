@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDishes } from "@/hooks/useDishes";
 import { supabase } from "@/integrations/supabase/client";
 import { useFavorites } from "@/hooks/useFavorites";
@@ -9,11 +9,31 @@ import SplashScreen from "@/components/SplashScreen";
 import { isIOS } from "@/lib/platform";
 import { Rotate3d } from "lucide-react";
 
+/** Prefetch all 3D model files so they're cached when user taps AR */
+function usePrefetchModels(dishes: ReturnType<typeof useDishes>["data"]) {
+  useEffect(() => {
+    if (!dishes?.length) return;
+    const ios = isIOS();
+    dishes.forEach((d) => {
+      const url = ios ? d.model_ios : d.model_android;
+      if (url) {
+        const link = document.createElement("link");
+        link.rel = "prefetch";
+        link.href = url;
+        link.as = "fetch";
+        link.crossOrigin = "anonymous";
+        document.head.appendChild(link);
+      }
+    });
+  }, [dishes]);
+}
+
 const Index = () => {
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
   const { data: dishes, isLoading } = useDishes();
   const { isFavorite, toggle } = useFavorites();
+  usePrefetchModels(dishes);
 
   if (isLoading || !dishes?.length) {
     return (
