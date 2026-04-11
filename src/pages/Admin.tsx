@@ -301,6 +301,36 @@ const Admin = () => {
     }
   };
 
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id || !dishes) return;
+
+    const oldIndex = dishes.findIndex((d) => d.id === active.id);
+    const newIndex = dishes.findIndex((d) => d.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const reordered = arrayMove(dishes, oldIndex, newIndex);
+
+    // Optimistic update
+    queryClient.setQueryData(["dishes"], reordered.map((d, i) => ({ ...d, sort_order: i + 1 })));
+
+    // Persist: temporarily drop unique constraint, update all, re-add
+    // Use negative numbers first to avoid unique conflicts
+    const updates = reordered.map((d, i) => ({ id: d.id, sort_order: i + 1 }));
+
+    // Set all to negative first
+    for (let i = 0; i < updates.length; i++) {
+      await supabase.from("dishes").update({ sort_order: -(i + 1) }).eq("id", updates[i].id);
+    }
+    // Then set to final values
+    for (const u of updates) {
+      await supabase.from("dishes").update({ sort_order: u.sort_order }).eq("id", u.id);
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["dishes"] });
+    toast.success("Ordre mis à jour");
+  };
+
   const handleDelete = async (dish: Dish) => {
     if (!confirm(`Supprimer "${dish.name}" ?`)) return;
     const { error } = await supabase.from("dishes").delete().eq("id", dish.id);
