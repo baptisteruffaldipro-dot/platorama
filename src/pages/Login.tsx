@@ -16,12 +16,20 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    const { error } = await signIn(email, password);
-    setLoading(false);
-    if (error) {
-      toast.error("Identifiants incorrects");
-    } else {
+
+    try {
+      const { error } = await signIn(email, password);
+
+      if (error) {
+        toast.error("Identifiants incorrects");
+        return;
+      }
+
       navigate("/admin");
+    } catch {
+      toast.error("Erreur pendant la connexion");
+    } finally {
+      setLoading(false);
     }
   };
 
