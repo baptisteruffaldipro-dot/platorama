@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "dish-favorites";
 
@@ -15,10 +16,20 @@ export const useFavorites = () => {
 
   const toggle = useCallback((dishId: string) => {
     setFavorites((prev) => {
-      const next = prev.includes(dishId)
+      const wasFavorite = prev.includes(dishId);
+      const next = wasFavorite
         ? prev.filter((id) => id !== dishId)
         : [...prev, dishId];
       localStorage.setItem(STORAGE_KEY, JSON.stringify(next));
+
+      // Track "favorite" event only when adding
+      if (!wasFavorite) {
+        supabase
+          .from("dish_events")
+          .insert({ dish_id: dishId, event_type: "favorite" })
+          .then();
+      }
+
       return next;
     });
   }, []);

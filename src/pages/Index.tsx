@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDishes } from "@/hooks/useDishes";
+import { supabase } from "@/integrations/supabase/client";
 import { useFavorites } from "@/hooks/useFavorites";
 import DishCarousel from "@/components/DishCarousel";
 import DishInfo from "@/components/DishInfo";
@@ -26,6 +27,12 @@ const Index = () => {
   const dish = dishes[safeIndex];
 
   const handleLaunchAR = () => {
+    // Track AR click
+    supabase
+      .from("dish_events")
+      .insert({ dish_id: dish.id, event_type: "ar_click" })
+      .then();
+
     if (isIOS() && dish.model_ios) {
       const a = document.createElement("a");
       a.rel = "ar";
