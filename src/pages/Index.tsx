@@ -27,6 +27,12 @@ const Index = () => {
   const dish = dishes[safeIndex];
 
   const handleLaunchAR = () => {
+    // Track AR click
+    supabase
+      .from("dish_events")
+      .insert({ dish_id: dish.id, event_type: "ar_click" })
+      .then();
+
     if (isIOS() && dish.model_ios) {
       const a = document.createElement("a");
       a.rel = "ar";
