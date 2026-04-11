@@ -6,7 +6,7 @@ interface DishViewerProps {
 
 const DishViewer = ({ dish }: DishViewerProps) => {
   return (
-    <div className="flex items-center justify-center flex-1 w-full">
+    <div className="flex items-center justify-center flex-1 w-full" style={{ background: "transparent" }}>
       {/* @ts-ignore */}
       <model-viewer
         key={dish.id}
