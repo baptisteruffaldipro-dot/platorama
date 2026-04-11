@@ -157,6 +157,19 @@ export default function SettingsPanel() {
         </button>
       </div>
 
+      {/* Restaurant name */}
+      <div>
+        <h3 className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">Restaurant</h3>
+        <div className="space-y-1">
+          <Label className="text-xs">Nom du restaurant</Label>
+          <Input
+            value={form.restaurant_name}
+            onChange={(e) => setForm((f) => ({ ...f, restaurant_name: e.target.value }))}
+            placeholder="La Maison"
+          />
+        </div>
+      </div>
+
       {/* Colors */}
       <div>
         <h3 className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">Couleurs</h3>
