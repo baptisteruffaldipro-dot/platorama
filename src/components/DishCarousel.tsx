@@ -47,7 +47,7 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
               <img
                 src={dish.thumbnail}
                 alt={dish.name}
-                className="w-full h-full object-cover"
+                className="w-[85%] h-[85%] object-contain"
                 loading="lazy"
               />
             </div>
