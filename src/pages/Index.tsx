@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDishes } from "@/hooks/useDishes";
+import { useFavorites } from "@/hooks/useFavorites";
 import DishCarousel from "@/components/DishCarousel";
 import DishInfo from "@/components/DishInfo";
 import DishViewer from "@/components/DishViewer";
