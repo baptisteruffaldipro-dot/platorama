@@ -97,6 +97,7 @@ export type Database = {
           is_draft: boolean
           logo_url: string
           restaurant_name: string
+          subtitle: string
           text_color: string
           updated_at: string
         }
@@ -111,6 +112,7 @@ export type Database = {
           is_draft?: boolean
           logo_url?: string
           restaurant_name?: string
+          subtitle?: string
           text_color?: string
           updated_at?: string
         }
@@ -125,6 +127,7 @@ export type Database = {
           is_draft?: boolean
           logo_url?: string
           restaurant_name?: string
+          subtitle?: string
           text_color?: string
           updated_at?: string
         }

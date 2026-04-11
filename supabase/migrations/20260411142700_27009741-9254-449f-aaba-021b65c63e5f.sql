@@ -1,0 +1,1 @@
+ALTER TABLE public.site_settings ADD COLUMN subtitle text NOT NULL DEFAULT 'Menu Virtuel';
