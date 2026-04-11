@@ -533,6 +533,19 @@ const Admin = () => {
                   <Upload className="w-5 h-5 text-muted-foreground hover:text-foreground" />
                   <input type="file" accept=".glb" className="hidden" onChange={(e) => handleFileUpload(e, "model_android")} />
                 </label>
+                {form.model_android && !isNew && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => handleCompress("model_android")}
+                    disabled={compressing === "model_android"}
+                    title="Compresser avec Draco"
+                  >
+                    <Shrink className="w-4 h-4 mr-1" />
+                    {compressing === "model_android" ? "..." : "Draco"}
+                  </Button>
+                )}
               </div>
             </div>
 
