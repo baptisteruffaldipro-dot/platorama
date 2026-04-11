@@ -10,6 +10,7 @@ export interface SiteSettings {
   button_bg_color: string;
   button_text_color: string;
   logo_url: string;
+  restaurant_name: string;
   is_draft: boolean;
 }
 
@@ -21,6 +22,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   button_bg_color: "#b8943e",
   button_text_color: "#ece5d5",
   logo_url: "",
+  restaurant_name: "La Maison",
   is_draft: false,
 };
 

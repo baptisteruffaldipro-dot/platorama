@@ -1,0 +1,1 @@
+ALTER TABLE public.site_settings ADD COLUMN restaurant_name text NOT NULL DEFAULT 'La Maison';

@@ -72,6 +72,7 @@ export default function SettingsPanel() {
     button_bg_color: initial.button_bg_color,
     button_text_color: initial.button_text_color,
     logo_url: initial.logo_url,
+    restaurant_name: initial.restaurant_name,
   });
 
   // Sync when draft/published loads
@@ -85,6 +86,7 @@ export default function SettingsPanel() {
       button_bg_color: src.button_bg_color,
       button_text_color: src.button_text_color,
       logo_url: src.logo_url,
+      restaurant_name: src.restaurant_name,
     });
   }, [draft, published]);
 
@@ -139,7 +141,7 @@ export default function SettingsPanel() {
           <img src={form.logo_url} alt="Logo" className="h-12 object-contain" />
         )}
         <h2 className="text-2xl" style={{ fontFamily: `'${form.heading_font}', serif` }}>
-          La Maison
+          {form.restaurant_name || "La Maison"}
         </h2>
         <p className="text-sm" style={{ fontFamily: `'${form.body_font}', serif` }}>
           Filet de bœuf, jus au thym, purée truffée
@@ -153,6 +155,19 @@ export default function SettingsPanel() {
         >
           Voir en réalité augmentée
         </button>
+      </div>
+
+      {/* Restaurant name */}
+      <div>
+        <h3 className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">Restaurant</h3>
+        <div className="space-y-1">
+          <Label className="text-xs">Nom du restaurant</Label>
+          <Input
+            value={form.restaurant_name}
+            onChange={(e) => setForm((f) => ({ ...f, restaurant_name: e.target.value }))}
+            placeholder="La Maison"
+          />
+        </div>
       </div>
 
       {/* Colors */}
