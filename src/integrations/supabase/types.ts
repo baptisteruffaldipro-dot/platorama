@@ -14,6 +14,35 @@ export type Database = {
   }
   public: {
     Tables: {
+      dish_events: {
+        Row: {
+          created_at: string
+          dish_id: string
+          event_type: string
+          id: string
+        }
+        Insert: {
+          created_at?: string
+          dish_id: string
+          event_type: string
+          id?: string
+        }
+        Update: {
+          created_at?: string
+          dish_id?: string
+          event_type?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dish_events_dish_id_fkey"
+            columns: ["dish_id"]
+            isOneToOne: false
+            referencedRelation: "dishes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dishes: {
         Row: {
           category: string
