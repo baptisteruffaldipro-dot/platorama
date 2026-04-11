@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDishes } from "@/hooks/useDishes";
+import { supabase } from "@/integrations/supabase/client";
 import { useFavorites } from "@/hooks/useFavorites";
 import DishCarousel from "@/components/DishCarousel";
 import DishInfo from "@/components/DishInfo";
