@@ -26,7 +26,7 @@ const SplashScreen = ({ onDone }: { onDone: () => void }) => {
         </h1>
         <div className="w-12 h-px bg-accent mx-auto mt-4" />
         <p className="text-xs tracking-[0.4em] uppercase text-muted-foreground mt-3">
-          Menu Virtuel
+          {settings?.subtitle || "Menu Virtuel"}
         </p>
       </motion.div>
     </motion.div>

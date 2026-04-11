@@ -73,6 +73,7 @@ export default function SettingsPanel() {
     button_text_color: initial.button_text_color,
     logo_url: initial.logo_url,
     restaurant_name: initial.restaurant_name,
+    subtitle: initial.subtitle,
   });
 
   // Sync when draft/published loads
@@ -87,6 +88,7 @@ export default function SettingsPanel() {
       button_text_color: src.button_text_color,
       logo_url: src.logo_url,
       restaurant_name: src.restaurant_name,
+      subtitle: src.subtitle,
     });
   }, [draft, published]);
 
@@ -143,7 +145,8 @@ export default function SettingsPanel() {
         <h2 className="text-2xl" style={{ fontFamily: `'${form.heading_font}', serif` }}>
           {form.restaurant_name || "La Maison"}
         </h2>
-        <p className="text-sm" style={{ fontFamily: `'${form.body_font}', serif` }}>
+        <p className="text-xs tracking-[0.3em] uppercase opacity-60">{form.subtitle || "Menu Virtuel"}</p>
+        <p className="text-sm mt-2" style={{ fontFamily: `'${form.body_font}', serif` }}>
           Filet de bœuf, jus au thym, purée truffée
         </p>
         <button
@@ -160,13 +163,23 @@ export default function SettingsPanel() {
       {/* Restaurant name */}
       <div>
         <h3 className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">Restaurant</h3>
-        <div className="space-y-1">
-          <Label className="text-xs">Nom du restaurant</Label>
-          <Input
-            value={form.restaurant_name}
-            onChange={(e) => setForm((f) => ({ ...f, restaurant_name: e.target.value }))}
-            placeholder="La Maison"
-          />
+        <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-1">
+            <Label className="text-xs">Nom du restaurant</Label>
+            <Input
+              value={form.restaurant_name}
+              onChange={(e) => setForm((f) => ({ ...f, restaurant_name: e.target.value }))}
+              placeholder="La Maison"
+            />
+          </div>
+          <div className="space-y-1">
+            <Label className="text-xs">Sous-titre</Label>
+            <Input
+              value={form.subtitle}
+              onChange={(e) => setForm((f) => ({ ...f, subtitle: e.target.value }))}
+              placeholder="Menu Virtuel"
+            />
+          </div>
         </div>
       </div>
 
