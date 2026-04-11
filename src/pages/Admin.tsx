@@ -333,6 +333,30 @@ const Admin = () => {
     toast.success("Ordre mis à jour");
   };
 
+  const handleCompress = async (field: "model_android" | "model_ios") => {
+    if (!editDish) return;
+    const url = field === "model_android" ? form.model_android : form.model_ios;
+    if (!url) {
+      toast.error("Aucun modèle à compresser");
+      return;
+    }
+    setCompressing(field);
+    try {
+      const { data, error } = await supabase.functions.invoke("compress-glb", {
+        body: { glb_url: url, dish_id: editDish.id, field },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      setForm((f) => ({ ...f, [field]: data.new_url }));
+      toast.success(`Compressé ! -${data.reduction_percent}% (${(data.original_size / 1024).toFixed(0)}KB → ${(data.compressed_size / 1024).toFixed(0)}KB)`);
+      queryClient.invalidateQueries({ queryKey: ["dishes"] });
+    } catch (err: any) {
+      toast.error("Erreur compression : " + (err.message || "Inconnue"));
+    } finally {
+      setCompressing(null);
+    }
+  };
+
   const handleDelete = async (dish: Dish) => {
     if (!confirm(`Supprimer "${dish.name}" ?`)) return;
     const { error } = await supabase.from("dishes").delete().eq("id", dish.id);
