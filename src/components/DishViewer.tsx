@@ -1,4 +1,3 @@
-import { isIOS } from "@/lib/platform";
 import type { Dish } from "@/data/menu";
 
 interface DishViewerProps {
@@ -6,33 +5,28 @@ interface DishViewerProps {
 }
 
 const DishViewer = ({ dish }: DishViewerProps) => {
-  if (isIOS()) {
-    // iOS: show dish image; AR is triggered via <a rel="ar"> in DishInfo
-    return (
-      <div className="flex items-center justify-center flex-1">
-        <img
-          src={dish.thumbnail}
-          alt={dish.name}
-          className="w-64 h-64 rounded-full object-cover shadow-2xl"
-          width={256}
-          height={256}
-        />
-      </div>
-    );
-  }
-
-  // Android: use model-viewer
   return (
-    <div className="flex items-center justify-center flex-1">
+    <div className="flex items-center justify-center flex-1 w-full">
       {/* @ts-ignore */}
       <model-viewer
+        key={dish.id}
         src={dish.model_android}
+        ios-src={dish.model_ios}
         alt={dish.name}
-        ar
-        ar-modes="scene-viewer webxr quick-look"
         camera-controls
         auto-rotate
-        style={{ width: "100%", height: "300px" }}
+        auto-rotate-delay="0"
+        rotation-per-second="12deg"
+        interaction-prompt="none"
+        shadow-intensity="0.4"
+        exposure="1.2"
+        style={{
+          width: "100%",
+          height: "100%",
+          minHeight: "300px",
+          backgroundColor: "transparent",
+          "--poster-color": "transparent",
+        } as React.CSSProperties}
         poster={dish.thumbnail}
       />
     </div>
