@@ -22,7 +22,7 @@ const SplashScreen = ({ onDone }: { onDone: () => void }) => {
           <img src={settings.logo_url} alt="Logo" className="h-20 object-contain mx-auto mb-4" />
         ) : null}
         <h1 className="text-4xl font-light text-foreground tracking-[0.2em] uppercase" style={{ fontFamily: "var(--font-serif)" }}>
-          La Maison
+          {settings?.restaurant_name || "La Maison"}
         </h1>
         <div className="w-12 h-px bg-accent mx-auto mt-4" />
         <p className="text-xs tracking-[0.4em] uppercase text-muted-foreground mt-3">
