@@ -1,4 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
+import { Star } from "lucide-react";
 
 interface DishInfoProps {
   dish: {
@@ -8,9 +9,11 @@ interface DishInfoProps {
     ingredients: string;
     price: number;
   };
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 }
 
-const DishInfo = ({ dish }: DishInfoProps) => {
+const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -24,9 +27,26 @@ const DishInfo = ({ dish }: DishInfoProps) => {
         <span className="text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-1">
           {dish.category}
         </span>
-        <h1 className="text-3xl font-bold text-foreground uppercase tracking-wide mb-2" style={{ fontFamily: "var(--font-serif)" }}>
-          {dish.name}
-        </h1>
+
+        <div className="flex items-center gap-2 mb-2">
+          <h1 className="text-3xl font-bold text-foreground uppercase tracking-wide" style={{ fontFamily: "var(--font-serif)" }}>
+            {dish.name}
+          </h1>
+          <button
+            onClick={onToggleFavorite}
+            className="transition-transform active:scale-90"
+            aria-label={isFavorite ? "Retirer des favoris" : "Ajouter aux favoris"}
+          >
+            <Star
+              className={`w-5 h-5 transition-colors ${
+                isFavorite
+                  ? "fill-accent text-accent"
+                  : "text-muted-foreground"
+              }`}
+            />
+          </button>
+        </div>
+
         <p className="text-lg font-semibold text-accent mb-2" style={{ fontFamily: "var(--font-serif)" }}>
           {dish.price.toFixed(2)} €
         </p>

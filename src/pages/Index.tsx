@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useDishes } from "@/hooks/useDishes";
+import { useFavorites } from "@/hooks/useFavorites";
 import DishCarousel from "@/components/DishCarousel";
 import DishInfo from "@/components/DishInfo";
 import DishViewer from "@/components/DishViewer";
@@ -11,6 +12,7 @@ const Index = () => {
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
   const { data: dishes, isLoading } = useDishes();
+  const { isFavorite, toggle } = useFavorites();
 
   if (isLoading || !dishes?.length) {
     return (
@@ -45,7 +47,7 @@ const Index = () => {
       </div>
 
       <div className="pb-safe relative">
-        <DishInfo dish={dish} />
+        <DishInfo dish={dish} isFavorite={isFavorite(dish.id)} onToggleFavorite={() => toggle(dish.id)} />
 
         <div className="flex justify-center mt-3">
           <button
