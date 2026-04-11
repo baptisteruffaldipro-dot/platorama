@@ -8,7 +8,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
-import { LogOut, Plus, Pencil, Trash2, Upload, Star, Rotate3d, BarChart3, UtensilsCrossed, GripVertical } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Upload, Star, Rotate3d, BarChart3, UtensilsCrossed, GripVertical, Settings } from "lucide-react";
+import SettingsPanel from "@/components/SettingsPanel";
 import {
   Dialog,
   DialogContent,
@@ -196,7 +197,7 @@ const Admin = () => {
   const [isNew, setIsNew] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [tab, setTab] = useState<"menu" | "stats">("menu");
+  const [tab, setTab] = useState<"menu" | "stats" | "settings">("menu");
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -385,6 +386,17 @@ const Admin = () => {
           <BarChart3 className="w-4 h-4" />
           Statistiques
         </button>
+        <button
+          onClick={() => setTab("settings")}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors ${
+            tab === "settings"
+              ? "text-accent border-b-2 border-accent"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Settings className="w-4 h-4" />
+          Réglages
+        </button>
       </div>
 
       {/* Content */}
@@ -419,8 +431,10 @@ const Admin = () => {
             </div>
           )}
         </div>
-      ) : (
+      ) : tab === "stats" ? (
         <StatsPanel dishes={dishes ?? []} />
+      ) : (
+        <SettingsPanel />
       )}
 
       {/* Edit/Create Dialog */}
