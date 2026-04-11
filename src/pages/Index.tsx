@@ -47,7 +47,7 @@ const Index = () => {
       </div>
 
       <div className="pb-safe relative">
-        <DishInfo dish={dish} />
+        <DishInfo dish={dish} isFavorite={isFavorite(dish.id)} onToggleFavorite={() => toggle(dish.id)} />
 
         <div className="flex justify-center mt-3">
           <button
