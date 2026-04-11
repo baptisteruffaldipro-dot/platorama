@@ -1,4 +1,4 @@
-import type { Dish } from "@/data/menu";
+import type { Dish } from "@/hooks/useDishes";
 
 interface DishViewerProps {
   dish: Dish;

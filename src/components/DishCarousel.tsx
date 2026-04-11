@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { Dish } from "@/data/menu";
+import type { Dish } from "@/hooks/useDishes";
 
 interface DishCarouselProps {
   dishes: Dish[];
