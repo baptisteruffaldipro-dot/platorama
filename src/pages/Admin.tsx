@@ -394,9 +394,11 @@ const Admin = () => {
             <p className="text-muted-foreground">Chargement...</p>
           ) : (
             <div className="overflow-x-auto">
+             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border text-left text-muted-foreground">
+                    <th className="py-2 px-1 w-8"></th>
                     <th className="py-2 px-3">#</th>
                     <th className="py-2 px-3">Image</th>
                     <th className="py-2 px-3">Catégorie</th>
@@ -406,31 +408,14 @@ const Admin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {dishes?.map((dish) => (
-                    <tr key={dish.id} className="border-b border-border/50 hover:bg-card/50">
-                      <td className="py-2 px-3 text-muted-foreground">{dish.sort_order}</td>
-                      <td className="py-2 px-3">
-                        {dish.thumbnail && (
-                          <img src={dish.thumbnail} alt={dish.name} className="w-10 h-10 rounded-full object-contain bg-muted/20" />
-                        )}
-                      </td>
-                      <td className="py-2 px-3 text-xs tracking-wider text-muted-foreground">{dish.category}</td>
-                      <td className="py-2 px-3 font-medium">{dish.name}</td>
-                      <td className="py-2 px-3">{dish.price.toFixed(2)} €</td>
-                      <td className="py-2 px-3">
-                        <div className="flex gap-1">
-                          <Button size="icon" variant="ghost" onClick={() => openEdit(dish)}>
-                            <Pencil className="w-4 h-4" />
-                          </Button>
-                          <Button size="icon" variant="ghost" onClick={() => handleDelete(dish)}>
-                            <Trash2 className="w-4 h-4 text-destructive" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  <SortableContext items={dishes?.map((d) => d.id) ?? []} strategy={verticalListSortingStrategy}>
+                    {dishes?.map((dish) => (
+                      <SortableRow key={dish.id} dish={dish} onEdit={openEdit} onDelete={handleDelete} />
+                    ))}
+                  </SortableContext>
                 </tbody>
               </table>
+            </DndContext>
             </div>
           )}
         </div>
