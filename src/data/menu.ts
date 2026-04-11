@@ -51,7 +51,7 @@ export const menuData: Dish[] = [
     name: "Bouillon d'Huîtres",
     ingredients: "Huîtres fraîches, bouillon dashi, champignons shiitake, ciboulette, yuzu",
     thumbnail: "/dishes/bouillon.jpg",
-    model_ios: "/models/bouillon.usdz",
+    model_ios: "/models/huitres.usdz",
     model_android: "/models/bouillon.glb",
   },
   {
