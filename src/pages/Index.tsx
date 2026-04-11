@@ -12,6 +12,7 @@ const Index = () => {
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
   const { data: dishes, isLoading } = useDishes();
+  const { isFavorite, toggle } = useFavorites();
 
   if (isLoading || !dishes?.length) {
     return (
