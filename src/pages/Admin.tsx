@@ -342,8 +342,9 @@ const Admin = () => {
     }
     setCompressing(field);
     try {
+      const fullUrl = url.startsWith("http") ? url : `${window.location.origin}${url}`;
       const { data, error } = await supabase.functions.invoke("compress-glb", {
-        body: { glb_url: url, dish_id: editDish.id, field },
+        body: { glb_url: fullUrl, dish_id: editDish.id, field },
       });
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
