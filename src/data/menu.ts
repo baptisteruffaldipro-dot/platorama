@@ -12,11 +12,11 @@ export const menuData: Dish[] = [
   {
     id: 1,
     category: "ENTRÉE",
-    name: "La Tartelette",
-    ingredients: "Pâte brisée, champignons de Paris, crème fraîche, thym, échalotes, beurre noisette",
+    name: "Les Ravioles",
+    ingredients: "Ravioles du Dauphiné, crème légère, parmesan, ciboulette, beurre noisette",
     thumbnail: "/dishes/tartelette.jpg",
     model_ios: "/models/tartelette.usdz",
-    model_android: "/models/tartelette.glb",
+    model_android: "/models/ravioles.glb",
   },
   {
     id: 2,
@@ -52,7 +52,7 @@ export const menuData: Dish[] = [
     ingredients: "Huîtres fraîches, bouillon dashi, champignons shiitake, ciboulette, yuzu",
     thumbnail: "/dishes/bouillon.jpg",
     model_ios: "/models/huitres.usdz",
-    model_android: "/models/bouillon.glb",
+    model_android: "/models/huitres.glb",
   },
   {
     id: 6,
@@ -74,6 +74,15 @@ export const menuData: Dish[] = [
   },
   {
     id: 8,
+    category: "PLAT",
+    name: "Le Verjus",
+    ingredients: "Verjus frais, légumes de saison, vinaigrette acidulée, herbes du potager",
+    thumbnail: "/dishes/bouillon.jpg",
+    model_ios: "/models/verjus.usdz",
+    model_android: "/models/verjus.glb",
+  },
+  {
+    id: 9,
     category: "DESSERT",
     name: "Le Chocolat Noir",
     ingredients: "Chocolat Valrhona 70%, feuille d'or, coulis de fruits rouges, crème anglaise",
