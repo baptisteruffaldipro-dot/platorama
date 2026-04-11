@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useDishes, type Dish } from "@/hooks/useDishes";
 import { supabase } from "@/integrations/supabase/client";
@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
-import { LogOut, Plus, Pencil, Trash2, Upload } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Upload, Star, Rotate3d, BarChart3, UtensilsCrossed } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -16,6 +16,113 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 
+/* ─── Stats types ─── */
+interface DishStats {
+  dish_id: string;
+  dish_name: string;
+  favorites: number;
+  ar_clicks: number;
+}
+
+/* ─── Stats Panel ─── */
+const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
+  const [stats, setStats] = useState<DishStats[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      const { data, error } = await supabase
+        .from("dish_events")
+        .select("dish_id, event_type");
+
+      if (error) {
+        toast.error("Erreur chargement stats");
+        setLoading(false);
+        return;
+      }
+
+      const counters: Record<string, { favorites: number; ar_clicks: number }> = {};
+      dishes.forEach((d) => {
+        counters[d.id] = { favorites: 0, ar_clicks: 0 };
+      });
+
+      data?.forEach((ev) => {
+        if (!counters[ev.dish_id]) counters[ev.dish_id] = { favorites: 0, ar_clicks: 0 };
+        if (ev.event_type === "favorite") counters[ev.dish_id].favorites++;
+        if (ev.event_type === "ar_click") counters[ev.dish_id].ar_clicks++;
+      });
+
+      const result: DishStats[] = dishes.map((d) => ({
+        dish_id: d.id,
+        dish_name: d.name,
+        favorites: counters[d.id]?.favorites ?? 0,
+        ar_clicks: counters[d.id]?.ar_clicks ?? 0,
+      }));
+
+      setStats(result);
+      setLoading(false);
+    };
+
+    fetchStats();
+  }, [dishes]);
+
+  if (loading) return <p className="text-muted-foreground p-4">Chargement des stats...</p>;
+
+  const maxFav = Math.max(1, ...stats.map((s) => s.favorites));
+  const maxAR = Math.max(1, ...stats.map((s) => s.ar_clicks));
+
+  return (
+    <div className="p-4 space-y-8">
+      {/* Favorites chart */}
+      <div>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Star className="w-5 h-5 text-accent" />
+          Favoris par plat
+        </h2>
+        <div className="space-y-3">
+          {stats.map((s) => (
+            <div key={s.dish_id + "-fav"} className="flex items-center gap-3">
+              <span className="w-40 text-sm text-foreground truncate">{s.dish_name}</span>
+              <div className="flex-1 bg-muted/30 rounded-full h-6 overflow-hidden">
+                <div
+                  className="h-full bg-accent rounded-full transition-all duration-500 flex items-center justify-end pr-2"
+                  style={{ width: `${Math.max(2, (s.favorites / maxFav) * 100)}%` }}
+                >
+                  <span className="text-xs font-semibold text-accent-foreground">{s.favorites}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* AR clicks chart */}
+      <div>
+        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+          <Rotate3d className="w-5 h-5 text-accent" />
+          Clics AR par plat
+        </h2>
+        <div className="space-y-3">
+          {stats.map((s) => (
+            <div key={s.dish_id + "-ar"} className="flex items-center gap-3">
+              <span className="w-40 text-sm text-foreground truncate">{s.dish_name}</span>
+              <div className="flex-1 bg-muted/30 rounded-full h-6 overflow-hidden">
+                <div
+                  className="h-full bg-primary rounded-full transition-all duration-500 flex items-center justify-end pr-2"
+                  style={{ width: `${Math.max(2, (s.ar_clicks / maxAR) * 100)}%` }}
+                >
+                  <span className="text-xs font-semibold text-primary-foreground">{s.ar_clicks}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* ─── Admin Page ─── */
 const Admin = () => {
   const { user, isAdmin, loading: authLoading, signOut } = useAuth();
   const { data: dishes, isLoading } = useDishes();
@@ -24,6 +131,7 @@ const Admin = () => {
   const [isNew, setIsNew] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [tab, setTab] = useState<"menu" | "stats">("menu");
 
   // Form state
   const [form, setForm] = useState({
@@ -142,61 +250,93 @@ const Admin = () => {
           Gestion du Menu
         </h1>
         <div className="flex items-center gap-2">
-          <Button size="sm" onClick={openNew}>
-            <Plus className="w-4 h-4 mr-1" /> Ajouter
-          </Button>
+          {tab === "menu" && (
+            <Button size="sm" onClick={openNew}>
+              <Plus className="w-4 h-4 mr-1" /> Ajouter
+            </Button>
+          )}
           <Button size="sm" variant="ghost" onClick={() => signOut()}>
             <LogOut className="w-4 h-4" />
           </Button>
         </div>
       </header>
 
-      {/* Table */}
-      <div className="p-4">
-        {isLoading ? (
-          <p className="text-muted-foreground">Chargement...</p>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border text-left text-muted-foreground">
-                  <th className="py-2 px-3">#</th>
-                  <th className="py-2 px-3">Image</th>
-                  <th className="py-2 px-3">Catégorie</th>
-                  <th className="py-2 px-3">Nom</th>
-                  <th className="py-2 px-3">Prix</th>
-                  <th className="py-2 px-3">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {dishes?.map((dish) => (
-                  <tr key={dish.id} className="border-b border-border/50 hover:bg-card/50">
-                    <td className="py-2 px-3 text-muted-foreground">{dish.sort_order}</td>
-                    <td className="py-2 px-3">
-                      {dish.thumbnail && (
-                        <img src={dish.thumbnail} alt={dish.name} className="w-10 h-10 rounded-full object-contain bg-muted/20" />
-                      )}
-                    </td>
-                    <td className="py-2 px-3 text-xs tracking-wider text-muted-foreground">{dish.category}</td>
-                    <td className="py-2 px-3 font-medium">{dish.name}</td>
-                    <td className="py-2 px-3">{dish.price.toFixed(2)} €</td>
-                    <td className="py-2 px-3">
-                      <div className="flex gap-1">
-                        <Button size="icon" variant="ghost" onClick={() => openEdit(dish)}>
-                          <Pencil className="w-4 h-4" />
-                        </Button>
-                        <Button size="icon" variant="ghost" onClick={() => handleDelete(dish)}>
-                          <Trash2 className="w-4 h-4 text-destructive" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
+      {/* Tabs */}
+      <div className="flex border-b border-border">
+        <button
+          onClick={() => setTab("menu")}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors ${
+            tab === "menu"
+              ? "text-accent border-b-2 border-accent"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <UtensilsCrossed className="w-4 h-4" />
+          Menu
+        </button>
+        <button
+          onClick={() => setTab("stats")}
+          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors ${
+            tab === "stats"
+              ? "text-accent border-b-2 border-accent"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <BarChart3 className="w-4 h-4" />
+          Statistiques
+        </button>
       </div>
+
+      {/* Content */}
+      {tab === "menu" ? (
+        <div className="p-4">
+          {isLoading ? (
+            <p className="text-muted-foreground">Chargement...</p>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="border-b border-border text-left text-muted-foreground">
+                    <th className="py-2 px-3">#</th>
+                    <th className="py-2 px-3">Image</th>
+                    <th className="py-2 px-3">Catégorie</th>
+                    <th className="py-2 px-3">Nom</th>
+                    <th className="py-2 px-3">Prix</th>
+                    <th className="py-2 px-3">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {dishes?.map((dish) => (
+                    <tr key={dish.id} className="border-b border-border/50 hover:bg-card/50">
+                      <td className="py-2 px-3 text-muted-foreground">{dish.sort_order}</td>
+                      <td className="py-2 px-3">
+                        {dish.thumbnail && (
+                          <img src={dish.thumbnail} alt={dish.name} className="w-10 h-10 rounded-full object-contain bg-muted/20" />
+                        )}
+                      </td>
+                      <td className="py-2 px-3 text-xs tracking-wider text-muted-foreground">{dish.category}</td>
+                      <td className="py-2 px-3 font-medium">{dish.name}</td>
+                      <td className="py-2 px-3">{dish.price.toFixed(2)} €</td>
+                      <td className="py-2 px-3">
+                        <div className="flex gap-1">
+                          <Button size="icon" variant="ghost" onClick={() => openEdit(dish)}>
+                            <Pencil className="w-4 h-4" />
+                          </Button>
+                          <Button size="icon" variant="ghost" onClick={() => handleDelete(dish)}>
+                            <Trash2 className="w-4 h-4 text-destructive" />
+                          </Button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        </div>
+      ) : (
+        <StatsPanel dishes={dishes ?? []} />
+      )}
 
       {/* Edit/Create Dialog */}
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
