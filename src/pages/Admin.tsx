@@ -8,13 +8,30 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
-import { LogOut, Plus, Pencil, Trash2, Upload, Star, Rotate3d, BarChart3, UtensilsCrossed } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Upload, Star, Rotate3d, BarChart3, UtensilsCrossed, GripVertical } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  type DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  useSortable,
+  verticalListSortingStrategy,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 /* ─── Stats types ─── */
 interface DishStats {
@@ -122,6 +139,54 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
   );
 };
 
+/* ─── Sortable Row ─── */
+const SortableRow = ({
+  dish,
+  onEdit,
+  onDelete,
+}: {
+  dish: Dish;
+  onEdit: (d: Dish) => void;
+  onDelete: (d: Dish) => void;
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: dish.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <tr ref={setNodeRef} style={style} className="border-b border-border/50 hover:bg-card/50">
+      <td className="py-2 px-1 w-8">
+        <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing p-1 text-muted-foreground hover:text-foreground touch-none">
+          <GripVertical className="w-4 h-4" />
+        </button>
+      </td>
+      <td className="py-2 px-3 text-muted-foreground">{dish.sort_order}</td>
+      <td className="py-2 px-3">
+        {dish.thumbnail && (
+          <img src={dish.thumbnail} alt={dish.name} className="w-10 h-10 rounded-full object-contain bg-muted/20" />
+        )}
+      </td>
+      <td className="py-2 px-3 text-xs tracking-wider text-muted-foreground">{dish.category}</td>
+      <td className="py-2 px-3 font-medium">{dish.name}</td>
+      <td className="py-2 px-3">{dish.price.toFixed(2)} €</td>
+      <td className="py-2 px-3">
+        <div className="flex gap-1">
+          <Button size="icon" variant="ghost" onClick={() => onEdit(dish)}>
+            <Pencil className="w-4 h-4" />
+          </Button>
+          <Button size="icon" variant="ghost" onClick={() => onDelete(dish)}>
+            <Trash2 className="w-4 h-4 text-destructive" />
+          </Button>
+        </div>
+      </td>
+    </tr>
+  );
+};
+
 /* ─── Admin Page ─── */
 const Admin = () => {
   const { user, isAdmin, loading: authLoading, signOut } = useAuth();
@@ -132,6 +197,11 @@ const Admin = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState<"menu" | "stats">("menu");
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
 
   // Form state
   const [form, setForm] = useState({
@@ -231,6 +301,36 @@ const Admin = () => {
     }
   };
 
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+    if (!over || active.id === over.id || !dishes) return;
+
+    const oldIndex = dishes.findIndex((d) => d.id === active.id);
+    const newIndex = dishes.findIndex((d) => d.id === over.id);
+    if (oldIndex === -1 || newIndex === -1) return;
+
+    const reordered = arrayMove(dishes, oldIndex, newIndex);
+
+    // Optimistic update
+    queryClient.setQueryData(["dishes"], reordered.map((d, i) => ({ ...d, sort_order: i + 1 })));
+
+    // Persist: temporarily drop unique constraint, update all, re-add
+    // Use negative numbers first to avoid unique conflicts
+    const updates = reordered.map((d, i) => ({ id: d.id, sort_order: i + 1 }));
+
+    // Set all to negative first
+    for (let i = 0; i < updates.length; i++) {
+      await supabase.from("dishes").update({ sort_order: -(i + 1) }).eq("id", updates[i].id);
+    }
+    // Then set to final values
+    for (const u of updates) {
+      await supabase.from("dishes").update({ sort_order: u.sort_order }).eq("id", u.id);
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["dishes"] });
+    toast.success("Ordre mis à jour");
+  };
+
   const handleDelete = async (dish: Dish) => {
     if (!confirm(`Supprimer "${dish.name}" ?`)) return;
     const { error } = await supabase.from("dishes").delete().eq("id", dish.id);
@@ -294,9 +394,11 @@ const Admin = () => {
             <p className="text-muted-foreground">Chargement...</p>
           ) : (
             <div className="overflow-x-auto">
+             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-border text-left text-muted-foreground">
+                    <th className="py-2 px-1 w-8"></th>
                     <th className="py-2 px-3">#</th>
                     <th className="py-2 px-3">Image</th>
                     <th className="py-2 px-3">Catégorie</th>
@@ -306,31 +408,14 @@ const Admin = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {dishes?.map((dish) => (
-                    <tr key={dish.id} className="border-b border-border/50 hover:bg-card/50">
-                      <td className="py-2 px-3 text-muted-foreground">{dish.sort_order}</td>
-                      <td className="py-2 px-3">
-                        {dish.thumbnail && (
-                          <img src={dish.thumbnail} alt={dish.name} className="w-10 h-10 rounded-full object-contain bg-muted/20" />
-                        )}
-                      </td>
-                      <td className="py-2 px-3 text-xs tracking-wider text-muted-foreground">{dish.category}</td>
-                      <td className="py-2 px-3 font-medium">{dish.name}</td>
-                      <td className="py-2 px-3">{dish.price.toFixed(2)} €</td>
-                      <td className="py-2 px-3">
-                        <div className="flex gap-1">
-                          <Button size="icon" variant="ghost" onClick={() => openEdit(dish)}>
-                            <Pencil className="w-4 h-4" />
-                          </Button>
-                          <Button size="icon" variant="ghost" onClick={() => handleDelete(dish)}>
-                            <Trash2 className="w-4 h-4 text-destructive" />
-                          </Button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
+                  <SortableContext items={dishes?.map((d) => d.id) ?? []} strategy={verticalListSortingStrategy}>
+                    {dishes?.map((dish) => (
+                      <SortableRow key={dish.id} dish={dish} onEdit={openEdit} onDelete={handleDelete} />
+                    ))}
+                  </SortableContext>
                 </tbody>
               </table>
+            </DndContext>
             </div>
           )}
         </div>
