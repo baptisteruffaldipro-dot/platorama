@@ -51,8 +51,12 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overscroll-behavior: none;
-    overflow: hidden;
-    height: 100dvh;
+    min-height: 100dvh;
+  }
+
+  body:has(.admin-layout) {
+    overflow: auto;
+    height: auto;
   }
 
   #root {
