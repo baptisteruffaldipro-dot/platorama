@@ -139,6 +139,54 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
   );
 };
 
+/* ─── Sortable Row ─── */
+const SortableRow = ({
+  dish,
+  onEdit,
+  onDelete,
+}: {
+  dish: Dish;
+  onEdit: (d: Dish) => void;
+  onDelete: (d: Dish) => void;
+}) => {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: dish.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <tr ref={setNodeRef} style={style} className="border-b border-border/50 hover:bg-card/50">
+      <td className="py-2 px-1 w-8">
+        <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing p-1 text-muted-foreground hover:text-foreground touch-none">
+          <GripVertical className="w-4 h-4" />
+        </button>
+      </td>
+      <td className="py-2 px-3 text-muted-foreground">{dish.sort_order}</td>
+      <td className="py-2 px-3">
+        {dish.thumbnail && (
+          <img src={dish.thumbnail} alt={dish.name} className="w-10 h-10 rounded-full object-contain bg-muted/20" />
+        )}
+      </td>
+      <td className="py-2 px-3 text-xs tracking-wider text-muted-foreground">{dish.category}</td>
+      <td className="py-2 px-3 font-medium">{dish.name}</td>
+      <td className="py-2 px-3">{dish.price.toFixed(2)} €</td>
+      <td className="py-2 px-3">
+        <div className="flex gap-1">
+          <Button size="icon" variant="ghost" onClick={() => onEdit(dish)}>
+            <Pencil className="w-4 h-4" />
+          </Button>
+          <Button size="icon" variant="ghost" onClick={() => onDelete(dish)}>
+            <Trash2 className="w-4 h-4 text-destructive" />
+          </Button>
+        </div>
+      </td>
+    </tr>
+  );
+};
+
 /* ─── Admin Page ─── */
 const Admin = () => {
   const { user, isAdmin, loading: authLoading, signOut } = useAuth();
@@ -149,6 +197,11 @@ const Admin = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState<"menu" | "stats">("menu");
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
+    useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
+  );
 
   // Form state
   const [form, setForm] = useState({
