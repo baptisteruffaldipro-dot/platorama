@@ -344,7 +344,7 @@ const Admin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-auto">
+    <div className="min-h-screen bg-background text-foreground overflow-auto admin-layout">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-card border-b border-border px-4 py-3 flex items-center justify-between">
         <h1 className="text-xl font-bold" style={{ fontFamily: "var(--font-serif)" }}>
