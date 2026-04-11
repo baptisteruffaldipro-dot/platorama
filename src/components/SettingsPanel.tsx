@@ -145,7 +145,8 @@ export default function SettingsPanel() {
         <h2 className="text-2xl" style={{ fontFamily: `'${form.heading_font}', serif` }}>
           {form.restaurant_name || "La Maison"}
         </h2>
-        <p className="text-sm" style={{ fontFamily: `'${form.body_font}', serif` }}>
+        <p className="text-xs tracking-[0.3em] uppercase opacity-60">{form.subtitle || "Menu Virtuel"}</p>
+        <p className="text-sm mt-2" style={{ fontFamily: `'${form.body_font}', serif` }}>
           Filet de bœuf, jus au thym, purée truffée
         </p>
         <button
