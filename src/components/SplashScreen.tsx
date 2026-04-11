@@ -1,6 +1,9 @@
 import { motion } from "framer-motion";
+import { usePublishedSettings } from "@/hooks/useSiteSettings";
 
 const SplashScreen = ({ onDone }: { onDone: () => void }) => {
+  const { data: settings } = usePublishedSettings();
+
   return (
     <motion.div
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background"
@@ -15,6 +18,9 @@ const SplashScreen = ({ onDone }: { onDone: () => void }) => {
         transition={{ duration: 0.6 }}
         className="text-center"
       >
+        {settings?.logo_url ? (
+          <img src={settings.logo_url} alt="Logo" className="h-20 object-contain mx-auto mb-4" />
+        ) : null}
         <h1 className="text-4xl font-light text-foreground tracking-[0.2em] uppercase" style={{ fontFamily: "var(--font-serif)" }}>
           La Maison
         </h1>

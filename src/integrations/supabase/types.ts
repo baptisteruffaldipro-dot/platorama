@@ -85,6 +85,48 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          background_color: string
+          body_font: string
+          button_bg_color: string
+          button_text_color: string
+          created_at: string
+          heading_font: string
+          id: string
+          is_draft: boolean
+          logo_url: string
+          text_color: string
+          updated_at: string
+        }
+        Insert: {
+          background_color?: string
+          body_font?: string
+          button_bg_color?: string
+          button_text_color?: string
+          created_at?: string
+          heading_font?: string
+          id?: string
+          is_draft?: boolean
+          logo_url?: string
+          text_color?: string
+          updated_at?: string
+        }
+        Update: {
+          background_color?: string
+          body_font?: string
+          button_bg_color?: string
+          button_text_color?: string
+          created_at?: string
+          heading_font?: string
+          id?: string
+          is_draft?: boolean
+          logo_url?: string
+          text_color?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
