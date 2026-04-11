@@ -1,0 +1,1 @@
+ALTER TABLE public.dishes ADD CONSTRAINT dishes_sort_order_unique UNIQUE (sort_order);
