@@ -5,7 +5,7 @@ import DishInfo from "@/components/DishInfo";
 import DishViewer from "@/components/DishViewer";
 import SplashScreen from "@/components/SplashScreen";
 import { isIOS } from "@/lib/platform";
-import { Cuboid } from "lucide-react";
+import { Rotate3d } from "lucide-react";
 
 const Index = () => {
   const [activeIndex, setActiveIndex] = useState(2);
@@ -46,7 +46,7 @@ const Index = () => {
             onClick={handleLaunchAR}
             className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-accent-foreground text-sm font-semibold tracking-wide backdrop-blur-md transition-all active:scale-95"
           >
-            <Cuboid className="w-4 h-4" />
+            <Rotate3d className="w-4 h-4" />
             Voir en RA
           </button>
         </div>
