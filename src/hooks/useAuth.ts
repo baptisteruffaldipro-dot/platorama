@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import type { User } from "@supabase/supabase-js";
+import type { Session, User } from "@supabase/supabase-js";
 
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
@@ -12,37 +12,41 @@ export const useAuth = () => {
       setIsAdmin(false);
       return;
     }
-    const { data } = await supabase
+
+    const { data, error } = await supabase
       .from("user_roles")
       .select("role")
       .eq("user_id", u.id)
       .eq("role", "admin")
       .maybeSingle();
-    setIsAdmin(!!data);
+
+    setIsAdmin(!error && !!data);
   }, []);
 
   useEffect(() => {
     let ignore = false;
 
-    // Get initial session first
-    supabase.auth.getSession().then(async ({ data: { session } }) => {
+    const syncSession = async (session: Session | null) => {
       if (ignore) return;
-      const u = session?.user ?? null;
-      setUser(u);
-      await checkAdmin(u);
-      if (!ignore) setLoading(false);
+
+      const nextUser = session?.user ?? null;
+      setUser(nextUser);
+      await checkAdmin(nextUser);
+
+      if (!ignore) {
+        setLoading(false);
+      }
+    };
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      void syncSession(session);
     });
 
-    // Then listen for changes (won't re-fire for initial session)
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        if (ignore) return;
-        const u = session?.user ?? null;
-        setUser(u);
-        await checkAdmin(u);
-        if (!ignore) setLoading(false);
-      }
-    );
+    void supabase.auth.getSession().then(({ data: { session } }) => {
+      void syncSession(session);
+    });
 
     return () => {
       ignore = true;
