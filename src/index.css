@@ -59,6 +59,11 @@
     height: auto;
   }
 
+  body:has(.admin-layout) #root {
+    height: auto;
+    overflow: auto;
+  }
+
   #root {
     height: 100dvh;
     overflow: hidden;
