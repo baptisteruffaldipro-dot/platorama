@@ -44,13 +44,24 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
                   : "w-[56px] h-[56px] opacity-60"
               }`}
             >
-              <img
-                src={dish.thumbnail}
+              {/* @ts-ignore */}
+              <model-viewer
+                src={dish.model_android}
                 alt={dish.name}
-                className="w-full h-full object-cover"
-                loading="lazy"
-                width={72}
-                height={72}
+                camera-controls={false}
+                auto-rotate
+                auto-rotate-delay="0"
+                rotation-per-second="12deg"
+                interaction-prompt="none"
+                shadow-intensity="0"
+                exposure="1.2"
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "transparent",
+                  "--poster-color": "transparent",
+                  pointerEvents: "none",
+                } as React.CSSProperties}
               />
             </div>
             <span
