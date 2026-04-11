@@ -73,6 +73,7 @@ export default function SettingsPanel() {
     button_text_color: initial.button_text_color,
     logo_url: initial.logo_url,
     restaurant_name: initial.restaurant_name,
+    subtitle: initial.subtitle,
   });
 
   // Sync when draft/published loads
@@ -87,6 +88,7 @@ export default function SettingsPanel() {
       button_text_color: src.button_text_color,
       logo_url: src.logo_url,
       restaurant_name: src.restaurant_name,
+      subtitle: src.subtitle,
     });
   }, [draft, published]);
 
