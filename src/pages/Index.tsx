@@ -111,7 +111,7 @@ const Index = () => {
             className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-accent-foreground text-sm font-semibold tracking-wide backdrop-blur-md transition-all active:scale-95"
           >
             <Rotate3d className="w-4 h-4" />
-            {t("Voir en réalité augmentée")}
+            {t("Voir sur ma table")}
           </button>
         </div>
 
