@@ -13,16 +13,23 @@ export interface Dish {
   sort_order: number;
   allergens: string[];
   chef_note: string;
+  restaurant_id?: string | null;
 }
 
-export const useDishes = () => {
+export const useDishes = (restaurantId?: string | null) => {
   return useQuery({
-    queryKey: ["dishes"],
+    queryKey: ["dishes", restaurantId ?? "all"],
     queryFn: async (): Promise<Dish[]> => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("dishes")
         .select("*")
         .order("sort_order");
+
+      if (restaurantId) {
+        query = query.eq("restaurant_id", restaurantId);
+      }
+
+      const { data, error } = await query;
       if (error) throw error;
       return data;
     },

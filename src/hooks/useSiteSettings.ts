@@ -13,6 +13,7 @@ export interface SiteSettings {
   restaurant_name: string;
   subtitle: string;
   is_draft: boolean;
+  restaurant_id?: string | null;
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -44,17 +45,22 @@ export const FONT_OPTIONS = [
 ];
 
 /** Fetch published settings (public) */
-export function usePublishedSettings() {
+export function usePublishedSettings(restaurantId?: string | null) {
   return useQuery({
-    queryKey: ["site-settings", "published"],
+    queryKey: ["site-settings", "published", restaurantId ?? "default"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("site_settings")
         .select("*")
         .eq("is_draft", false)
         .order("updated_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .limit(1);
+
+      if (restaurantId) {
+        query = query.eq("restaurant_id", restaurantId);
+      }
+
+      const { data, error } = await query.maybeSingle();
       if (error) throw error;
       return (data as SiteSettings | null) ?? DEFAULT_SETTINGS;
     },
@@ -62,17 +68,22 @@ export function usePublishedSettings() {
 }
 
 /** Fetch draft settings (admin only) */
-export function useDraftSettings() {
+export function useDraftSettings(restaurantId?: string | null) {
   return useQuery({
-    queryKey: ["site-settings", "draft"],
+    queryKey: ["site-settings", "draft", restaurantId ?? "default"],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("site_settings")
         .select("*")
         .eq("is_draft", true)
         .order("updated_at", { ascending: false })
-        .limit(1)
-        .maybeSingle();
+        .limit(1);
+
+      if (restaurantId) {
+        query = query.eq("restaurant_id", restaurantId);
+      }
+
+      const { data, error } = await query.maybeSingle();
       if (error) throw error;
       return (data as SiteSettings | null) ?? null;
     },
@@ -80,28 +91,34 @@ export function useDraftSettings() {
 }
 
 /** Save draft */
-export function useSaveDraft() {
+export function useSaveDraft(restaurantId?: string | null) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (settings: Omit<SiteSettings, "is_draft" | "id">) => {
-      // Check if draft exists
-      const { data: existing } = await supabase
+      let query = supabase
         .from("site_settings")
         .select("id")
         .eq("is_draft", true)
-        .limit(1)
-        .maybeSingle();
+        .limit(1);
+
+      if (restaurantId) {
+        query = query.eq("restaurant_id", restaurantId);
+      }
+
+      const { data: existing } = await query.maybeSingle();
+
+      const payload = { ...settings, is_draft: true, restaurant_id: restaurantId ?? null };
 
       if (existing) {
         const { error } = await supabase
           .from("site_settings")
-          .update({ ...settings, is_draft: true })
+          .update(payload)
           .eq("id", existing.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from("site_settings")
-          .insert({ ...settings, is_draft: true });
+          .insert(payload);
         if (error) throw error;
       }
     },
@@ -110,28 +127,34 @@ export function useSaveDraft() {
 }
 
 /** Publish: copy draft to published row */
-export function usePublishSettings() {
+export function usePublishSettings(restaurantId?: string | null) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (settings: Omit<SiteSettings, "is_draft" | "id">) => {
-      // Upsert published row
-      const { data: existing } = await supabase
+      let query = supabase
         .from("site_settings")
         .select("id")
         .eq("is_draft", false)
-        .limit(1)
-        .maybeSingle();
+        .limit(1);
+
+      if (restaurantId) {
+        query = query.eq("restaurant_id", restaurantId);
+      }
+
+      const { data: existing } = await query.maybeSingle();
+
+      const payload = { ...settings, is_draft: false, restaurant_id: restaurantId ?? null };
 
       if (existing) {
         const { error } = await supabase
           .from("site_settings")
-          .update({ ...settings, is_draft: false })
+          .update(payload)
           .eq("id", existing.id);
         if (error) throw error;
       } else {
         const { error } = await supabase
           .from("site_settings")
-          .insert({ ...settings, is_draft: false });
+          .insert(payload);
         if (error) throw error;
       }
     },
