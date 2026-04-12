@@ -104,13 +104,10 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
           {stats.map((s) => (
             <div key={s.dish_id + "-fav"} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
               <span className="text-xs font-semibold text-accent">{s.favorites}</span>
-              <div className="w-full bg-muted/30 rounded-t-md overflow-hidden" style={{ height: 160 }}>
+              <div className="w-full bg-muted/30 rounded-t-md flex flex-col justify-end" style={{ height: 160 }}>
                 <div
-                  className="w-full bg-accent rounded-t-md transition-all duration-500 mt-auto"
-                  style={{
-                    height: `${Math.max(4, (s.favorites / maxFav) * 100)}%`,
-                    marginTop: `${100 - Math.max(4, (s.favorites / maxFav) * 100)}%`,
-                  }}
+                  className="w-full bg-accent rounded-t-md transition-all duration-500"
+                  style={{ height: `${Math.max(4, (s.favorites / maxFav) * 100)}%` }}
                 />
               </div>
               <span className="text-[10px] text-muted-foreground text-center leading-tight w-full truncate px-0.5">
@@ -131,13 +128,10 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
           {stats.map((s) => (
             <div key={s.dish_id + "-ar"} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
               <span className="text-xs font-semibold text-primary">{s.ar_clicks}</span>
-              <div className="w-full bg-muted/30 rounded-t-md overflow-hidden" style={{ height: 160 }}>
+              <div className="w-full bg-muted/30 rounded-t-md flex flex-col justify-end" style={{ height: 160 }}>
                 <div
                   className="w-full bg-primary rounded-t-md transition-all duration-500"
-                  style={{
-                    height: `${Math.max(4, (s.ar_clicks / maxAR) * 100)}%`,
-                    marginTop: `${100 - Math.max(4, (s.ar_clicks / maxAR) * 100)}%`,
-                  }}
+                  style={{ height: `${Math.max(4, (s.ar_clicks / maxAR) * 100)}%` }}
                 />
               </div>
               <span className="text-[10px] text-muted-foreground text-center leading-tight w-full truncate px-0.5">
