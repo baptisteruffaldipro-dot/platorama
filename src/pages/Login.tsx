@@ -10,7 +10,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn } = useAuth();
+  const { signIn, isSuperAdmin } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,7 +25,20 @@ const Login = () => {
         return;
       }
 
-      navigate("/admin");
+      // We need to re-check roles after sign in
+      // The auth state change will update isSuperAdmin, but we need to wait
+      // Simple approach: check roles manually after login
+      const { data: { user: u } } = await (await import("@/integrations/supabase/client")).supabase.auth.getUser();
+      if (u) {
+        const { data: roles } = await (await import("@/integrations/supabase/client")).supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", u.id);
+        const isSA = roles?.some((r) => r.role === "super_admin");
+        navigate(isSA ? "/dashboard" : "/admin");
+      } else {
+        navigate("/admin");
+      }
     } catch {
       toast.error("Erreur pendant la connexion");
     } finally {
