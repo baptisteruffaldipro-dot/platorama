@@ -14,7 +14,7 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
-    const active = el.children[activeIndex] as HTMLElement;
+    const active = el.querySelector(`[data-index="${activeIndex}"]`) as HTMLElement;
     if (active) {
       const offset = active.offsetLeft - el.clientWidth / 2 + active.clientWidth / 2;
       el.scrollTo({ left: offset, behavior: "smooth" });
@@ -36,7 +36,7 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
           const showSeparator = prevCategory && prevCategory !== dish.category;
 
           return (
-            <div key={dish.id} className="flex items-center gap-4 shrink-0">
+            <div key={dish.id} data-index={i} className="flex items-center gap-4 shrink-0">
               {showSeparator && (
                 <div className="w-px h-10 bg-border shrink-0" />
               )}
