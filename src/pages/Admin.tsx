@@ -9,8 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
-import { LogOut, Plus, Pencil, Trash2, Upload, Star, Rotate3d, BarChart3, UtensilsCrossed, GripVertical, Settings, Eye } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Upload, Star, Rotate3d, BarChart3, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail } from "lucide-react";
 import SettingsPanel from "@/components/SettingsPanel";
+import UsersPanel from "@/components/UsersPanel";
+import InfoPanel from "@/components/InfoPanel";
 import {
   Dialog,
   DialogContent,
@@ -201,7 +203,7 @@ const Admin = () => {
   const [isNew, setIsNew] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [tab, setTab] = useState<"menu" | "stats" | "settings">("menu");
+  const [tab, setTab] = useState<"menu" | "stats" | "settings" | "users" | "info">("menu");
   const [isResolvingRestaurant, setIsResolvingRestaurant] = useState(false);
   const [scopeError, setScopeError] = useState<string | null>(null);
   
@@ -430,40 +432,27 @@ const Admin = () => {
       </header>
 
       {/* Tabs */}
-      <div className="flex border-b border-border">
-        <button
-          onClick={() => setTab("menu")}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors ${
-            tab === "menu"
-              ? "text-accent border-b-2 border-accent"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <UtensilsCrossed className="w-4 h-4" />
-          Menu
-        </button>
-        <button
-          onClick={() => setTab("stats")}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors ${
-            tab === "stats"
-              ? "text-accent border-b-2 border-accent"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <BarChart3 className="w-4 h-4" />
-          Statistiques
-        </button>
-        <button
-          onClick={() => setTab("settings")}
-          className={`flex-1 flex items-center justify-center gap-2 py-3 text-sm font-medium transition-colors ${
-            tab === "settings"
-              ? "text-accent border-b-2 border-accent"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
-        >
-          <Settings className="w-4 h-4" />
-          Réglages
-        </button>
+      <div className="flex border-b border-border overflow-x-auto">
+        {([
+          { key: "menu", icon: UtensilsCrossed, label: "Menu" },
+          { key: "stats", icon: BarChart3, label: "Stats" },
+          { key: "users", icon: Users, label: "Utilisateurs" },
+          { key: "info", icon: Mail, label: "Infos" },
+          { key: "settings", icon: Settings, label: "Réglages" },
+        ] as const).map((t) => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className={`flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap ${
+              tab === t.key
+                ? "text-accent border-b-2 border-accent"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <t.icon className="w-4 h-4" />
+            {t.label}
+          </button>
+        ))}
       </div>
 
       {/* Content */}
@@ -500,6 +489,10 @@ const Admin = () => {
         </div>
       ) : tab === "stats" ? (
         <StatsPanel dishes={dishes ?? []} />
+      ) : tab === "users" ? (
+        <UsersPanel restaurantId={restaurantId} isSuperAdmin={isSuperAdmin} />
+      ) : tab === "info" ? (
+        <InfoPanel restaurantId={restaurantId} />
       ) : (
         <SettingsPanel restaurantId={restaurantId} />
       )}
