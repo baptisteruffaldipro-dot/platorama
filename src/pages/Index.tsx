@@ -79,11 +79,16 @@ const Index = () => {
   const dish = dishes[safeIndex];
 
   const handleLaunchAR = () => {
-    // Launch AR FIRST (synchronously) to preserve user gesture on iOS Safari
+    const hostname = window.location.hostname;
+    const publishedOrigin = "https://virtual-plate-show.lovable.app";
+    const shouldUsePublicOrigin =
+      hostname.includes("lovableproject.com") || hostname.includes("id-preview");
+    const assetOrigin = shouldUsePublicOrigin ? publishedOrigin : window.location.origin;
+
     if (isIOS() && dish.model_ios) {
       const modelUrl = dish.model_ios.startsWith("http")
         ? dish.model_ios
-        : `${window.location.origin}${dish.model_ios}`;
+        : `${assetOrigin}${dish.model_ios}`;
       const a = document.createElement("a");
       a.rel = "ar";
       a.href = modelUrl;
@@ -92,17 +97,15 @@ const Index = () => {
       a.appendChild(img);
       document.body.appendChild(a);
       a.click();
-      // Clean up after AR session starts
       setTimeout(() => a.remove(), 2000);
     } else if (dish.model_android) {
       const modelUrl = dish.model_android.startsWith("http")
         ? dish.model_android
-        : `${window.location.origin}${dish.model_android}`;
+        : `${assetOrigin}${dish.model_android}`;
       const url = `intent://arvr.google.com/scene-viewer/1.0?file=${modelUrl}&mode=ar_preferred#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;end;`;
       window.location.href = url;
     }
 
-    // Track event AFTER AR launch to avoid breaking gesture chain
     supabase
       .from("dish_events")
       .insert({ dish_id: dish.id, event_type: "ar_click" })
