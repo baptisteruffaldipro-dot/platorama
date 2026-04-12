@@ -37,6 +37,10 @@
     --radius: 0.5rem;
 
     --font-serif: 'Cormorant Garamond', Georgia, serif;
+
+    --category-entree: 142 40% 45%;
+    --category-plat: 38 50% 50%;
+    --category-dessert: 340 45% 55%;
   }
 }
 
