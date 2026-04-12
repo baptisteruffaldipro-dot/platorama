@@ -2,7 +2,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Star, Info, ChefHat } from "lucide-react";
 import AllergensDialog from "@/components/AllergensDialog";
 import { useTranslation } from "@/hooks/useTranslation";
-import { getCategoryStyle } from "@/lib/categoryStyle";
+import { getCategoryIcon } from "@/lib/categoryStyle";
 import {
   Dialog,
   DialogContent,
@@ -90,20 +90,12 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
         transition={{ duration: 0.35, ease: "easeOut" }}
         className="flex flex-col items-center text-center px-6"
       >
-        {(() => {
-          const style = getCategoryStyle(dish.category);
-          return (
-            <span
-              className="inline-block text-[10px] tracking-[0.25em] uppercase font-semibold px-3 py-0.5 rounded-full mb-1"
-              style={{
-                backgroundColor: `hsl(${style.hsl} / 0.15)`,
-                color: `hsl(${style.hsl})`,
-              }}
-            >
-              {t(dish.category)}
-            </span>
-          );
-        })()}
+        <div className="flex items-center gap-1.5 mb-1">
+          {getCategoryIcon(dish.category)}
+          <span className="text-[11px] tracking-[0.3em] uppercase text-muted-foreground">
+            {t(dish.category)}
+          </span>
+        </div>
 
         <div className="flex items-center gap-2 mb-2">
           <h1 className="text-3xl font-bold text-foreground uppercase tracking-wide" style={{ fontFamily: "var(--font-serif)" }}>
