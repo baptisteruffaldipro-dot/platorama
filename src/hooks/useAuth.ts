@@ -5,22 +5,30 @@ import type { Session, User } from "@supabase/supabase-js";
 export const useAuth = () => {
   const [user, setUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [isSuperAdmin, setIsSuperAdmin] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const checkAdmin = useCallback(async (u: User | null) => {
+  const checkRoles = useCallback(async (u: User | null) => {
     if (!u) {
       setIsAdmin(false);
+      setIsSuperAdmin(false);
       return;
     }
 
     const { data, error } = await supabase
       .from("user_roles")
       .select("role")
-      .eq("user_id", u.id)
-      .eq("role", "admin")
-      .maybeSingle();
+      .eq("user_id", u.id);
 
-    setIsAdmin(!error && !!data);
+    if (error || !data) {
+      setIsAdmin(false);
+      setIsSuperAdmin(false);
+      return;
+    }
+
+    const roles = data.map((r) => r.role);
+    setIsAdmin(roles.includes("admin") || roles.includes("super_admin"));
+    setIsSuperAdmin(roles.includes("super_admin"));
   }, []);
 
   useEffect(() => {
@@ -31,7 +39,7 @@ export const useAuth = () => {
 
       const nextUser = session?.user ?? null;
       setUser(nextUser);
-      await checkAdmin(nextUser);
+      await checkRoles(nextUser);
 
       if (!ignore) {
         setLoading(false);
@@ -52,7 +60,7 @@ export const useAuth = () => {
       ignore = true;
       subscription.unsubscribe();
     };
-  }, [checkAdmin]);
+  }, [checkRoles]);
 
   const signIn = async (email: string, password: string) => {
     return supabase.auth.signInWithPassword({ email, password });
@@ -62,5 +70,5 @@ export const useAuth = () => {
     return supabase.auth.signOut();
   };
 
-  return { user, isAdmin, loading, signIn, signOut };
+  return { user, isAdmin, isSuperAdmin, loading, signIn, signOut };
 };
