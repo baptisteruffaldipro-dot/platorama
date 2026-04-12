@@ -20,7 +20,7 @@ import {
   Trash2,
   Eye,
   Users,
-  BarChart3,
+  
   CreditCard,
   Power,
   PowerOff,
