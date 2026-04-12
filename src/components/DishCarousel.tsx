@@ -10,14 +10,12 @@ interface DishCarouselProps {
 
 const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+  const itemRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   useEffect(() => {
-    const el = scrollRef.current;
-    if (!el) return;
-    const active = el.querySelector(`[data-index="${activeIndex}"]`) as HTMLElement;
-    if (active) {
-      const offset = active.offsetLeft - el.clientWidth / 2 + active.clientWidth / 2;
-      el.scrollTo({ left: offset, behavior: "smooth" });
+    const btn = itemRefs.current[activeIndex];
+    if (btn) {
+      btn.scrollIntoView({ inline: "center", behavior: "smooth", block: "nearest" });
     }
   }, [activeIndex]);
 
@@ -30,19 +28,23 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
         <ChevronLeft className="w-5 h-5" />
       </button>
 
-      <div ref={scrollRef} className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2 px-1 flex-1 items-center scroll-smooth" style={{ scrollPaddingInline: "50%" }}>
+      <div ref={scrollRef} className="flex gap-4 overflow-x-auto scrollbar-hide py-2 flex-1 items-center">
+        {/* Spacer to allow first item to center */}
+        <div className="shrink-0" style={{ minWidth: "calc(50% - 36px)" }} />
+
         {dishes.map((dish, i) => {
           const prevCategory = i > 0 ? dishes[i - 1].category : null;
           const showSeparator = prevCategory && prevCategory !== dish.category;
 
           return (
-            <div key={dish.id} data-index={i} className="flex items-center gap-4 shrink-0">
+            <div key={dish.id} className="flex items-center gap-4 shrink-0">
               {showSeparator && (
                 <div className="w-px h-10 bg-border shrink-0" />
               )}
               <button
+                ref={(el) => { itemRefs.current[i] = el; }}
                 onClick={() => onSelect(i)}
-                className="flex flex-col items-center gap-1.5 shrink-0 snap-center transition-all duration-300"
+                className="flex flex-col items-center gap-1.5 shrink-0 transition-all duration-300"
               >
                 <div
                   className={`rounded-full overflow-hidden transition-all duration-300 flex items-center justify-center bg-muted/20 ${
@@ -72,6 +74,9 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
             </div>
           );
         })}
+
+        {/* Spacer to allow last item to center */}
+        <div className="shrink-0" style={{ minWidth: "calc(50% - 36px)" }} />
       </div>
 
       <button onClick={next} className="shrink-0 p-2 text-muted-foreground active:text-foreground transition-colors" aria-label="Next dish">
