@@ -7,7 +7,7 @@ import DishInfo from "@/components/DishInfo";
 import DishViewer from "@/components/DishViewer";
 import SplashScreen from "@/components/SplashScreen";
 
-import ChefNoteDialog from "@/components/ChefNoteDialog";
+
 import { isIOS } from "@/lib/platform";
 import { Rotate3d } from "lucide-react";
 
@@ -86,12 +86,6 @@ const Index = () => {
             <Rotate3d className="w-4 h-4" />
             Voir en réalité augmentée
           </button>
-        </div>
-
-        
-
-        <div className="flex justify-center pb-1">
-          <ChefNoteDialog />
         </div>
 
         <div className="mt-2 pb-4">
