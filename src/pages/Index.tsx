@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useDishes } from "@/hooks/useDishes";
 import { supabase } from "@/integrations/supabase/client";
 import { useFavorites } from "@/hooks/useFavorites";
@@ -31,9 +32,11 @@ function usePrefetchModels(dishes: ReturnType<typeof useDishes>["data"]) {
 }
 
 const Index = () => {
+  const [searchParams] = useSearchParams();
+  const restaurantId = searchParams.get("restaurant");
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
-  const { data: dishes, isLoading } = useDishes();
+  const { data: dishes, isLoading } = useDishes(restaurantId);
   const { isFavorite, toggle } = useFavorites();
   const { lang, t, translateBatch } = useTranslation();
   usePrefetchModels(dishes);
