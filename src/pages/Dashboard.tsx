@@ -88,9 +88,11 @@ const StatCard = ({ icon: Icon, label, value }: { icon: React.ElementType; label
 /* ─── Restaurant Info Panel ─── */
 const RestaurantInfoPanel = ({
   restaurant,
+  subscriptions,
   onSave,
 }: {
   restaurant: Restaurant;
+  subscriptions: Subscription[];
   onSave: (id: string, data: Partial<Restaurant>) => void;
 }) => {
   const [editing, setEditing] = useState(false);
@@ -99,10 +101,11 @@ const RestaurantInfoPanel = ({
     address: restaurant.address || "",
     phone: restaurant.phone || "",
     website: restaurant.website || "",
+    subscription_id: restaurant.subscription_id || "",
   });
 
   const handleSave = () => {
-    onSave(restaurant.id, form);
+    onSave(restaurant.id, { ...form, subscription_id: form.subscription_id || null });
     setEditing(false);
   };
 
@@ -124,6 +127,19 @@ const RestaurantInfoPanel = ({
 
       {editing ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="space-y-1">
+            <Label className="text-xs">Forfait</Label>
+            <select
+              value={form.subscription_id}
+              onChange={(e) => setForm(f => ({ ...f, subscription_id: e.target.value }))}
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
+              <option value="">Sans abonnement</option>
+              {subscriptions.map((s) => (
+                <option key={s.id} value={s.id}>{s.name} — {s.price_monthly}€/mois</option>
+              ))}
+            </select>
+          </div>
           <div className="space-y-1">
             <Label className="text-xs">Email</Label>
             <Input value={form.contact_email} onChange={(e) => setForm(f => ({ ...f, contact_email: e.target.value }))} placeholder="contact@restaurant.com" />
@@ -581,7 +597,7 @@ const Dashboard = () => {
                       {/* Expanded info panel */}
                       {isExpanded && (
                         <div className="px-4 pb-4">
-                          <RestaurantInfoPanel restaurant={restaurant} onSave={handleUpdateRestaurantInfo} />
+                          <RestaurantInfoPanel restaurant={restaurant} subscriptions={subscriptions} onSave={handleUpdateRestaurantInfo} />
                         </div>
                       )}
                     </div>
