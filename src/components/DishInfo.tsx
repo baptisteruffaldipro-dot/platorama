@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Info, ChefHat, Leaf, UtensilsCrossed, CakeSlice } from "lucide-react";
+import { Star, Info, ChefHat } from "lucide-react";
 import AllergensDialog from "@/components/AllergensDialog";
 import { useTranslation } from "@/hooks/useTranslation";
 import { getCategoryIcon } from "@/lib/categoryStyle";
