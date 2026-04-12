@@ -79,21 +79,29 @@ const Index = () => {
   const dish = dishes[safeIndex];
 
   const handleLaunchAR = () => {
+    // Launch AR FIRST (synchronously) to preserve user gesture on iOS Safari
+    if (isIOS() && dish.model_ios) {
+      const modelUrl = dish.model_ios.startsWith("http")
+        ? dish.model_ios
+        : `${window.location.origin}${dish.model_ios}`;
+      const a = document.createElement("a");
+      a.rel = "ar";
+      a.href = modelUrl;
+      a.appendChild(document.createElement("img"));
+      a.click();
+    } else if (dish.model_android) {
+      const modelUrl = dish.model_android.startsWith("http")
+        ? dish.model_android
+        : `${window.location.origin}${dish.model_android}`;
+      const url = `intent://arvr.google.com/scene-viewer/1.0?file=${modelUrl}&mode=ar_preferred#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;end;`;
+      window.location.href = url;
+    }
+
+    // Track event AFTER AR launch to avoid breaking gesture chain
     supabase
       .from("dish_events")
       .insert({ dish_id: dish.id, event_type: "ar_click" })
       .then();
-
-    if (isIOS() && dish.model_ios) {
-      const a = document.createElement("a");
-      a.rel = "ar";
-      a.href = dish.model_ios;
-      a.appendChild(document.createElement("img"));
-      a.click();
-    } else if (dish.model_android) {
-      const url = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}${dish.model_android}&mode=ar_preferred#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;end;`;
-      window.location.href = url;
-    }
   };
 
   return (
