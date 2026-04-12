@@ -29,7 +29,9 @@ function hexToHSL(hex: string): string {
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const { data: settings } = usePublishedSettings();
+  // Read restaurant param from URL to load the correct theme
+  const restaurantId = new URLSearchParams(window.location.search).get("restaurant");
+  const { data: settings } = usePublishedSettings(restaurantId);
 
   useEffect(() => {
     if (!settings) return;

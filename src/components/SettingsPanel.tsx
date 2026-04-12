@@ -56,11 +56,11 @@ function FontSelect({ label, value, onChange }: { label: string; value: string; 
   );
 }
 
-export default function SettingsPanel() {
-  const { data: draft } = useDraftSettings();
-  const { data: published } = usePublishedSettings();
-  const saveDraft = useSaveDraft();
-  const publishSettings = usePublishSettings();
+export default function SettingsPanel({ restaurantId }: { restaurantId?: string | null }) {
+  const { data: draft } = useDraftSettings(restaurantId);
+  const { data: published } = usePublishedSettings(restaurantId);
+  const saveDraft = useSaveDraft(restaurantId);
+  const publishSettings = usePublishSettings(restaurantId);
 
   const initial = draft ?? published ?? DEFAULT_SETTINGS;
 

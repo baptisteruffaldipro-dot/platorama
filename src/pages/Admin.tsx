@@ -3,6 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useDishes, type Dish } from "@/hooks/useDishes";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -191,7 +192,9 @@ const SortableRow = ({
 /* ─── Admin Page ─── */
 const Admin = () => {
   const { user, isAdmin, loading: authLoading, signOut } = useAuth();
-  const { data: dishes, isLoading } = useDishes();
+  const [searchParams] = useSearchParams();
+  const restaurantId = searchParams.get("restaurant");
+  const { data: dishes, isLoading } = useDishes(restaurantId);
   const queryClient = useQueryClient();
   const [editDish, setEditDish] = useState<Dish | null>(null);
   const [isNew, setIsNew] = useState(false);
@@ -290,7 +293,7 @@ const Admin = () => {
 
     let error;
     if (isNew) {
-      ({ error } = await supabase.from("dishes").insert(payload));
+      ({ error } = await supabase.from("dishes").insert({ ...payload, restaurant_id: restaurantId }));
     } else if (editDish) {
       ({ error } = await supabase.from("dishes").update(payload).eq("id", editDish.id));
     }
@@ -449,7 +452,7 @@ const Admin = () => {
       ) : tab === "stats" ? (
         <StatsPanel dishes={dishes ?? []} />
       ) : (
-        <SettingsPanel />
+        <SettingsPanel restaurantId={restaurantId} />
       )}
 
       {/* Edit/Create Dialog */}
