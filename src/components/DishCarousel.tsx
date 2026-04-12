@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Dish } from "@/hooks/useDishes";
+import { getCategoryIcon } from "@/lib/categoryStyle";
 
 interface DishCarouselProps {
   dishes: Dish[];
@@ -51,15 +52,18 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
                 loading="lazy"
               />
             </div>
-            <span
-              className={`text-center leading-tight transition-all duration-300 max-w-[80px] ${
-                i === activeIndex
-                  ? "text-[11px] font-semibold text-foreground"
-                  : "text-[10px] text-muted-foreground"
-              }`}
-            >
-              {dish.name}
-            </span>
+            <div className="flex flex-col items-center gap-0.5">
+              {getCategoryIcon(dish.category, 10)}
+              <span
+                className={`text-center leading-tight transition-all duration-300 max-w-[80px] ${
+                  i === activeIndex
+                    ? "text-[11px] font-semibold text-foreground"
+                    : "text-[10px] text-muted-foreground"
+                }`}
+              >
+                {dish.name}
+              </span>
+            </div>
           </button>
         ))}
       </div>
