@@ -65,7 +65,9 @@ Deno.serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
     );
 
-    // Create user
+    // Create user or find existing
+    let userId: string;
+
     const { data: userData, error: createError } =
       await supabaseAdmin.auth.admin.createUser({
         email,
@@ -74,26 +76,45 @@ Deno.serve(async (req) => {
       });
 
     if (createError) {
-      return new Response(JSON.stringify({ error: createError.message }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      // If user already exists, look them up
+      if (createError.message.includes("already been registered")) {
+        const { data: listData, error: listError } =
+          await supabaseAdmin.auth.admin.listUsers();
+        if (listError) {
+          return new Response(JSON.stringify({ error: listError.message }), {
+            status: 400,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const existingUser = listData.users.find((u) => u.email === email);
+        if (!existingUser) {
+          return new Response(JSON.stringify({ error: "Utilisateur introuvable" }), {
+            status: 404,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        userId = existingUser.id;
+      } else {
+        return new Response(JSON.stringify({ error: createError.message }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    } else {
+      userId = userData.user.id;
     }
 
-    const userId = userData.user.id;
+    // Assign 'admin' role (ignore if already exists)
+    await supabaseAdmin.from("user_roles").upsert(
+      { user_id: userId, role: "admin" },
+      { onConflict: "user_id,role" }
+    );
 
-    // Assign 'admin' role
-    await supabaseAdmin.from("user_roles").insert({
-      user_id: userId,
-      role: "admin",
-    });
-
-    // Link to restaurant
-    await supabaseAdmin.from("restaurant_members").insert({
-      user_id: userId,
-      restaurant_id,
-      role: "owner",
-    });
+    // Link to restaurant (ignore if already exists)
+    await supabaseAdmin.from("restaurant_members").upsert(
+      { user_id: userId, restaurant_id, role: "owner" },
+      { onConflict: "user_id,restaurant_id" }
+    );
 
     return new Response(
       JSON.stringify({ success: true, user_id: userId }),
