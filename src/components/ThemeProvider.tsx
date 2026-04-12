@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { usePublishedSettings, FONT_OPTIONS } from "@/hooks/useSiteSettings";
+import { usePublishedSettings } from "@/hooks/useSiteSettings";
 
 function hexToHSL(hex: string): string {
   let r = 0, g = 0, b = 0;
@@ -28,33 +28,55 @@ function hexToHSL(hex: string): string {
   return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
 }
 
+// Default dashboard theme (dark neutral)
+const DASHBOARD_DEFAULTS = {
+  background: "0 0% 5%",
+  foreground: "40 20% 92%",
+  card: "0 0% 8%",
+  accent: "38 30% 50%",
+  accentForeground: "40 20% 92%",
+};
+
+function resetToDashboardTheme() {
+  const root = document.documentElement;
+  root.style.setProperty("--background", DASHBOARD_DEFAULTS.background);
+  root.style.setProperty("--card", DASHBOARD_DEFAULTS.card);
+  root.style.setProperty("--foreground", DASHBOARD_DEFAULTS.foreground);
+  root.style.setProperty("--card-foreground", DASHBOARD_DEFAULTS.foreground);
+  root.style.setProperty("--primary", DASHBOARD_DEFAULTS.foreground);
+  root.style.setProperty("--accent", DASHBOARD_DEFAULTS.accent);
+  root.style.setProperty("--accent-foreground", DASHBOARD_DEFAULTS.accentForeground);
+  root.style.setProperty("--font-serif", "'Cormorant Garamond', Georgia, serif");
+  document.body.style.fontFamily = "'Cormorant Garamond', Georgia, serif";
+}
+
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  // Read restaurant param from URL to load the correct theme
   const restaurantId = new URLSearchParams(window.location.search).get("restaurant");
-  const { data: settings } = usePublishedSettings(restaurantId);
+  const isDashboard = window.location.pathname === "/dashboard" || window.location.pathname === "/login";
+
+  // Only fetch restaurant theme when a restaurant_id is present
+  const { data: settings } = usePublishedSettings(isDashboard ? "__none__" : restaurantId);
 
   useEffect(() => {
+    // Dashboard and login always use default theme
+    if (isDashboard) {
+      resetToDashboardTheme();
+      return;
+    }
+
     if (!settings) return;
     const root = document.documentElement;
 
-    // Background
     root.style.setProperty("--background", hexToHSL(settings.background_color));
     root.style.setProperty("--card", hexToHSL(settings.background_color));
-
-    // Text
     root.style.setProperty("--foreground", hexToHSL(settings.text_color));
     root.style.setProperty("--card-foreground", hexToHSL(settings.text_color));
     root.style.setProperty("--primary", hexToHSL(settings.text_color));
-
-    // Button / accent
     root.style.setProperty("--accent", hexToHSL(settings.button_bg_color));
     root.style.setProperty("--accent-foreground", hexToHSL(settings.button_text_color));
-
-    // Fonts
     root.style.setProperty("--font-serif", `'${settings.heading_font}', Georgia, serif`);
     document.body.style.fontFamily = `'${settings.body_font}', Georgia, serif`;
 
-    // Load Google Fonts
     const fonts = [...new Set([settings.heading_font, settings.body_font])];
     fonts.forEach((font) => {
       const id = `gfont-${font.replace(/\s+/g, "-")}`;
@@ -66,7 +88,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
         document.head.appendChild(link);
       }
     });
-  }, [settings]);
+  }, [settings, isDashboard]);
 
   return <>{children}</>;
 }
