@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Info, ChefHat } from "lucide-react";
 import AllergensDialog from "@/components/AllergensDialog";
+import { useTranslation } from "@/hooks/useTranslation";
 import {
   Dialog,
   DialogContent,
@@ -23,56 +24,61 @@ interface DishInfoProps {
   onToggleFavorite: () => void;
 }
 
-const FormulasDialog = () => (
-  <Dialog>
-    <DialogTrigger asChild>
-      <button
-        className="w-5 h-5 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors"
-        aria-label="Voir les formules"
-      >
-        <Info className="w-3 h-3 text-muted-foreground" />
-      </button>
-    </DialogTrigger>
-    <DialogContent className="bg-card border-border max-w-xs">
-      <DialogHeader>
-        <DialogTitle
-          className="text-xl text-foreground tracking-wide uppercase text-center"
-          style={{ fontFamily: "var(--font-serif)" }}
+const FormulasDialog = () => {
+  const { t } = useTranslation();
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+        <button
+          className="w-5 h-5 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors"
+          aria-label="Voir les formules"
         >
-          Nos Formules
-        </DialogTitle>
-      </DialogHeader>
-      <div className="space-y-3 pt-2 text-center" style={{ fontFamily: "var(--font-serif)" }}>
-        <div className="space-y-1">
-          <p className="text-sm text-foreground">Entrée / Plat / Dessert</p>
-          <p className="text-lg font-semibold text-accent">56 €</p>
-        </div>
-        <div className="border-t border-border" />
-        <div className="space-y-1">
-          <p className="text-sm text-foreground">Entrée / Plat ou Plat / Dessert</p>
-          <p className="text-lg font-semibold text-accent">48 €</p>
-        </div>
-        <div className="border-t border-border" />
-        <div className="grid grid-cols-3 gap-2 pt-1">
-          <div>
-            <p className="text-xs text-muted-foreground">Entrée</p>
-            <p className="text-sm font-semibold text-accent">17 €</p>
+          <Info className="w-3 h-3 text-muted-foreground" />
+        </button>
+      </DialogTrigger>
+      <DialogContent className="bg-card border-border max-w-xs">
+        <DialogHeader>
+          <DialogTitle
+            className="text-xl text-foreground tracking-wide uppercase text-center"
+            style={{ fontFamily: "var(--font-serif)" }}
+          >
+            {t("Nos Formules")}
+          </DialogTitle>
+        </DialogHeader>
+        <div className="space-y-3 pt-2 text-center" style={{ fontFamily: "var(--font-serif)" }}>
+          <div className="space-y-1">
+            <p className="text-sm text-foreground">{t("Entrée / Plat / Dessert")}</p>
+            <p className="text-lg font-semibold text-accent">56 €</p>
           </div>
-          <div>
-            <p className="text-xs text-muted-foreground">Plat</p>
-            <p className="text-sm font-semibold text-accent">34 €</p>
+          <div className="border-t border-border" />
+          <div className="space-y-1">
+            <p className="text-sm text-foreground">{t("Entrée / Plat ou Plat / Dessert")}</p>
+            <p className="text-lg font-semibold text-accent">48 €</p>
           </div>
-          <div>
-            <p className="text-xs text-muted-foreground">Dessert</p>
-            <p className="text-sm font-semibold text-accent">14 €</p>
+          <div className="border-t border-border" />
+          <div className="grid grid-cols-3 gap-2 pt-1">
+            <div>
+              <p className="text-xs text-muted-foreground">{t("Entrée")}</p>
+              <p className="text-sm font-semibold text-accent">17 €</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">{t("Plat")}</p>
+              <p className="text-sm font-semibold text-accent">34 €</p>
+            </div>
+            <div>
+              <p className="text-xs text-muted-foreground">{t("Dessert")}</p>
+              <p className="text-sm font-semibold text-accent">14 €</p>
+            </div>
           </div>
         </div>
-      </div>
-    </DialogContent>
-  </Dialog>
-);
+      </DialogContent>
+    </Dialog>
+  );
+};
 
 const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
+  const { t } = useTranslation();
+
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -84,12 +90,12 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
         className="flex flex-col items-center text-center px-6"
       >
         <span className="text-[11px] tracking-[0.3em] uppercase text-muted-foreground mb-1">
-          {dish.category}
+          {t(dish.category)}
         </span>
 
         <div className="flex items-center gap-2 mb-2">
           <h1 className="text-3xl font-bold text-foreground uppercase tracking-wide" style={{ fontFamily: "var(--font-serif)" }}>
-            {dish.name}
+            {t(dish.name)}
           </h1>
           <button
             onClick={onToggleFavorite}
@@ -128,11 +134,11 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
                     style={{ fontFamily: "var(--font-serif)" }}
                   >
                     <ChefHat className="w-5 h-5 text-accent" />
-                    Note du Chef
+                    {t("Note du Chef")}
                   </DialogTitle>
                 </DialogHeader>
                 <p className="text-sm text-foreground leading-relaxed italic text-center pt-2" style={{ fontFamily: "var(--font-serif)" }}>
-                  {dish.chef_note}
+                  {t(dish.chef_note)}
                 </p>
               </DialogContent>
             </Dialog>
@@ -140,7 +146,7 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
         </div>
 
         <p className="text-sm italic text-muted-foreground leading-relaxed max-w-[280px]" style={{ fontFamily: "var(--font-serif)" }}>
-          {dish.ingredients}
+          {t(dish.ingredients)}
         </p>
         <div className="mt-2">
           <AllergensDialog allergens={dish.allergens ?? []} />
