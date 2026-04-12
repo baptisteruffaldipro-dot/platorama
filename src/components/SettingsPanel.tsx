@@ -252,6 +252,36 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
         </div>
       </div>
 
+      {/* Abonnement actif */}
+      <div>
+        <h3 className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">Abonnement</h3>
+        {subscriptionInfo ? (
+          <div className="bg-accent/10 border border-accent/20 rounded-lg p-4 flex items-center gap-4">
+            <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center">
+              <CreditCard className="w-5 h-5 text-accent" />
+            </div>
+            <div>
+              <p className="font-semibold text-foreground">{subscriptionInfo.name}</p>
+              <p className="text-sm text-muted-foreground">
+                {subscriptionInfo.price_monthly}€/mois · Max {subscriptionInfo.max_dishes} plats
+              </p>
+              {Array.isArray(subscriptionInfo.features) && subscriptionInfo.features.length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-1">
+                  {subscriptionInfo.features.map((f: any, i: number) => (
+                    <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-accent/10 text-accent font-medium">{String(f)}</span>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="bg-muted/30 border border-border rounded-lg p-4 text-sm text-muted-foreground flex items-center gap-3">
+            <CreditCard className="w-5 h-5 opacity-50" />
+            <span>Aucun abonnement actif</span>
+          </div>
+        )}
+      </div>
+
       {/* Actions */}
       <div className="flex gap-3 pt-2">
         <Button
