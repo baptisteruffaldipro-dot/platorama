@@ -293,7 +293,7 @@ const Admin = () => {
 
     let error;
     if (isNew) {
-      ({ error } = await supabase.from("dishes").insert(payload));
+      ({ error } = await supabase.from("dishes").insert({ ...payload, restaurant_id: restaurantId }));
     } else if (editDish) {
       ({ error } = await supabase.from("dishes").update(payload).eq("id", editDish.id));
     }
