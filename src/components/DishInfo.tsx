@@ -1,5 +1,12 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Star } from "lucide-react";
+import { Star, Info } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 interface DishInfoProps {
   dish: {
@@ -12,6 +19,55 @@ interface DishInfoProps {
   isFavorite: boolean;
   onToggleFavorite: () => void;
 }
+
+const FormulasDialog = () => (
+  <Dialog>
+    <DialogTrigger asChild>
+      <button
+        className="w-5 h-5 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors"
+        aria-label="Voir les formules"
+      >
+        <Info className="w-3 h-3 text-muted-foreground" />
+      </button>
+    </DialogTrigger>
+    <DialogContent className="bg-card border-border max-w-xs">
+      <DialogHeader>
+        <DialogTitle
+          className="text-xl text-foreground tracking-wide uppercase text-center"
+          style={{ fontFamily: "var(--font-serif)" }}
+        >
+          Nos Formules
+        </DialogTitle>
+      </DialogHeader>
+      <div className="space-y-3 pt-2 text-center" style={{ fontFamily: "var(--font-serif)" }}>
+        <div className="space-y-1">
+          <p className="text-sm text-foreground">Entrée / Plat / Dessert</p>
+          <p className="text-lg font-semibold text-accent">56 €</p>
+        </div>
+        <div className="border-t border-border" />
+        <div className="space-y-1">
+          <p className="text-sm text-foreground">Entrée / Plat ou Plat / Dessert</p>
+          <p className="text-lg font-semibold text-accent">48 €</p>
+        </div>
+        <div className="border-t border-border" />
+        <div className="grid grid-cols-3 gap-2 pt-1">
+          <div>
+            <p className="text-xs text-muted-foreground">Entrée</p>
+            <p className="text-sm font-semibold text-accent">17 €</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Plat</p>
+            <p className="text-sm font-semibold text-accent">34 €</p>
+          </div>
+          <div>
+            <p className="text-xs text-muted-foreground">Dessert</p>
+            <p className="text-sm font-semibold text-accent">14 €</p>
+          </div>
+        </div>
+      </div>
+    </DialogContent>
+  </Dialog>
+);
 
 const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
   return (
@@ -47,9 +103,13 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
           </button>
         </div>
 
-        <p className="text-lg font-semibold text-accent mb-2" style={{ fontFamily: "var(--font-serif)" }}>
-          {dish.price.toFixed(2)} €
-        </p>
+        <div className="flex items-center gap-2 mb-2">
+          <p className="text-lg font-semibold text-accent" style={{ fontFamily: "var(--font-serif)" }}>
+            {dish.price.toFixed(2)} €
+          </p>
+          <FormulasDialog />
+        </div>
+
         <p className="text-sm italic text-muted-foreground leading-relaxed max-w-[280px]" style={{ fontFamily: "var(--font-serif)" }}>
           {dish.ingredients}
         </p>
