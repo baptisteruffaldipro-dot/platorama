@@ -650,6 +650,26 @@ const Dashboard = () => {
                           ))}
                         </div>
                       )}
+                      {/* Active subscribers list */}
+                      {(() => {
+                        const subscribers = restaurants.filter(r => r.subscription_id === sub.id && r.is_active);
+                        if (subscribers.length === 0) return null;
+                        return (
+                          <div className="border-t border-border/50 pt-3 mt-2 space-y-1.5">
+                            <p className="text-xs font-semibold text-foreground">Abonnés actifs</p>
+                            {subscribers.map(r => (
+                              <div key={r.id} className="flex items-center justify-between text-xs">
+                                <span className="text-muted-foreground">{r.name}</span>
+                                <span className="text-accent font-medium">{sub.price_monthly}€/mois</span>
+                              </div>
+                            ))}
+                            <div className="flex items-center justify-between text-xs font-semibold border-t border-border/30 pt-1.5 mt-1.5">
+                              <span className="text-foreground">Total</span>
+                              <span className="text-accent">{subscribers.length * sub.price_monthly}€/mois</span>
+                            </div>
+                          </div>
+                        );
+                      })()}
                     </div>
                   );
                 })}
