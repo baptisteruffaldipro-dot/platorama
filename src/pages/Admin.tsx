@@ -276,7 +276,8 @@ const Admin = () => {
   const openNew = () => {
     setIsNew(true);
     setEditDish(null);
-    setForm({ category: "ENTRÉE", name: "", ingredients: "", price: "", thumbnail: "", model_ios: "", model_android: "", sort_order: String((dishes?.length ?? 0) + 1), allergens: "", chef_note: "" });
+    const maxOrder = dishes?.length ? Math.max(...dishes.map((d) => d.sort_order)) : 0;
+    setForm({ category: "ENTRÉE", name: "", ingredients: "", price: "", thumbnail: "", model_ios: "", model_android: "", sort_order: String(maxOrder + 1), allergens: "", chef_note: "" });
     setDialogOpen(true);
   };
 
