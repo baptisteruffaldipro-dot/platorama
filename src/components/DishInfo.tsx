@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Info } from "lucide-react";
+import AllergensDialog from "@/components/AllergensDialog";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +16,7 @@ interface DishInfoProps {
     name: string;
     ingredients: string;
     price: number;
+    allergens?: string[];
   };
   isFavorite: boolean;
   onToggleFavorite: () => void;
