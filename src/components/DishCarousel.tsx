@@ -30,7 +30,7 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
         <ChevronLeft className="w-5 h-5" />
       </button>
 
-      <div ref={scrollRef} className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2 px-1 flex-1 items-center">
+      <div ref={scrollRef} className="flex gap-4 overflow-x-auto scrollbar-hide snap-x snap-mandatory py-2 px-1 flex-1 items-center scroll-smooth" style={{ scrollPaddingInline: "50%" }}>
         {dishes.map((dish, i) => {
           const prevCategory = i > 0 ? dishes[i - 1].category : null;
           const showSeparator = prevCategory && prevCategory !== dish.category;
@@ -50,6 +50,7 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
                       ? "w-[72px] h-[72px] ring-2 ring-foreground ring-offset-2 ring-offset-background"
                       : "w-[56px] h-[56px] opacity-60"
                   }`}
+                  style={i === activeIndex ? { boxShadow: "0 0 12px 2px rgba(255,255,255,0.25)" } : undefined}
                 >
                   <img
                     src={dish.thumbnail}
