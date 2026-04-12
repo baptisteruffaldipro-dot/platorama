@@ -1,8 +1,14 @@
 import { motion } from "framer-motion";
 import { usePublishedSettings } from "@/hooks/useSiteSettings";
 
-const SplashScreen = ({ onDone }: { onDone: () => void }) => {
-  const { data: settings } = usePublishedSettings();
+const SplashScreen = ({
+  onDone,
+  restaurantId,
+}: {
+  onDone: () => void;
+  restaurantId?: string | null;
+}) => {
+  const { data: settings } = usePublishedSettings(restaurantId);
 
   return (
     <motion.div

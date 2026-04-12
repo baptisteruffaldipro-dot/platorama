@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
-  const { signIn, isSuperAdmin } = useAuth();
+  const { signIn } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,17 +26,31 @@ const Login = () => {
         return;
       }
 
-      // We need to re-check roles after sign in
-      // The auth state change will update isSuperAdmin, but we need to wait
-      // Simple approach: check roles manually after login
-      const { data: { user: u } } = await (await import("@/integrations/supabase/client")).supabase.auth.getUser();
+      const {
+        data: { user: u },
+      } = await supabase.auth.getUser();
+
       if (u) {
-        const { data: roles } = await (await import("@/integrations/supabase/client")).supabase
+        const { data: roles } = await supabase
           .from("user_roles")
           .select("role")
           .eq("user_id", u.id);
+
         const isSA = roles?.some((r) => r.role === "super_admin");
-        navigate(isSA ? "/dashboard" : "/admin");
+
+        if (isSA) {
+          navigate("/dashboard");
+          return;
+        }
+
+        const { data: membership } = await supabase
+          .from("restaurant_members")
+          .select("restaurant_id")
+          .eq("user_id", u.id)
+          .limit(1)
+          .maybeSingle();
+
+        navigate(membership?.restaurant_id ? `/admin?restaurant=${membership.restaurant_id}` : "/admin");
       } else {
         navigate("/admin");
       }
