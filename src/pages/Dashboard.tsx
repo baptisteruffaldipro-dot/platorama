@@ -88,9 +88,11 @@ const StatCard = ({ icon: Icon, label, value }: { icon: React.ElementType; label
 /* ─── Restaurant Info Panel ─── */
 const RestaurantInfoPanel = ({
   restaurant,
+  subscriptions,
   onSave,
 }: {
   restaurant: Restaurant;
+  subscriptions: Subscription[];
   onSave: (id: string, data: Partial<Restaurant>) => void;
 }) => {
   const [editing, setEditing] = useState(false);
@@ -99,10 +101,11 @@ const RestaurantInfoPanel = ({
     address: restaurant.address || "",
     phone: restaurant.phone || "",
     website: restaurant.website || "",
+    subscription_id: restaurant.subscription_id || "",
   });
 
   const handleSave = () => {
-    onSave(restaurant.id, form);
+    onSave(restaurant.id, { ...form, subscription_id: form.subscription_id || null });
     setEditing(false);
   };
 
