@@ -47,7 +47,7 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
                 <div
                   className={`rounded-full overflow-hidden transition-all duration-300 flex items-center justify-center bg-muted/20 ${
                     i === activeIndex
-                      ? "w-[72px] h-[72px] ring-2 ring-foreground ring-offset-2 ring-offset-background"
+                      ? "w-[72px] h-[72px] border-2 border-foreground"
                       : "w-[56px] h-[56px] opacity-60"
                   }`}
                   style={i === activeIndex ? { boxShadow: "0 0 12px 2px rgba(255,255,255,0.25)" } : undefined}
