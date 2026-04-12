@@ -136,31 +136,43 @@ export type Database = {
       }
       restaurants: {
         Row: {
+          address: string | null
+          contact_email: string | null
           created_at: string
           id: string
           is_active: boolean
           name: string
+          phone: string | null
           slug: string
           subscription_id: string | null
           updated_at: string
+          website: string | null
         }
         Insert: {
+          address?: string | null
+          contact_email?: string | null
           created_at?: string
           id?: string
           is_active?: boolean
           name: string
+          phone?: string | null
           slug: string
           subscription_id?: string | null
           updated_at?: string
+          website?: string | null
         }
         Update: {
+          address?: string | null
+          contact_email?: string | null
           created_at?: string
           id?: string
           is_active?: boolean
           name?: string
+          phone?: string | null
           slug?: string
           subscription_id?: string | null
           updated_at?: string
+          website?: string | null
         }
         Relationships: [
           {
