@@ -6,6 +6,9 @@ import DishCarousel from "@/components/DishCarousel";
 import DishInfo from "@/components/DishInfo";
 import DishViewer from "@/components/DishViewer";
 import SplashScreen from "@/components/SplashScreen";
+import MenuFormulas from "@/components/MenuFormulas";
+import AllergensDialog from "@/components/AllergensDialog";
+import ChefNoteDialog from "@/components/ChefNoteDialog";
 import { isIOS } from "@/lib/platform";
 import { Rotate3d } from "lucide-react";
 
@@ -86,7 +89,14 @@ const Index = () => {
           </button>
         </div>
 
-        <div className="mt-4 pb-4">
+        <MenuFormulas />
+
+        <div className="flex justify-center gap-6 pb-1">
+          <AllergensDialog />
+          <ChefNoteDialog />
+        </div>
+
+        <div className="mt-2 pb-4">
           <DishCarousel
             dishes={dishes}
             activeIndex={safeIndex}
