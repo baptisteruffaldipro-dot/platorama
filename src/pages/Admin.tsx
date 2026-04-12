@@ -100,18 +100,22 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
           <Star className="w-5 h-5 text-accent" />
           Favoris par plat
         </h2>
-        <div className="space-y-3">
+        <div className="flex items-end gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ minHeight: 200 }}>
           {stats.map((s) => (
-            <div key={s.dish_id + "-fav"} className="flex items-center gap-3">
-              <span className="w-40 text-sm text-foreground truncate">{s.dish_name}</span>
-              <div className="flex-1 bg-muted/30 rounded-full h-6 overflow-hidden">
+            <div key={s.dish_id + "-fav"} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
+              <span className="text-xs font-semibold text-accent">{s.favorites}</span>
+              <div className="w-full bg-muted/30 rounded-t-md overflow-hidden" style={{ height: 160 }}>
                 <div
-                  className="h-full bg-accent rounded-full transition-all duration-500 flex items-center justify-end pr-2"
-                  style={{ width: `${Math.max(2, (s.favorites / maxFav) * 100)}%` }}
-                >
-                  <span className="text-xs font-semibold text-accent-foreground">{s.favorites}</span>
-                </div>
+                  className="w-full bg-accent rounded-t-md transition-all duration-500 mt-auto"
+                  style={{
+                    height: `${Math.max(4, (s.favorites / maxFav) * 100)}%`,
+                    marginTop: `${100 - Math.max(4, (s.favorites / maxFav) * 100)}%`,
+                  }}
+                />
               </div>
+              <span className="text-[10px] text-muted-foreground text-center leading-tight w-full truncate px-0.5">
+                {s.dish_name}
+              </span>
             </div>
           ))}
         </div>
@@ -123,18 +127,22 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
           <Rotate3d className="w-5 h-5 text-accent" />
           Clics AR par plat
         </h2>
-        <div className="space-y-3">
+        <div className="flex items-end gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ minHeight: 200 }}>
           {stats.map((s) => (
-            <div key={s.dish_id + "-ar"} className="flex items-center gap-3">
-              <span className="w-40 text-sm text-foreground truncate">{s.dish_name}</span>
-              <div className="flex-1 bg-muted/30 rounded-full h-6 overflow-hidden">
+            <div key={s.dish_id + "-ar"} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
+              <span className="text-xs font-semibold text-primary">{s.ar_clicks}</span>
+              <div className="w-full bg-muted/30 rounded-t-md overflow-hidden" style={{ height: 160 }}>
                 <div
-                  className="h-full bg-primary rounded-full transition-all duration-500 flex items-center justify-end pr-2"
-                  style={{ width: `${Math.max(2, (s.ar_clicks / maxAR) * 100)}%` }}
-                >
-                  <span className="text-xs font-semibold text-primary-foreground">{s.ar_clicks}</span>
-                </div>
+                  className="w-full bg-primary rounded-t-md transition-all duration-500"
+                  style={{
+                    height: `${Math.max(4, (s.ar_clicks / maxAR) * 100)}%`,
+                    marginTop: `${100 - Math.max(4, (s.ar_clicks / maxAR) * 100)}%`,
+                  }}
+                />
               </div>
+              <span className="text-[10px] text-muted-foreground text-center leading-tight w-full truncate px-0.5">
+                {s.dish_name}
+              </span>
             </div>
           ))}
         </div>
