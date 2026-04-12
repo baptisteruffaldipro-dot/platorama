@@ -58,6 +58,26 @@ function FontSelect({ label, value, onChange }: { label: string; value: string; 
 }
 
 export default function SettingsPanel({ restaurantId }: { restaurantId?: string | null }) {
+  // Fetch active subscription for this restaurant
+  const { data: subscriptionInfo } = useQuery({
+    queryKey: ["restaurant-subscription", restaurantId],
+    queryFn: async () => {
+      if (!restaurantId) return null;
+      const { data: restaurant } = await supabase
+        .from("restaurants")
+        .select("subscription_id")
+        .eq("id", restaurantId)
+        .single();
+      if (!restaurant?.subscription_id) return null;
+      const { data: sub } = await supabase
+        .from("subscriptions")
+        .select("*")
+        .eq("id", restaurant.subscription_id)
+        .single();
+      return sub;
+    },
+    enabled: !!restaurantId,
+  });
   const { data: draft } = useDraftSettings(restaurantId);
   const { data: published } = usePublishedSettings(restaurantId);
   const saveDraft = useSaveDraft(restaurantId);
