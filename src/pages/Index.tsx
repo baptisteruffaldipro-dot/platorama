@@ -70,7 +70,7 @@ const Index = () => {
   if (isLoading || !dishes?.length) {
     return (
       <div className="h-full flex items-center justify-center bg-background">
-        {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
+        {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
       </div>
     );
   }
@@ -98,7 +98,7 @@ const Index = () => {
 
   return (
     <div className="h-full flex flex-col relative overflow-hidden bg-background">
-      {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
+      {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
       <LanguageSelector />
 
       <div className="flex-1 flex items-center justify-center relative">

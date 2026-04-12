@@ -3,7 +3,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useDishes, type Dish } from "@/hooks/useDishes";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -191,7 +191,8 @@ const SortableRow = ({
 
 /* ─── Admin Page ─── */
 const Admin = () => {
-  const { user, isAdmin, loading: authLoading, signOut } = useAuth();
+  const { user, isAdmin, isSuperAdmin, loading: authLoading, signOut } = useAuth();
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const restaurantId = searchParams.get("restaurant");
   const { data: dishes, isLoading } = useDishes(restaurantId);
@@ -201,12 +202,57 @@ const Admin = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [tab, setTab] = useState<"menu" | "stats" | "settings">("menu");
+  const [isResolvingRestaurant, setIsResolvingRestaurant] = useState(false);
+  const [scopeError, setScopeError] = useState<string | null>(null);
   
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
+
+  useEffect(() => {
+    if (authLoading || !user || !isAdmin || restaurantId) {
+      setIsResolvingRestaurant(false);
+      setScopeError(null);
+      return;
+    }
+
+    if (isSuperAdmin) {
+      navigate("/dashboard", { replace: true });
+      return;
+    }
+
+    let ignore = false;
+
+    const resolveRestaurant = async () => {
+      setIsResolvingRestaurant(true);
+      setScopeError(null);
+
+      const { data, error } = await supabase
+        .from("restaurant_members")
+        .select("restaurant_id")
+        .eq("user_id", user.id)
+        .limit(1)
+        .maybeSingle();
+
+      if (ignore) return;
+
+      if (error || !data?.restaurant_id) {
+        setScopeError("Aucun restaurant associé à ce compte.");
+        setIsResolvingRestaurant(false);
+        return;
+      }
+
+      navigate(`/admin?restaurant=${data.restaurant_id}`, { replace: true });
+    };
+
+    void resolveRestaurant();
+
+    return () => {
+      ignore = true;
+    };
+  }, [authLoading, isAdmin, isSuperAdmin, navigate, restaurantId, user]);
 
   // Form state
   const [form, setForm] = useState({
@@ -222,8 +268,10 @@ const Admin = () => {
     chef_note: "",
   });
 
-  if (authLoading) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Chargement...</div>;
+  if (authLoading || isResolvingRestaurant) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Chargement...</div>;
   if (!user || !isAdmin) return <Navigate to="/login" replace />;
+  if (!restaurantId && scopeError) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">{scopeError}</div>;
+  if (!restaurantId) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Chargement...</div>;
 
   const openNew = () => {
     setIsNew(true);

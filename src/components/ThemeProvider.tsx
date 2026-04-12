@@ -54,8 +54,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
   const restaurantId = new URLSearchParams(window.location.search).get("restaurant");
   const isDashboard = window.location.pathname === "/dashboard" || window.location.pathname === "/login";
 
-  // Only fetch restaurant theme when a restaurant_id is present
-  const { data: settings } = usePublishedSettings(isDashboard ? "__none__" : restaurantId);
+  const { data: settings } = usePublishedSettings(isDashboard ? null : restaurantId);
 
   useEffect(() => {
     // Dashboard and login always use default theme
