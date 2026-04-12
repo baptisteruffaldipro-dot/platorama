@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
-import { LogOut, Plus, Pencil, Trash2, Upload, Star, Rotate3d, BarChart3, UtensilsCrossed, GripVertical, Settings } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Upload, Star, Rotate3d, BarChart3, UtensilsCrossed, GripVertical, Settings, Eye } from "lucide-react";
 import SettingsPanel from "@/components/SettingsPanel";
 import {
   Dialog,
@@ -364,6 +364,13 @@ const Admin = () => {
               <Plus className="w-4 h-4 mr-1" /> Ajouter
             </Button>
           )}
+          <Button size="sm" variant="outline" onClick={() => {
+            const params = new URLSearchParams(window.location.search);
+            const rid = params.get("restaurant");
+            window.open(rid ? `/?restaurant=${rid}` : "/", "_blank");
+          }}>
+            <Eye className="w-4 h-4 mr-1" /> Voir le menu
+          </Button>
           <Button size="sm" variant="ghost" onClick={() => signOut()}>
             <LogOut className="w-4 h-4" />
           </Button>
