@@ -510,9 +510,30 @@ const Admin = () => {
               <Input value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} type="number" step="0.01" />
             </div>
 
-            <div className="space-y-1">
+            <div className="space-y-2">
               <Label>Allergènes</Label>
-              <Input value={form.allergens} onChange={(e) => setForm((f) => ({ ...f, allergens: e.target.value }))} placeholder="Gluten, Lait, Œufs… (séparés par des virgules)" />
+              <div className="grid grid-cols-2 gap-2">
+                {["Gluten", "Crustacés", "Œufs", "Poissons", "Arachides", "Soja", "Lait", "Fruits à coque", "Céleri", "Moutarde", "Sésame", "Sulfites", "Lupin", "Mollusques"].map((a) => {
+                  const checked = form.allergens.split(",").map((s) => s.trim()).filter(Boolean).includes(a);
+                  return (
+                    <label key={a} className="flex items-center gap-2 text-sm cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={checked}
+                        onChange={(e) => {
+                          const current = form.allergens.split(",").map((s) => s.trim()).filter(Boolean);
+                          const next = e.target.checked
+                            ? [...current, a]
+                            : current.filter((x) => x !== a);
+                          setForm((f) => ({ ...f, allergens: next.join(", ") }));
+                        }}
+                        className="rounded border-input accent-accent"
+                      />
+                      {a}
+                    </label>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="space-y-1">
