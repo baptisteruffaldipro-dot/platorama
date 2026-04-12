@@ -55,6 +55,7 @@ export type Database = {
           model_ios: string
           name: string
           price: number
+          restaurant_id: string | null
           sort_order: number
           thumbnail: string
           updated_at: string
@@ -70,6 +71,7 @@ export type Database = {
           model_ios?: string
           name: string
           price?: number
+          restaurant_id?: string | null
           sort_order?: number
           thumbnail?: string
           updated_at?: string
@@ -85,11 +87,90 @@ export type Database = {
           model_ios?: string
           name?: string
           price?: number
+          restaurant_id?: string | null
           sort_order?: number
           thumbnail?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "dishes_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      restaurant_members: {
+        Row: {
+          created_at: string
+          id: string
+          restaurant_id: string
+          role: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          restaurant_id: string
+          role?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          restaurant_id?: string
+          role?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_members_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      restaurants: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          slug: string
+          subscription_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          slug: string
+          subscription_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          subscription_id?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurants_subscription_id_fkey"
+            columns: ["subscription_id"]
+            isOneToOne: false
+            referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       site_settings: {
         Row: {
@@ -102,6 +183,7 @@ export type Database = {
           id: string
           is_draft: boolean
           logo_url: string
+          restaurant_id: string | null
           restaurant_name: string
           subtitle: string
           text_color: string
@@ -117,6 +199,7 @@ export type Database = {
           id?: string
           is_draft?: boolean
           logo_url?: string
+          restaurant_id?: string | null
           restaurant_name?: string
           subtitle?: string
           text_color?: string
@@ -132,10 +215,52 @@ export type Database = {
           id?: string
           is_draft?: boolean
           logo_url?: string
+          restaurant_id?: string | null
           restaurant_name?: string
           subtitle?: string
           text_color?: string
           updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "site_settings_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      subscriptions: {
+        Row: {
+          created_at: string
+          features: Json
+          id: string
+          max_dishes: number
+          name: string
+          price_monthly: number
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          features?: Json
+          id?: string
+          max_dishes?: number
+          name: string
+          price_monthly?: number
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          features?: Json
+          id?: string
+          max_dishes?: number
+          name?: string
+          price_monthly?: number
+          slug?: string
+          sort_order?: number
         }
         Relationships: []
       }
@@ -162,6 +287,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_user_restaurant_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
