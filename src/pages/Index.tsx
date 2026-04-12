@@ -88,12 +88,6 @@ const Index = () => {
           </button>
         </div>
 
-        
-
-        <div className="flex justify-center pb-1">
-          <ChefNoteDialog />
-        </div>
-
         <div className="mt-2 pb-4">
           <DishCarousel
             dishes={dishes}
