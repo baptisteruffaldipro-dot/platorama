@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Info } from "lucide-react";
+import AllergensDialog from "@/components/AllergensDialog";
 import {
   Dialog,
   DialogContent,
@@ -15,6 +16,7 @@ interface DishInfoProps {
     name: string;
     ingredients: string;
     price: number;
+    allergens?: string[];
   };
   isFavorite: boolean;
   onToggleFavorite: () => void;
@@ -113,6 +115,9 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
         <p className="text-sm italic text-muted-foreground leading-relaxed max-w-[280px]" style={{ fontFamily: "var(--font-serif)" }}>
           {dish.ingredients}
         </p>
+        <div className="mt-2">
+          <AllergensDialog allergens={dish.allergens ?? []} />
+        </div>
       </motion.div>
     </AnimatePresence>
   );

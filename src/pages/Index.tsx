@@ -7,7 +7,6 @@ import DishInfo from "@/components/DishInfo";
 import DishViewer from "@/components/DishViewer";
 import SplashScreen from "@/components/SplashScreen";
 
-import AllergensDialog from "@/components/AllergensDialog";
 import ChefNoteDialog from "@/components/ChefNoteDialog";
 import { isIOS } from "@/lib/platform";
 import { Rotate3d } from "lucide-react";
@@ -91,8 +90,7 @@ const Index = () => {
 
         
 
-        <div className="flex justify-center gap-6 pb-1">
-          <AllergensDialog allergens={dish.allergens ?? []} />
+        <div className="flex justify-center pb-1">
           <ChefNoteDialog />
         </div>
 
