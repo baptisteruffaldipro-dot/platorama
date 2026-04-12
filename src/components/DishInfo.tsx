@@ -1,6 +1,13 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Info } from "lucide-react";
+import { Star, Info, ChefHat } from "lucide-react";
 import AllergensDialog from "@/components/AllergensDialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import {
   Dialog,
   DialogContent,
@@ -17,6 +24,7 @@ interface DishInfoProps {
     ingredients: string;
     price: number;
     allergens?: string[];
+    chef_note?: string;
   };
   isFavorite: boolean;
   onToggleFavorite: () => void;
@@ -110,6 +118,32 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
             {dish.price.toFixed(2)} €
           </p>
           <FormulasDialog />
+          {dish.chef_note && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <button
+                  className="w-5 h-5 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors"
+                  aria-label="Note du chef"
+                >
+                  <ChefHat className="w-3 h-3 text-muted-foreground" />
+                </button>
+              </DialogTrigger>
+              <DialogContent className="bg-card border-border max-w-sm">
+                <DialogHeader>
+                  <DialogTitle
+                    className="text-xl text-foreground tracking-wide uppercase text-center flex items-center justify-center gap-2"
+                    style={{ fontFamily: "var(--font-serif)" }}
+                  >
+                    <ChefHat className="w-5 h-5 text-accent" />
+                    Note du Chef
+                  </DialogTitle>
+                </DialogHeader>
+                <p className="text-sm text-foreground leading-relaxed italic text-center pt-2" style={{ fontFamily: "var(--font-serif)" }}>
+                  {dish.chef_note}
+                </p>
+              </DialogContent>
+            </Dialog>
+          )}
         </div>
 
         <p className="text-sm italic text-muted-foreground leading-relaxed max-w-[280px]" style={{ fontFamily: "var(--font-serif)" }}>
