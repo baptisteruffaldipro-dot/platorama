@@ -104,18 +104,17 @@ Deno.serve(async (req) => {
       userId = userData.user.id;
     }
 
-    // Assign 'admin' role
-    await supabaseAdmin.from("user_roles").insert({
-      user_id: userId,
-      role: "admin",
-    });
+    // Assign 'admin' role (ignore if already exists)
+    await supabaseAdmin.from("user_roles").upsert(
+      { user_id: userId, role: "admin" },
+      { onConflict: "user_id,role" }
+    );
 
-    // Link to restaurant
-    await supabaseAdmin.from("restaurant_members").insert({
-      user_id: userId,
-      restaurant_id,
-      role: "owner",
-    });
+    // Link to restaurant (ignore if already exists)
+    await supabaseAdmin.from("restaurant_members").upsert(
+      { user_id: userId, restaurant_id, role: "owner" },
+      { onConflict: "user_id,restaurant_id" }
+    );
 
     return new Response(
       JSON.stringify({ success: true, user_id: userId }),
