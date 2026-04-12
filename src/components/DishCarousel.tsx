@@ -1,6 +1,7 @@
 import { useRef, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Dish } from "@/hooks/useDishes";
+import { getCategoryStyle } from "@/lib/categoryStyle";
 
 interface DishCarouselProps {
   dishes: Dish[];
@@ -40,9 +41,10 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
             <div
               className={`rounded-full overflow-hidden transition-all duration-300 flex items-center justify-center bg-muted/20 ${
                 i === activeIndex
-                  ? "w-[72px] h-[72px] ring-2 ring-foreground ring-offset-2 ring-offset-background"
+                  ? "w-[72px] h-[72px] ring-2 ring-offset-2 ring-offset-background"
                   : "w-[56px] h-[56px] opacity-60"
               }`}
+              style={i === activeIndex ? { ["--tw-ring-color" as string]: `hsl(${getCategoryStyle(dish.category).hsl})` } : undefined}
             >
               <img
                 src={dish.thumbnail}
