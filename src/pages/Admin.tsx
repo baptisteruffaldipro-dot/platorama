@@ -215,6 +215,8 @@ const Admin = () => {
     model_ios: "",
     model_android: "",
     sort_order: "",
+    allergens: "",
+    chef_note: "",
   });
 
   if (authLoading) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Chargement...</div>;
@@ -223,7 +225,7 @@ const Admin = () => {
   const openNew = () => {
     setIsNew(true);
     setEditDish(null);
-    setForm({ category: "ENTRÉE", name: "", ingredients: "", price: "", thumbnail: "", model_ios: "", model_android: "", sort_order: String((dishes?.length ?? 0) + 1) });
+    setForm({ category: "ENTRÉE", name: "", ingredients: "", price: "", thumbnail: "", model_ios: "", model_android: "", sort_order: String((dishes?.length ?? 0) + 1), allergens: "", chef_note: "" });
     setDialogOpen(true);
   };
 
@@ -239,6 +241,8 @@ const Admin = () => {
       model_ios: dish.model_ios,
       model_android: dish.model_android,
       sort_order: String(dish.sort_order),
+      allergens: (dish.allergens ?? []).join(", "),
+      chef_note: dish.chef_note ?? "",
     });
     setDialogOpen(true);
   };
@@ -280,6 +284,8 @@ const Admin = () => {
       model_ios: form.model_ios,
       model_android: form.model_android,
       sort_order: parseInt(form.sort_order) || 0,
+      allergens: form.allergens.split(",").map((a) => a.trim()).filter(Boolean),
+      chef_note: form.chef_note,
     };
 
     let error;
@@ -502,6 +508,21 @@ const Admin = () => {
             <div className="space-y-1">
               <Label>Prix (€)</Label>
               <Input value={form.price} onChange={(e) => setForm((f) => ({ ...f, price: e.target.value }))} type="number" step="0.01" />
+            </div>
+
+            <div className="space-y-1">
+              <Label>Allergènes</Label>
+              <Input value={form.allergens} onChange={(e) => setForm((f) => ({ ...f, allergens: e.target.value }))} placeholder="Gluten, Lait, Œufs… (séparés par des virgules)" />
+            </div>
+
+            <div className="space-y-1">
+              <Label>Note du Chef</Label>
+              <textarea
+                value={form.chef_note}
+                onChange={(e) => setForm((f) => ({ ...f, chef_note: e.target.value }))}
+                placeholder="Description du chef pour ce plat…"
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm min-h-[80px] resize-y"
+              />
             </div>
 
             <div className="space-y-1">
