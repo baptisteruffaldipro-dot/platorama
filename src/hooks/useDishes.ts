@@ -11,6 +11,7 @@ export interface Dish {
   model_ios: string;
   model_android: string;
   sort_order: number;
+  allergens: string[];
 }
 
 export const useDishes = () => {

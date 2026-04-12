@@ -34,14 +34,6 @@ const ChefNoteDialog = () => {
             Le pain pita, simplement grillé, accompagne ce moment de partage, pensé pour être dégusté du bout des
             doigts, dans la simplicité et le plaisir.
           </p>
-          <div className="border-t border-border pt-3 space-y-1">
-            <p className="text-xs text-muted-foreground text-center">
-              <span className="text-accent font-semibold">Allergènes :</span> sésame, gluten.
-            </p>
-            <p className="text-[10px] text-muted-foreground text-center italic">
-              Peut contenir des traces de fruits à coque.
-            </p>
-          </div>
         </div>
       </DialogContent>
     </Dialog>

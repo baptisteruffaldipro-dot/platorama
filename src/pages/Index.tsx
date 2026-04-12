@@ -92,7 +92,7 @@ const Index = () => {
         
 
         <div className="flex justify-center gap-6 pb-1">
-          <AllergensDialog />
+          <AllergensDialog allergens={dish.allergens ?? []} />
           <ChefNoteDialog />
         </div>
 
