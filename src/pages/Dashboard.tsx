@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import {
   LogOut,
+  Settings,
   Plus,
   Search,
   Store,
@@ -284,8 +285,11 @@ const Dashboard = () => {
                   </div>
 
                   <div className="flex items-center gap-1 shrink-0">
-                    <Button size="icon" variant="ghost" title="Voir le menu" onClick={() => navigate(`/admin?restaurant=${restaurant.id}`)}>
+                    <Button size="icon" variant="ghost" title="Voir le menu" onClick={() => window.open(`/?restaurant=${restaurant.id}`, '_blank')}>
                       <Eye className="w-4 h-4" />
+                    </Button>
+                    <Button size="icon" variant="ghost" title="Personnaliser" onClick={() => navigate(`/admin?restaurant=${restaurant.id}`)}>
+                      <Settings className="w-4 h-4" />
                     </Button>
                     <Button size="icon" variant="ghost" title={restaurant.is_active ? "Désactiver" : "Activer"} onClick={() => handleToggleActive(restaurant)}>
                       {restaurant.is_active ? <PowerOff className="w-4 h-4" /> : <Power className="w-4 h-4 text-green-400" />}
