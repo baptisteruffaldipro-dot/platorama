@@ -201,7 +201,7 @@ const Admin = () => {
   const [isNew, setIsNew] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [tab, setTab] = useState<"menu" | "stats" | "settings">("menu");
+  const [tab, setTab] = useState<"menu" | "stats" | "settings" | "users" | "info">("menu");
   const [isResolvingRestaurant, setIsResolvingRestaurant] = useState(false);
   const [scopeError, setScopeError] = useState<string | null>(null);
   
