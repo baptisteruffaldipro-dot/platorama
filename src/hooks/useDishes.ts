@@ -12,6 +12,7 @@ export interface Dish {
   model_android: string;
   sort_order: number;
   allergens: string[];
+  chef_note: string;
 }
 
 export const useDishes = () => {
