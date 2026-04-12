@@ -452,7 +452,7 @@ const Admin = () => {
       ) : tab === "stats" ? (
         <StatsPanel dishes={dishes ?? []} />
       ) : (
-        <SettingsPanel />
+        <SettingsPanel restaurantId={restaurantId} />
       )}
 
       {/* Edit/Create Dialog */}
