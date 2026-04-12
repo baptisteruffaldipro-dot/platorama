@@ -2,12 +2,12 @@ import { useState, useEffect } from "react";
 import { useDishes } from "@/hooks/useDishes";
 import { supabase } from "@/integrations/supabase/client";
 import { useFavorites } from "@/hooks/useFavorites";
+import { useTranslation } from "@/hooks/useTranslation";
 import DishCarousel from "@/components/DishCarousel";
 import DishInfo from "@/components/DishInfo";
 import DishViewer from "@/components/DishViewer";
 import SplashScreen from "@/components/SplashScreen";
-
-
+import LanguageSelector from "@/components/LanguageSelector";
 import { isIOS } from "@/lib/platform";
 import { Rotate3d } from "lucide-react";
 
@@ -35,7 +35,34 @@ const Index = () => {
   const [showSplash, setShowSplash] = useState(true);
   const { data: dishes, isLoading } = useDishes();
   const { isFavorite, toggle } = useFavorites();
+  const { lang, t, translateBatch } = useTranslation();
   usePrefetchModels(dishes);
+
+  // Trigger translation when language or dishes change
+  useEffect(() => {
+    if (lang === "fr" || !dishes?.length) return;
+    const allTexts: string[] = [];
+    dishes.forEach((d) => {
+      allTexts.push(d.category, d.name, d.ingredients);
+      if (d.chef_note) allTexts.push(d.chef_note);
+      if (d.allergens?.length) allTexts.push(...d.allergens);
+    });
+    // Add static UI texts
+    allTexts.push(
+      "Voir en réalité augmentée",
+      "Allergènes",
+      "Note du Chef",
+      "Nos Formules",
+      "Entrée / Plat / Dessert",
+      "Entrée / Plat ou Plat / Dessert",
+      "Entrée",
+      "Plat",
+      "Dessert",
+      "N'hésitez pas à informer votre serveur de toute allergie ou intolérance alimentaire."
+    );
+    const unique = [...new Set(allTexts.filter(Boolean))];
+    translateBatch(unique);
+  }, [lang, dishes, translateBatch]);
 
   if (isLoading || !dishes?.length) {
     return (
@@ -49,7 +76,6 @@ const Index = () => {
   const dish = dishes[safeIndex];
 
   const handleLaunchAR = () => {
-    // Track AR click
     supabase
       .from("dish_events")
       .insert({ dish_id: dish.id, event_type: "ar_click" })
@@ -70,6 +96,7 @@ const Index = () => {
   return (
     <div className="h-full flex flex-col relative overflow-hidden bg-background">
       {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
+      <LanguageSelector />
 
       <div className="flex-1 flex items-center justify-center relative">
         <DishViewer dish={dish} />
@@ -84,7 +111,7 @@ const Index = () => {
             className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-accent-foreground text-sm font-semibold tracking-wide backdrop-blur-md transition-all active:scale-95"
           >
             <Rotate3d className="w-4 h-4" />
-            Voir en réalité augmentée
+            {t("Voir en réalité augmentée")}
           </button>
         </div>
 
