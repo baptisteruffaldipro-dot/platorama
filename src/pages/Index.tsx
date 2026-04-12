@@ -87,8 +87,13 @@ const Index = () => {
       const a = document.createElement("a");
       a.rel = "ar";
       a.href = modelUrl;
-      a.appendChild(document.createElement("img"));
+      a.style.display = "none";
+      const img = document.createElement("img");
+      a.appendChild(img);
+      document.body.appendChild(a);
       a.click();
+      // Clean up after AR session starts
+      setTimeout(() => a.remove(), 2000);
     } else if (dish.model_android) {
       const modelUrl = dish.model_android.startsWith("http")
         ? dish.model_android
