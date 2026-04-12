@@ -6,7 +6,7 @@ import DishCarousel from "@/components/DishCarousel";
 import DishInfo from "@/components/DishInfo";
 import DishViewer from "@/components/DishViewer";
 import SplashScreen from "@/components/SplashScreen";
-import MenuFormulas from "@/components/MenuFormulas";
+
 import AllergensDialog from "@/components/AllergensDialog";
 import ChefNoteDialog from "@/components/ChefNoteDialog";
 import { isIOS } from "@/lib/platform";
@@ -89,7 +89,7 @@ const Index = () => {
           </button>
         </div>
 
-        <MenuFormulas />
+        
 
         <div className="flex justify-center gap-6 pb-1">
           <AllergensDialog />
