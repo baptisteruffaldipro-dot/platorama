@@ -34,7 +34,6 @@ import {
   Phone,
   Globe,
   Package,
-  X,
 } from "lucide-react";
 
 /* ─── Types ─── */
