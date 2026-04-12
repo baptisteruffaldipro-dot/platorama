@@ -103,8 +103,8 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         <div className="flex items-end gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ minHeight: 200 }}>
           {stats.map((s) => (
             <div key={s.dish_id + "-fav"} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
-              <span className="text-xs font-semibold text-accent">{s.favorites}</span>
-              <div className="w-full bg-muted/30 rounded-t-md flex flex-col justify-end" style={{ height: 160 }}>
+              <div className="w-full bg-muted/30 rounded-t-md flex flex-col justify-end items-center" style={{ height: 160 }}>
+                <span className="text-xs font-semibold text-accent mb-1">{s.favorites}</span>
                 <div
                   className="w-full bg-accent rounded-t-md transition-all duration-500"
                   style={{ height: `${Math.max(4, (s.favorites / maxFav) * 100)}%` }}
