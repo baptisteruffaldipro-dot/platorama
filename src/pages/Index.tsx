@@ -91,8 +91,7 @@ const Index = () => {
 
         
 
-        <div className="flex justify-center gap-6 pb-1">
-          <AllergensDialog allergens={dish.allergens ?? []} />
+        <div className="flex justify-center pb-1">
           <ChefNoteDialog />
         </div>
 

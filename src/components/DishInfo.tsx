@@ -115,6 +115,9 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
         <p className="text-sm italic text-muted-foreground leading-relaxed max-w-[280px]" style={{ fontFamily: "var(--font-serif)" }}>
           {dish.ingredients}
         </p>
+        <div className="mt-2">
+          <AllergensDialog allergens={dish.allergens ?? []} />
+        </div>
       </motion.div>
     </AnimatePresence>
   );
