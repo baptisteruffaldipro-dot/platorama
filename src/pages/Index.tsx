@@ -49,7 +49,7 @@ const Index = () => {
     });
     // Add static UI texts
     allTexts.push(
-      "Voir en réalité augmentée",
+      "Voir sur ma table",
       "Allergènes",
       "Note du Chef",
       "Nos Formules",
