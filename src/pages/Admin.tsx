@@ -192,7 +192,9 @@ const SortableRow = ({
 /* ─── Admin Page ─── */
 const Admin = () => {
   const { user, isAdmin, loading: authLoading, signOut } = useAuth();
-  const { data: dishes, isLoading } = useDishes();
+  const [searchParams] = useSearchParams();
+  const restaurantId = searchParams.get("restaurant");
+  const { data: dishes, isLoading } = useDishes(restaurantId);
   const queryClient = useQueryClient();
   const [editDish, setEditDish] = useState<Dish | null>(null);
   const [isNew, setIsNew] = useState(false);
