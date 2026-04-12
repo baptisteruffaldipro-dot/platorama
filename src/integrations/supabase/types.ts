@@ -47,6 +47,7 @@ export type Database = {
         Row: {
           allergens: string[]
           category: string
+          chef_note: string
           created_at: string
           id: string
           ingredients: string
@@ -61,6 +62,7 @@ export type Database = {
         Insert: {
           allergens?: string[]
           category: string
+          chef_note?: string
           created_at?: string
           id?: string
           ingredients?: string
@@ -75,6 +77,7 @@ export type Database = {
         Update: {
           allergens?: string[]
           category?: string
+          chef_note?: string
           created_at?: string
           id?: string
           ingredients?: string
