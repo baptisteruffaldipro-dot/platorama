@@ -8,7 +8,6 @@ import DishViewer from "@/components/DishViewer";
 import SplashScreen from "@/components/SplashScreen";
 
 import ChefNoteDialog from "@/components/ChefNoteDialog";
-import ChefNoteDialog from "@/components/ChefNoteDialog";
 import { isIOS } from "@/lib/platform";
 import { Rotate3d } from "lucide-react";
 
