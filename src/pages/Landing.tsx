@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronRight, ChevronLeft, Check, QrCode, Smartphone, ThumbsUp, Star, Mail, Phone, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import logoPlatorama from "@/assets/logo-platorama.png";
 
 /* ─── palette (local to landing, not theme tokens since theme is dark) ─── */
 const c = {
@@ -106,9 +107,7 @@ const Landing = () => {
     <div style={{ background: c.cream, color: c.dark, fontFamily: fontBody }}>
       {/* ── NAV ── */}
       <nav className="flex items-center justify-between px-6 md:px-12 py-5 max-w-7xl mx-auto">
-        <div style={{ fontFamily: fontDisplay, fontWeight: 800, fontSize: 24, color: c.pink }}>
-          Plat<span style={{ color: c.mint }}>O</span>rama
-        </div>
+        <img src={logoPlatorama} alt="Platorama" className="h-10 object-contain" />
         <div className="hidden md:flex items-center gap-8" style={{ fontFamily: fontBody, fontWeight: 600, fontSize: 14 }}>
           {["Solution", "Tarifs", "FAQ", "Contact"].map((l) => (
             <a key={l} href={`#${l.toLowerCase()}`} style={{ color: c.dark }} className="hover:opacity-70 transition-opacity">{l}</a>
@@ -365,9 +364,7 @@ const Landing = () => {
       <footer className="px-6 md:px-12 py-12 max-w-7xl mx-auto">
         <div className="grid sm:grid-cols-3 gap-8 mb-8">
           <div>
-            <p style={{ fontFamily: fontDisplay, fontWeight: 800, fontSize: 20, color: c.pink, marginBottom: 8 }}>
-              Plat<span style={{ color: c.mint }}>O</span>rama
-            </p>
+            <img src={logoPlatorama} alt="Platorama" className="h-8 object-contain mb-2" />
             <p style={{ fontSize: 13, color: c.muted, lineHeight: 1.6 }}>Platorama révèle le plat avant la commande pour faciliter le choix.</p>
           </div>
           <div>
