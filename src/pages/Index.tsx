@@ -28,6 +28,8 @@ const Index = () => {
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
   const { data: dishes, isLoading } = useDishes(restaurantId);
+  const { isFavorite, toggle } = useFavorites();
+  const { lang, t, translateBatch } = useTranslation();
 
   // No restaurant parameter = invalid link
   if (!restaurantId) {
@@ -38,8 +40,6 @@ const Index = () => {
       </div>
     );
   }
-  const { isFavorite, toggle } = useFavorites();
-  const { lang, t, translateBatch } = useTranslation();
 
   // Trigger translation when language or dishes change
   useEffect(() => {
