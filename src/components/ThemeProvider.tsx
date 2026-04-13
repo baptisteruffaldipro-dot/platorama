@@ -63,7 +63,7 @@ function resetToDashboardTheme() {
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   const restaurantId = new URLSearchParams(window.location.search).get("restaurant");
-  const isDashboard = window.location.pathname === "/" || window.location.pathname === "/login";
+  const isDashboard = (window.location.pathname === "/" || window.location.pathname === "/login") && !window.location.search.includes("restaurant");
 
   const { data: settings } = usePublishedSettings(isDashboard ? null : restaurantId);
 
