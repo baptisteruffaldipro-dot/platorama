@@ -67,7 +67,7 @@ export async function compressGlb(file: File): Promise<File> {
     return file;
   }
 
-  const compressedFile = new File([compressed], file.name, { type: "model/gltf-binary" });
+  const compressedFile = new File([compressed.buffer as ArrayBuffer], file.name, { type: "model/gltf-binary" });
   
   const ratio = ((1 - compressedFile.size / file.size) * 100).toFixed(0);
   console.log(
