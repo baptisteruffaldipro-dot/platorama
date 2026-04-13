@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDishes } from "@/hooks/useDishes";
 import { supabase } from "@/integrations/supabase/client";
@@ -51,7 +51,7 @@ const Index = () => {
   const { data: dishes, isLoading } = useDishes(restaurantId);
   const { isFavorite, toggle } = useFavorites();
   const { lang, t, translateBatch } = useTranslation();
-  usePrefetchModels(dishes);
+  usePrefetchAdjacentModels(dishes, activeIndex);
 
   // Trigger translation when language or dishes change
   useEffect(() => {
@@ -214,7 +214,9 @@ const Index = () => {
       </div>
 
       <div className="flex-1 flex items-center justify-center relative">
-        <DishViewer dish={dish} />
+        <ErrorBoundary fallback={<DishViewerErrorFallback dish={dish} />}>
+          <DishViewer dish={dish} />
+        </ErrorBoundary>
       </div>
 
       <div className="pb-safe relative">
