@@ -33,7 +33,6 @@ const Index = () => {
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
   const { isFavorite, toggle } = useFavorites();
   const { lang, t, translateBatch } = useTranslation();
-  const { lang, t, translateBatch } = useTranslation();
 
   // Trigger translation when language or dishes change
   useEffect(() => {
