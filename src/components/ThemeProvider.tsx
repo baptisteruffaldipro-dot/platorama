@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { usePublishedSettings } from "@/hooks/useSiteSettings";
 
 function hexToHSL(hex: string): string {
@@ -30,13 +31,13 @@ function hexToHSL(hex: string): string {
 
 // Default dashboard theme (Plat'O'rama branding)
 const DASHBOARD_DEFAULTS = {
-  background: "30 50% 97%",       // cream #FFF8F2
-  foreground: "0 0% 20%",         // dark text
-  card: "0 0% 100%",              // white cards
+  background: "30 50% 97%",
+  foreground: "0 0% 20%",
+  card: "0 0% 100%",
   cardForeground: "0 0% 20%",
-  accent: "352 72% 63%",          // pink #E8637A
+  accent: "352 72% 63%",
   accentForeground: "0 0% 100%",
-  secondary: "160 35% 60%",       // mint #6BBFA3
+  secondary: "160 35% 60%",
   muted: "30 20% 92%",
   mutedForeground: "0 0% 45%",
   border: "30 15% 88%",
@@ -61,65 +62,52 @@ function resetToDashboardTheme() {
   document.body.style.fontFamily = "'DM Sans', 'Inter', sans-serif";
 }
 
+function applyRestaurantTheme(settings: { background_color: string; text_color: string; button_bg_color: string; button_text_color: string; heading_font: string; body_font: string }) {
+  const root = document.documentElement;
+  root.style.setProperty("--background", hexToHSL(settings.background_color));
+  root.style.setProperty("--card", hexToHSL(settings.background_color));
+  root.style.setProperty("--foreground", hexToHSL(settings.text_color));
+  root.style.setProperty("--card-foreground", hexToHSL(settings.text_color));
+  root.style.setProperty("--primary", hexToHSL(settings.text_color));
+  root.style.setProperty("--accent", hexToHSL(settings.button_bg_color));
+  root.style.setProperty("--accent-foreground", hexToHSL(settings.button_text_color));
+  root.style.setProperty("--muted", hexToHSL(settings.background_color));
+  root.style.setProperty("--muted-foreground", hexToHSL(settings.text_color));
+  root.style.setProperty("--border", hexToHSL(settings.text_color));
+  root.style.setProperty("--font-serif", `'${settings.heading_font}', Georgia, serif`);
+  root.style.setProperty("--font-body", `'${settings.body_font}', Georgia, serif`);
+  document.body.style.fontFamily = `'${settings.body_font}', Georgia, serif`;
+
+  const fonts = [...new Set([settings.heading_font, settings.body_font])];
+  fonts.forEach((font) => {
+    const id = `gfont-${font.replace(/\s+/g, "-")}`;
+    if (!document.getElementById(id)) {
+      const link = document.createElement("link");
+      link.id = id;
+      link.rel = "stylesheet";
+      link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:wght@300;400;600;700&display=swap`;
+      document.head.appendChild(link);
+    }
+  });
+}
+
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const restaurantId = new URLSearchParams(window.location.search).get("restaurant");
-  const pathname = window.location.pathname;
-  const isDashboard = (pathname === "/" || pathname === "/login") && !restaurantId;
-  const isAdmin = pathname === "/admin";
+  const location = useLocation();
+  const restaurantId = new URLSearchParams(location.search).get("restaurant");
+  const isDashboard = (location.pathname === "/" || location.pathname === "/login") && !restaurantId;
 
   const { data: settings } = usePublishedSettings(isDashboard ? null : restaurantId);
 
   useEffect(() => {
-    // Dashboard and login always use Plat'O'rama theme
     if (isDashboard) {
       resetToDashboardTheme();
       return;
     }
 
-    // Admin page: use restaurant theme for colors but keep admin-friendly layout
-    if (isAdmin && settings) {
-      const root = document.documentElement;
-      root.style.setProperty("--background", hexToHSL(settings.background_color));
-      root.style.setProperty("--card", hexToHSL(settings.background_color));
-      root.style.setProperty("--foreground", hexToHSL(settings.text_color));
-      root.style.setProperty("--card-foreground", hexToHSL(settings.text_color));
-      root.style.setProperty("--primary", hexToHSL(settings.text_color));
-      root.style.setProperty("--accent", hexToHSL(settings.button_bg_color));
-      root.style.setProperty("--accent-foreground", hexToHSL(settings.button_text_color));
-      root.style.setProperty("--muted", hexToHSL(settings.background_color));
-      root.style.setProperty("--muted-foreground", hexToHSL(settings.text_color));
-      root.style.setProperty("--border", hexToHSL(settings.text_color));
-      root.style.setProperty("--font-serif", `'${settings.heading_font}', Georgia, serif`);
-      root.style.setProperty("--font-body", `'${settings.body_font}', Georgia, serif`);
-      document.body.style.fontFamily = `'${settings.body_font}', Georgia, serif`;
-      return;
+    if (settings) {
+      applyRestaurantTheme(settings);
     }
-
-    if (!settings) return;
-    const root = document.documentElement;
-
-    root.style.setProperty("--background", hexToHSL(settings.background_color));
-    root.style.setProperty("--card", hexToHSL(settings.background_color));
-    root.style.setProperty("--foreground", hexToHSL(settings.text_color));
-    root.style.setProperty("--card-foreground", hexToHSL(settings.text_color));
-    root.style.setProperty("--primary", hexToHSL(settings.text_color));
-    root.style.setProperty("--accent", hexToHSL(settings.button_bg_color));
-    root.style.setProperty("--accent-foreground", hexToHSL(settings.button_text_color));
-    root.style.setProperty("--font-serif", `'${settings.heading_font}', Georgia, serif`);
-    document.body.style.fontFamily = `'${settings.body_font}', Georgia, serif`;
-
-    const fonts = [...new Set([settings.heading_font, settings.body_font])];
-    fonts.forEach((font) => {
-      const id = `gfont-${font.replace(/\s+/g, "-")}`;
-      if (!document.getElementById(id)) {
-        const link = document.createElement("link");
-        link.id = id;
-        link.rel = "stylesheet";
-        link.href = `https://fonts.googleapis.com/css2?family=${encodeURIComponent(font)}:wght@300;400;600;700&display=swap`;
-        document.head.appendChild(link);
-      }
-    });
-  }, [settings, isDashboard, isAdmin]);
+  }, [settings, isDashboard, location.pathname, location.search]);
 
   return <>{children}</>;
 }
