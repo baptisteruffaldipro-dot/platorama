@@ -480,11 +480,11 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-auto dashboard-layout">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-card border-b border-border px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
-        <h1 className="text-base sm:text-xl font-bold" style={{ fontFamily: "var(--font-serif)" }}>
-          Dashboard
-        </h1>
-        <Button size="sm" variant="ghost" onClick={() => signOut()}>
+      <header className="sticky top-0 z-10 bg-card border-b border-border px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-3">
+          <img src={logoPlatorama} alt="Plat'O'rama" className="h-8 sm:h-10 object-contain" />
+        </div>
+        <Button size="sm" variant="ghost" onClick={() => signOut()} className="text-muted-foreground hover:text-foreground">
           <LogOut className="w-4 h-4" />
         </Button>
       </header>
@@ -493,11 +493,11 @@ const Dashboard = () => {
         {/* Stats */}
         <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
           <StatCard icon={Store} label="Restaurants" value={restaurants.length} />
-          <StatCard icon={Power} label="Actifs" value={activeCount} />
+          <StatCard icon={Power} label="Actifs" value={activeCount} color="bg-[hsl(160,35%,60%)]" />
           <StatCard icon={Users} label="Propriétaires" value={members.length} />
           <StatCard icon={UtensilsCrossed} label="Total plats" value={totalDishes} />
-          <StatCard icon={Rotate3d} label="Plats en 3D" value={totalWith3D} />
-          <StatCard icon={CreditCard} label="Revenu/mois" value={`${totalRevenue}€`} />
+          <StatCard icon={Rotate3d} label="Plats en 3D" value={totalWith3D} color="bg-accent" />
+          <StatCard icon={CreditCard} label="Revenu/mois" value={`${totalRevenue}€`} color="bg-[hsl(160,35%,60%)]" />
         </div>
 
         {/* Section tabs */}
