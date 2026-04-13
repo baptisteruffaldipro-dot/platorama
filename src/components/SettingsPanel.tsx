@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Upload, Save, Send, Eye, CreditCard } from "lucide-react";
+import { Upload, Save, Send, Eye, CreditCard, Plus, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   useDraftSettings,
@@ -14,6 +14,7 @@ import {
   DEFAULT_SETTINGS,
   FONT_OPTIONS,
   type SiteSettings,
+  type FormulaItem,
 } from "@/hooks/useSiteSettings";
 
 function ColorInput({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
@@ -95,6 +96,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
     logo_url: initial.logo_url,
     restaurant_name: initial.restaurant_name,
     subtitle: initial.subtitle,
+    formulas: initial.formulas ?? [],
   });
 
   // Sync when draft/published loads
@@ -110,6 +112,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
       logo_url: src.logo_url,
       restaurant_name: src.restaurant_name,
       subtitle: src.subtitle,
+      formulas: src.formulas ?? [],
     });
   }, [draft, published]);
 
@@ -249,6 +252,55 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
               Supprimer
             </Button>
           )}
+        </div>
+      </div>
+
+      {/* Formules tarifaires */}
+      <div>
+        <h3 className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">Formules tarifaires</h3>
+        <p className="text-xs text-muted-foreground mb-3">Ajoutez vos formules (ex: "Entrée / Plat / Dessert" → "56 €"). L'icône ℹ️ n'apparaîtra sur le menu que si au moins une formule est renseignée.</p>
+        <div className="space-y-2">
+          {form.formulas.map((f, i) => (
+            <div key={i} className="flex items-center gap-2">
+              <Input
+                value={f.label}
+                onChange={(e) => {
+                  const updated = [...form.formulas];
+                  updated[i] = { ...updated[i], label: e.target.value };
+                  setForm((prev) => ({ ...prev, formulas: updated }));
+                }}
+                placeholder="Entrée / Plat / Dessert"
+                className="flex-1"
+              />
+              <Input
+                value={f.price}
+                onChange={(e) => {
+                  const updated = [...form.formulas];
+                  updated[i] = { ...updated[i], price: e.target.value };
+                  setForm((prev) => ({ ...prev, formulas: updated }));
+                }}
+                placeholder="56 €"
+                className="w-24"
+              />
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => {
+                  const updated = form.formulas.filter((_, j) => j !== i);
+                  setForm((prev) => ({ ...prev, formulas: updated }));
+                }}
+              >
+                <Trash2 className="w-4 h-4 text-destructive" />
+              </Button>
+            </div>
+          ))}
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setForm((prev) => ({ ...prev, formulas: [...prev.formulas, { label: "", price: "" }] }))}
+          >
+            <Plus className="w-4 h-4 mr-1" /> Ajouter une formule
+          </Button>
         </div>
       </div>
 

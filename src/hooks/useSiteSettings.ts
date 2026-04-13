@@ -1,5 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import type { Json } from "@/integrations/supabase/types";
+
+export interface FormulaItem {
+  label: string;
+  price: string;
+}
 
 export interface SiteSettings {
   id?: string;
@@ -14,6 +20,7 @@ export interface SiteSettings {
   subtitle: string;
   is_draft: boolean;
   restaurant_id?: string | null;
+  formulas: FormulaItem[];
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -27,6 +34,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   restaurant_name: "La Maison",
   subtitle: "Menu Virtuel",
   is_draft: false,
+  formulas: [],
 };
 
 export const FONT_OPTIONS = [
@@ -44,27 +52,41 @@ export const FONT_OPTIONS = [
   "Roboto",
 ];
 
+function parseRow(row: any): SiteSettings {
+  return {
+    ...row,
+    formulas: Array.isArray(row.formulas) ? row.formulas : [],
+  } as SiteSettings;
+}
+
+function toDbPayload(settings: Omit<SiteSettings, "is_draft" | "id">, isDraft: boolean, restaurantId: string) {
+  const { formulas, ...rest } = settings;
+  return {
+    ...rest,
+    formulas: formulas as unknown as Json,
+    is_draft: isDraft,
+    restaurant_id: restaurantId,
+  };
+}
+
 /** Fetch published settings (public) */
 export function usePublishedSettings(restaurantId?: string | null) {
   return useQuery({
     queryKey: ["site-settings", "published", restaurantId ?? "unscoped"],
     queryFn: async () => {
-      if (!restaurantId) {
-        return DEFAULT_SETTINGS;
-      }
+      if (!restaurantId) return DEFAULT_SETTINGS;
 
-      let query = supabase
+      const { data, error } = await supabase
         .from("site_settings")
         .select("*")
         .eq("is_draft", false)
+        .eq("restaurant_id", restaurantId)
         .order("updated_at", { ascending: false })
-        .limit(1);
+        .limit(1)
+        .maybeSingle();
 
-      query = query.eq("restaurant_id", restaurantId);
-
-      const { data, error } = await query.maybeSingle();
       if (error) throw error;
-      return (data as SiteSettings | null) ?? DEFAULT_SETTINGS;
+      return data ? parseRow(data) : DEFAULT_SETTINGS;
     },
   });
 }
@@ -74,22 +96,19 @@ export function useDraftSettings(restaurantId?: string | null) {
   return useQuery({
     queryKey: ["site-settings", "draft", restaurantId ?? "unscoped"],
     queryFn: async () => {
-      if (!restaurantId) {
-        return null;
-      }
+      if (!restaurantId) return null;
 
-      let query = supabase
+      const { data, error } = await supabase
         .from("site_settings")
         .select("*")
         .eq("is_draft", true)
+        .eq("restaurant_id", restaurantId)
         .order("updated_at", { ascending: false })
-        .limit(1);
+        .limit(1)
+        .maybeSingle();
 
-      query = query.eq("restaurant_id", restaurantId);
-
-      const { data, error } = await query.maybeSingle();
       if (error) throw error;
-      return (data as SiteSettings | null) ?? null;
+      return data ? parseRow(data) : null;
     },
   });
 }
@@ -99,31 +118,23 @@ export function useSaveDraft(restaurantId?: string | null) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (settings: Omit<SiteSettings, "is_draft" | "id">) => {
-      if (!restaurantId) {
-        throw new Error("Restaurant context is required to save settings.");
-      }
+      if (!restaurantId) throw new Error("Restaurant context is required to save settings.");
 
-      let query = supabase
+      const { data: existing } = await supabase
         .from("site_settings")
         .select("id")
         .eq("is_draft", true)
         .eq("restaurant_id", restaurantId)
-        .limit(1);
+        .limit(1)
+        .maybeSingle();
 
-      const { data: existing } = await query.maybeSingle();
-
-      const payload = { ...settings, is_draft: true, restaurant_id: restaurantId };
+      const payload = toDbPayload(settings, true, restaurantId);
 
       if (existing) {
-        const { error } = await supabase
-          .from("site_settings")
-          .update(payload)
-          .eq("id", existing.id);
+        const { error } = await supabase.from("site_settings").update(payload).eq("id", existing.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase
-          .from("site_settings")
-          .insert(payload);
+        const { error } = await supabase.from("site_settings").insert(payload);
         if (error) throw error;
       }
     },
@@ -136,31 +147,23 @@ export function usePublishSettings(restaurantId?: string | null) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: async (settings: Omit<SiteSettings, "is_draft" | "id">) => {
-      if (!restaurantId) {
-        throw new Error("Restaurant context is required to publish settings.");
-      }
+      if (!restaurantId) throw new Error("Restaurant context is required to publish settings.");
 
-      let query = supabase
+      const { data: existing } = await supabase
         .from("site_settings")
         .select("id")
         .eq("is_draft", false)
         .eq("restaurant_id", restaurantId)
-        .limit(1);
+        .limit(1)
+        .maybeSingle();
 
-      const { data: existing } = await query.maybeSingle();
-
-      const payload = { ...settings, is_draft: false, restaurant_id: restaurantId };
+      const payload = toDbPayload(settings, false, restaurantId);
 
       if (existing) {
-        const { error } = await supabase
-          .from("site_settings")
-          .update(payload)
-          .eq("id", existing.id);
+        const { error } = await supabase.from("site_settings").update(payload).eq("id", existing.id);
         if (error) throw error;
       } else {
-        const { error } = await supabase
-          .from("site_settings")
-          .insert(payload);
+        const { error } = await supabase.from("site_settings").insert(payload);
         if (error) throw error;
       }
     },
