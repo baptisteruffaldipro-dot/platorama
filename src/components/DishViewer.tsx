@@ -6,7 +6,7 @@ interface DishViewerProps {
 
 const DishViewer = ({ dish }: DishViewerProps) => {
   return (
-    <div className="flex items-center justify-center flex-1 w-full" style={{ background: "transparent" }}>
+    <div className="flex items-center justify-center flex-1 w-full max-h-[40vh]" style={{ background: "transparent" }}>
       {/* @ts-ignore */}
       <model-viewer
         key={dish.id}
@@ -23,7 +23,7 @@ const DishViewer = ({ dish }: DishViewerProps) => {
         style={{
           width: "100%",
           height: "100%",
-          minHeight: "300px",
+          minHeight: "220px",
           backgroundColor: "transparent",
           "--poster-color": "transparent",
         } as React.CSSProperties}

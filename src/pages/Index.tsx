@@ -127,9 +127,9 @@ const Index = () => {
         <div className="flex justify-center mt-3">
           <button
             onClick={handleLaunchAR}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-accent text-accent-foreground text-sm font-semibold tracking-wide backdrop-blur-md transition-all active:scale-95"
+            className="flex items-center gap-2 px-7 py-3 rounded-full bg-accent text-accent-foreground text-base font-semibold tracking-wide backdrop-blur-md transition-all active:scale-95"
           >
-            <Rotate3d className="w-4 h-4" />
+            <Rotate3d className="w-5 h-5" />
             {t("Voir sur ma table")}
           </button>
         </div>

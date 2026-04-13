@@ -30,10 +30,10 @@ const FormulasDialog = () => {
     <Dialog>
       <DialogTrigger asChild>
         <button
-          className="w-5 h-5 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors"
+          className="w-7 h-7 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors"
           aria-label="Voir les formules"
         >
-          <Info className="w-3 h-3 text-muted-foreground" />
+          <Info className="w-4 h-4 text-muted-foreground" />
         </button>
       </DialogTrigger>
       <DialogContent className="bg-card border-border max-w-xs">
@@ -89,11 +89,13 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
         transition={{ duration: 0.35, ease: "easeOut" }}
         className="flex flex-col items-center text-center px-6"
       >
-        <span className="text-xs sm:text-sm tracking-[0.3em] uppercase text-muted-foreground mb-1">
+        {/* Category label - bigger */}
+        <span className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-1">
           {t(dish.category)}
         </span>
 
-        <div className="flex items-center gap-2 mb-2">
+        {/* Dish name + favorite */}
+        <div className="flex items-center gap-2 mb-1">
           <h1 className="text-3xl sm:text-4xl font-bold text-foreground uppercase tracking-wide" style={{ fontFamily: "var(--font-serif)" }}>
             {t(dish.name)}
           </h1>
@@ -112,7 +114,13 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
           </button>
         </div>
 
-        <div className="flex items-center gap-2 mb-2">
+        {/* Ingredients directly below name */}
+        <p className="text-base italic text-muted-foreground leading-relaxed max-w-[340px] mb-2" style={{ fontFamily: "var(--font-serif)" }}>
+          {t(dish.ingredients)}
+        </p>
+
+        {/* Price + icons row */}
+        <div className="flex items-center gap-3 mb-2">
           <p className="text-xl sm:text-2xl font-semibold text-accent" style={{ fontFamily: "var(--font-serif)" }}>
             {dish.price.toFixed(2)} €
           </p>
@@ -121,10 +129,10 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
             <Dialog>
               <DialogTrigger asChild>
                 <button
-                  className="w-5 h-5 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors"
+                  className="w-7 h-7 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors"
                   aria-label="Note du chef"
                 >
-                  <ChefHat className="w-3 h-3 text-muted-foreground" />
+                  <ChefHat className="w-4 h-4 text-muted-foreground" />
                 </button>
               </DialogTrigger>
               <DialogContent className="bg-card border-border max-w-sm">
@@ -145,10 +153,7 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
           )}
         </div>
 
-        <p className="text-sm sm:text-base italic text-muted-foreground leading-relaxed max-w-[320px]" style={{ fontFamily: "var(--font-serif)" }}>
-          {t(dish.ingredients)}
-        </p>
-        <div className="mt-2">
+        <div className="mt-1">
           <AllergensDialog allergens={dish.allergens ?? []} />
         </div>
       </motion.div>
