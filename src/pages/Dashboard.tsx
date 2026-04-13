@@ -74,10 +74,10 @@ interface DishCount {
 }
 
 /* ─── Stats card ─── */
-const StatCard = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string | number }) => (
-  <div className="bg-card border border-border rounded-xl p-3 sm:p-4 flex items-center gap-3">
-    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-accent/20 flex items-center justify-center shrink-0">
-      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
+const StatCard = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number; color?: string }) => (
+  <div className="bg-card border border-border rounded-2xl p-3 sm:p-4 flex items-center gap-3 shadow-sm">
+    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 ${color || "bg-accent/15"}`}>
+      <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${color ? "text-white" : "text-accent"}`} />
     </div>
     <div className="min-w-0">
       <p className="text-xl sm:text-2xl font-bold text-foreground truncate">{value}</p>
