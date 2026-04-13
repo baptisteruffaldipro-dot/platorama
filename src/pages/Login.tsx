@@ -39,7 +39,7 @@ const Login = () => {
         const isSA = roles?.some((r) => r.role === "super_admin");
 
         if (isSA) {
-          navigate("/dashboard");
+          navigate("/");
           return;
         }
 
