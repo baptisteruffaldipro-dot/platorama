@@ -76,3 +76,16 @@
     overflow: hidden;
   }
 }
+
+@keyframes ar-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--accent) / 0.5);
+  }
+  50% {
+    box-shadow: 0 0 0 10px hsl(var(--accent) / 0);
+  }
+}
+
+.animate-ar-pulse {
+  animation: ar-pulse 2s ease-in-out infinite;
+}
