@@ -30,8 +30,6 @@ const Index = () => {
   const { data: dishes, isLoading } = useDishes(restaurantId);
   const { isFavorite, toggle } = useFavorites();
   const { lang, t, translateBatch } = useTranslation();
-  const showStaticPreview =
-    typeof window !== "undefined" && (window.innerWidth < 768 || isIOS());
 
   // Trigger translation when language or dishes change
   useEffect(() => {
