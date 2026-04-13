@@ -35,6 +35,7 @@ import {
   Globe,
   Package,
 } from "lucide-react";
+import logoPlatorama from "@/assets/logo-platorama.png";
 
 /* ─── Types ─── */
 interface Restaurant {

@@ -28,26 +28,36 @@ function hexToHSL(hex: string): string {
   return `${Math.round(h * 360)} ${Math.round(s * 100)}% ${Math.round(l * 100)}%`;
 }
 
-// Default dashboard theme (dark neutral)
+// Default dashboard theme (Plat'O'rama branding)
 const DASHBOARD_DEFAULTS = {
-  background: "0 0% 5%",
-  foreground: "40 20% 92%",
-  card: "0 0% 8%",
-  accent: "38 30% 50%",
-  accentForeground: "40 20% 92%",
+  background: "30 50% 97%",       // cream #FFF8F2
+  foreground: "0 0% 20%",         // dark text
+  card: "0 0% 100%",              // white cards
+  cardForeground: "0 0% 20%",
+  accent: "352 72% 63%",          // pink #E8637A
+  accentForeground: "0 0% 100%",
+  secondary: "160 35% 60%",       // mint #6BBFA3
+  muted: "30 20% 92%",
+  mutedForeground: "0 0% 45%",
+  border: "30 15% 88%",
 };
 
 function resetToDashboardTheme() {
   const root = document.documentElement;
   root.style.setProperty("--background", DASHBOARD_DEFAULTS.background);
   root.style.setProperty("--card", DASHBOARD_DEFAULTS.card);
+  root.style.setProperty("--card-foreground", DASHBOARD_DEFAULTS.cardForeground);
   root.style.setProperty("--foreground", DASHBOARD_DEFAULTS.foreground);
-  root.style.setProperty("--card-foreground", DASHBOARD_DEFAULTS.foreground);
-  root.style.setProperty("--primary", DASHBOARD_DEFAULTS.foreground);
+  root.style.setProperty("--primary", DASHBOARD_DEFAULTS.accent);
+  root.style.setProperty("--primary-foreground", DASHBOARD_DEFAULTS.accentForeground);
   root.style.setProperty("--accent", DASHBOARD_DEFAULTS.accent);
   root.style.setProperty("--accent-foreground", DASHBOARD_DEFAULTS.accentForeground);
-  root.style.setProperty("--font-serif", "'Cormorant Garamond', Georgia, serif");
-  document.body.style.fontFamily = "'Cormorant Garamond', Georgia, serif";
+  root.style.setProperty("--secondary", DASHBOARD_DEFAULTS.secondary);
+  root.style.setProperty("--muted", DASHBOARD_DEFAULTS.muted);
+  root.style.setProperty("--muted-foreground", DASHBOARD_DEFAULTS.mutedForeground);
+  root.style.setProperty("--border", DASHBOARD_DEFAULTS.border);
+  root.style.setProperty("--font-serif", "'HF Gesco', 'Inter', sans-serif");
+  document.body.style.fontFamily = "'HF Gesco', 'Inter', sans-serif";
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
