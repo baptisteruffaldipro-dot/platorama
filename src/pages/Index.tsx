@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDishes } from "@/hooks/useDishes";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,6 +7,8 @@ import { useTranslation } from "@/hooks/useTranslation";
 import DishCarousel from "@/components/DishCarousel";
 import DishInfo from "@/components/DishInfo";
 import DishViewer from "@/components/DishViewer";
+import DishViewerErrorFallback from "@/components/DishViewerErrorFallback";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import SplashScreen from "@/components/SplashScreen";
 import LanguageSelector from "@/components/LanguageSelector";
 import AllergensDialog from "@/components/AllergensDialog";
@@ -20,12 +22,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-/** Prefetch all 3D model files so they're cached when user taps AR */
-function usePrefetchModels(dishes: ReturnType<typeof useDishes>["data"]) {
+/** Prefetch only the next/prev model, not all at once */
+function usePrefetchAdjacentModels(dishes: ReturnType<typeof useDishes>["data"], activeIndex: number) {
   useEffect(() => {
     if (!dishes?.length) return;
     const ios = isIOS();
-    dishes.forEach((d) => {
+    const indices = [activeIndex - 1, activeIndex + 1].filter(i => i >= 0 && i < dishes.length);
+    indices.forEach((i) => {
+      const d = dishes[i];
       const url = ios ? d.model_ios : d.model_android;
       if (url) {
         const link = document.createElement("link");
@@ -36,7 +40,7 @@ function usePrefetchModels(dishes: ReturnType<typeof useDishes>["data"]) {
         document.head.appendChild(link);
       }
     });
-  }, [dishes]);
+  }, [dishes, activeIndex]);
 }
 
 const Index = () => {
@@ -47,7 +51,7 @@ const Index = () => {
   const { data: dishes, isLoading } = useDishes(restaurantId);
   const { isFavorite, toggle } = useFavorites();
   const { lang, t, translateBatch } = useTranslation();
-  usePrefetchModels(dishes);
+  usePrefetchAdjacentModels(dishes, activeIndex);
 
   // Trigger translation when language or dishes change
   useEffect(() => {
@@ -210,7 +214,9 @@ const Index = () => {
       </div>
 
       <div className="flex-1 flex items-center justify-center relative">
-        <DishViewer dish={dish} />
+        <ErrorBoundary fallback={<DishViewerErrorFallback dish={dish} />}>
+          <DishViewer dish={dish} />
+        </ErrorBoundary>
       </div>
 
       <div className="pb-safe relative">
