@@ -71,7 +71,8 @@ export function usePublishedSettings(restaurantId?: string | null) {
 
       const { data, error } = await query.maybeSingle();
       if (error) throw error;
-      return (data as SiteSettings | null) ?? DEFAULT_SETTINGS;
+      if (!data) return DEFAULT_SETTINGS;
+      return { ...data, formulas: (Array.isArray(data.formulas) ? data.formulas : []) as FormulaItem[] } as SiteSettings;
     },
   });
 }
