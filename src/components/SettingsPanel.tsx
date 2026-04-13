@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Upload, Save, Send, Eye, CreditCard } from "lucide-react";
+import { Upload, Save, Send, Eye, CreditCard, Plus, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   useDraftSettings,
@@ -14,6 +14,7 @@ import {
   DEFAULT_SETTINGS,
   FONT_OPTIONS,
   type SiteSettings,
+  type FormulaItem,
 } from "@/hooks/useSiteSettings";
 
 function ColorInput({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
@@ -95,6 +96,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
     logo_url: initial.logo_url,
     restaurant_name: initial.restaurant_name,
     subtitle: initial.subtitle,
+    formulas: initial.formulas ?? [],
   });
 
   // Sync when draft/published loads
@@ -110,6 +112,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
       logo_url: src.logo_url,
       restaurant_name: src.restaurant_name,
       subtitle: src.subtitle,
+      formulas: src.formulas ?? [],
     });
   }, [draft, published]);
 
