@@ -22,27 +22,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-/** Prefetch only the next/prev model, not all at once */
-function usePrefetchAdjacentModels(dishes: ReturnType<typeof useDishes>["data"], activeIndex: number) {
-  useEffect(() => {
-    if (!dishes?.length) return;
-    const ios = isIOS();
-    const indices = [activeIndex - 1, activeIndex + 1].filter(i => i >= 0 && i < dishes.length);
-    indices.forEach((i) => {
-      const d = dishes[i];
-      const url = ios ? d.model_ios : d.model_android;
-      if (url) {
-        const link = document.createElement("link");
-        link.rel = "prefetch";
-        link.href = url;
-        link.as = "fetch";
-        link.crossOrigin = "anonymous";
-        document.head.appendChild(link);
-      }
-    });
-  }, [dishes, activeIndex]);
-}
-
 const Index = () => {
   const [searchParams] = useSearchParams();
   const restaurantId = searchParams.get("restaurant");
@@ -51,7 +30,8 @@ const Index = () => {
   const { data: dishes, isLoading } = useDishes(restaurantId);
   const { isFavorite, toggle } = useFavorites();
   const { lang, t, translateBatch } = useTranslation();
-  usePrefetchAdjacentModels(dishes, activeIndex);
+  const showStaticPreview =
+    typeof window !== "undefined" && (window.innerWidth < 768 || isIOS());
 
   // Trigger translation when language or dishes change
   useEffect(() => {
@@ -214,9 +194,13 @@ const Index = () => {
       </div>
 
       <div className="flex-1 flex items-center justify-center relative">
-        <ErrorBoundary fallback={<DishViewerErrorFallback dish={dish} />}>
-          <DishViewer dish={dish} />
-        </ErrorBoundary>
+        {showStaticPreview ? (
+          <DishViewerErrorFallback dish={dish} />
+        ) : (
+          <ErrorBoundary fallback={<DishViewerErrorFallback dish={dish} />}>
+            <DishViewer dish={dish} />
+          </ErrorBoundary>
+        )}
       </div>
 
       <div className="pb-safe relative">
