@@ -194,13 +194,9 @@ const Index = () => {
       </div>
 
       <div className="flex-1 flex items-center justify-center relative">
-        {showStaticPreview ? (
-          <DishViewerErrorFallback dish={dish} />
-        ) : (
-          <ErrorBoundary fallback={<DishViewerErrorFallback dish={dish} />}>
-            <DishViewer dish={dish} />
-          </ErrorBoundary>
-        )}
+        <ErrorBoundary fallback={<DishViewerErrorFallback dish={dish} />}>
+          <DishViewer dish={dish} />
+        </ErrorBoundary>
       </div>
 
       <div className="pb-safe relative">

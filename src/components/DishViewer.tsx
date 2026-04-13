@@ -1,3 +1,4 @@
+import { useState, useCallback } from "react";
 import type { Dish } from "@/hooks/useDishes";
 
 interface DishViewerProps {
@@ -5,6 +6,25 @@ interface DishViewerProps {
 }
 
 const DishViewer = ({ dish }: DishViewerProps) => {
+  const [hasError, setHasError] = useState(false);
+
+  const handleError = useCallback(() => {
+    console.warn("model-viewer error for", dish.name);
+    setHasError(true);
+  }, [dish.name]);
+
+  if (hasError) {
+    return (
+      <div className="flex items-center justify-center flex-1 w-full max-h-[40vh]">
+        <img
+          src={dish.thumbnail}
+          alt={dish.name}
+          className="max-h-[220px] object-contain rounded-xl"
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="flex items-center justify-center flex-1 w-full max-h-[40vh]" style={{ background: "transparent" }}>
       {/* @ts-ignore */}
@@ -20,6 +40,8 @@ const DishViewer = ({ dish }: DishViewerProps) => {
         interaction-prompt="none"
         shadow-intensity="0.4"
         exposure="1.2"
+        loading="lazy"
+        reveal="auto"
         style={{
           width: "100%",
           height: "100%",
@@ -28,6 +50,7 @@ const DishViewer = ({ dish }: DishViewerProps) => {
           "--poster-color": "transparent",
         } as React.CSSProperties}
         poster={dish.thumbnail}
+        onError={handleError}
       />
     </div>
   );
