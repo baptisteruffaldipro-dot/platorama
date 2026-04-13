@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronRight, ChevronLeft, Check, QrCode, Smartphone, ThumbsUp, Star, Mail, Phone, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import logoPlatorama from "@/assets/logo-platorama.png";
 
 /* ─── palette (local to landing, not theme tokens since theme is dark) ─── */
 const c = {
