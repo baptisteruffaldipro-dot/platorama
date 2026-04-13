@@ -55,11 +55,11 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
         </div>
 
         {/* Ingredients */}
-        <p className="text-base italic text-muted-foreground leading-relaxed max-w-[340px] mb-2" style={{ fontFamily: "var(--font-serif)" }}>
+        <p className="text-base italic text-muted-foreground leading-relaxed max-w-[340px] mb-1" style={{ fontFamily: "var(--font-serif)" }}>
           {t(dish.ingredients)}
         </p>
 
-        {/* Price */}
+        {/* Price - tighter spacing */}
         <p className="text-xl sm:text-2xl font-semibold text-accent" style={{ fontFamily: "var(--font-serif)" }}>
           {dish.price.toFixed(2)} €
         </p>

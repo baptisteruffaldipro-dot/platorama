@@ -25,21 +25,21 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
   return (
     <div className="flex items-center gap-1 px-2">
       <button onClick={prev} className="shrink-0 p-2 text-muted-foreground active:text-foreground transition-colors" aria-label="Previous dish">
-        <ChevronLeft className="w-6 h-6" />
+        <ChevronLeft className="w-7 h-7" />
       </button>
 
-      <div ref={scrollRef} className="flex gap-4 overflow-x-auto scrollbar-hide py-3 flex-1 items-center">
+      <div ref={scrollRef} className="flex gap-5 overflow-x-auto scrollbar-hide py-3 flex-1 items-center">
         {/* Spacer to allow first item to center */}
-        <div className="shrink-0" style={{ minWidth: "calc(50% - 44px)" }} />
+        <div className="shrink-0" style={{ minWidth: "calc(50% - 50px)" }} />
 
         {dishes.map((dish, i) => {
           const prevCategory = i > 0 ? dishes[i - 1].category : null;
           const showSeparator = prevCategory && prevCategory !== dish.category;
 
           return (
-            <div key={dish.id} className="flex items-center gap-4 shrink-0">
+            <div key={dish.id} className="flex items-center gap-5 shrink-0">
               {showSeparator && (
-                <div className="w-px h-12 bg-border shrink-0" />
+                <div className="w-px h-14 bg-border shrink-0" />
               )}
               <button
                 ref={(el) => { itemRefs.current[i] = el; }}
@@ -49,10 +49,10 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
                 <div
                   className={`rounded-full overflow-hidden transition-all duration-300 flex items-center justify-center bg-muted/20 ${
                     i === activeIndex
-                      ? "w-[84px] h-[84px] border-2 border-foreground"
-                      : "w-[64px] h-[64px] opacity-60"
+                      ? "w-[96px] h-[96px] border-2 border-foreground"
+                      : "w-[72px] h-[72px] opacity-60"
                   }`}
-                  style={i === activeIndex ? { boxShadow: "0 0 12px 2px rgba(255,255,255,0.25)" } : undefined}
+                  style={i === activeIndex ? { boxShadow: "0 0 14px 3px rgba(255,255,255,0.25)" } : undefined}
                 >
                   <img
                     src={dish.thumbnail}
@@ -62,10 +62,10 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
                   />
                 </div>
                 <span
-                  className={`text-center leading-tight transition-all duration-300 max-w-[90px] ${
+                  className={`text-center leading-tight transition-all duration-300 max-w-[100px] ${
                     i === activeIndex
-                      ? "text-sm font-semibold text-foreground"
-                      : "text-xs text-muted-foreground"
+                      ? "text-base font-semibold text-foreground"
+                      : "text-sm text-muted-foreground"
                   }`}
                 >
                   {dish.name}
@@ -76,11 +76,11 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
         })}
 
         {/* Spacer to allow last item to center */}
-        <div className="shrink-0" style={{ minWidth: "calc(50% - 44px)" }} />
+        <div className="shrink-0" style={{ minWidth: "calc(50% - 50px)" }} />
       </div>
 
       <button onClick={next} className="shrink-0 p-2 text-muted-foreground active:text-foreground transition-colors" aria-label="Next dish">
-        <ChevronRight className="w-6 h-6" />
+        <ChevronRight className="w-7 h-7" />
       </button>
     </div>
   );

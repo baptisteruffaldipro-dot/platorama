@@ -5,7 +5,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { AlertTriangle } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 
 interface AllergensDialogProps {
@@ -24,7 +24,7 @@ const AllergensDialog = ({ allergens }: AllergensDialogProps) => {
           className="w-10 h-10 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
           aria-label="Allergènes"
         >
-          <AlertTriangle className="w-5 h-5 text-muted-foreground" />
+          <ShieldCheck className="w-5 h-5 text-muted-foreground" />
         </button>
       </DialogTrigger>
       <DialogContent className="bg-card border-border max-w-xs">
@@ -42,7 +42,7 @@ const AllergensDialog = ({ allergens }: AllergensDialogProps) => {
               key={a}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-secondary/50"
             >
-              <AlertTriangle className="w-3 h-3 text-accent shrink-0" />
+              <ShieldCheck className="w-3 h-3 text-accent shrink-0" />
               <span className="text-sm text-foreground" style={{ fontFamily: "var(--font-serif)" }}>
                 {t(a)}
               </span>
