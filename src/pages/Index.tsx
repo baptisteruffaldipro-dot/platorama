@@ -7,6 +7,8 @@ import { useTranslation } from "@/hooks/useTranslation";
 import DishCarousel from "@/components/DishCarousel";
 import DishInfo from "@/components/DishInfo";
 import DishViewer from "@/components/DishViewer";
+import DishViewerErrorFallback from "@/components/DishViewerErrorFallback";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import SplashScreen from "@/components/SplashScreen";
 import LanguageSelector from "@/components/LanguageSelector";
 import AllergensDialog from "@/components/AllergensDialog";
