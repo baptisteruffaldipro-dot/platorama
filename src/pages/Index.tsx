@@ -9,8 +9,16 @@ import DishInfo from "@/components/DishInfo";
 import DishViewer from "@/components/DishViewer";
 import SplashScreen from "@/components/SplashScreen";
 import LanguageSelector from "@/components/LanguageSelector";
+import AllergensDialog from "@/components/AllergensDialog";
 import { isIOS } from "@/lib/platform";
-import { Rotate3d } from "lucide-react";
+import { Rotate3d, Info, ChefHat } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 /** Prefetch all 3D model files so they're cached when user taps AR */
 function usePrefetchModels(dishes: ReturnType<typeof useDishes>["data"]) {
@@ -124,14 +132,96 @@ const Index = () => {
       <div className="pb-safe relative">
         <DishInfo dish={dish} isFavorite={isFavorite(dish.id)} onToggleFavorite={() => toggle(dish.id)} />
 
-        <div className="flex justify-center mt-3">
+        {/* Action buttons row: AR + Info + Chef + Allergens */}
+        <div className="flex items-center justify-center gap-3 mt-3 px-4">
           <button
             onClick={handleLaunchAR}
-            className="flex items-center gap-2 px-7 py-3 rounded-full bg-accent text-accent-foreground text-base font-semibold tracking-wide backdrop-blur-md transition-all active:scale-95"
+            className="flex items-center gap-2 px-6 py-2.5 rounded-full bg-accent text-accent-foreground text-sm font-semibold tracking-wide backdrop-blur-md transition-all active:scale-95"
           >
             <Rotate3d className="w-5 h-5" />
             {t("Voir sur ma table")}
           </button>
+
+          {/* Formulas / Info button */}
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="w-10 h-10 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
+                aria-label="Voir les formules"
+              >
+                <Info className="w-5 h-5 text-muted-foreground" />
+              </button>
+            </DialogTrigger>
+            <DialogContent className="bg-card border-border max-w-xs">
+              <DialogHeader>
+                <DialogTitle
+                  className="text-xl text-foreground tracking-wide uppercase text-center"
+                  style={{ fontFamily: "var(--font-serif)" }}
+                >
+                  {t("Nos Formules")}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-3 pt-2 text-center" style={{ fontFamily: "var(--font-serif)" }}>
+                <div className="space-y-1">
+                  <p className="text-sm text-foreground">{t("Entrée / Plat / Dessert")}</p>
+                  <p className="text-lg font-semibold text-accent">56 €</p>
+                </div>
+                <div className="border-t border-border" />
+                <div className="space-y-1">
+                  <p className="text-sm text-foreground">{t("Entrée / Plat ou Plat / Dessert")}</p>
+                  <p className="text-lg font-semibold text-accent">48 €</p>
+                </div>
+                <div className="border-t border-border" />
+                <div className="grid grid-cols-3 gap-2 pt-1">
+                  <div>
+                    <p className="text-xs text-muted-foreground">{t("Entrée")}</p>
+                    <p className="text-sm font-semibold text-accent">17 €</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">{t("Plat")}</p>
+                    <p className="text-sm font-semibold text-accent">34 €</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground">{t("Dessert")}</p>
+                    <p className="text-sm font-semibold text-accent">14 €</p>
+                  </div>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+
+          {/* Chef note button */}
+          {dish.chef_note && (
+            <Dialog>
+              <DialogTrigger asChild>
+                <button
+                  className="w-10 h-10 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
+                  aria-label="Note du chef"
+                >
+                  <ChefHat className="w-5 h-5 text-muted-foreground" />
+                </button>
+              </DialogTrigger>
+              <DialogContent className="bg-card border-border max-w-sm">
+                <DialogHeader>
+                  <DialogTitle
+                    className="text-xl text-foreground tracking-wide uppercase text-center flex items-center justify-center gap-2"
+                    style={{ fontFamily: "var(--font-serif)" }}
+                  >
+                    <ChefHat className="w-5 h-5 text-accent" />
+                    {t("Note du Chef")}
+                  </DialogTitle>
+                </DialogHeader>
+                <p className="text-sm text-foreground leading-relaxed italic text-center pt-2" style={{ fontFamily: "var(--font-serif)" }}>
+                  {t(dish.chef_note)}
+                </p>
+              </DialogContent>
+            </Dialog>
+          )}
+
+          {/* Allergens button */}
+          {dish.allergens && dish.allergens.length > 0 && (
+            <AllergensDialog allergens={dish.allergens} />
+          )}
         </div>
 
         <div className="mt-2 pb-4">
