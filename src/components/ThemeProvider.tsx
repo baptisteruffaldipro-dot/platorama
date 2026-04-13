@@ -119,7 +119,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
         document.head.appendChild(link);
       }
     });
-  }, [settings, isDashboard]);
+  }, [settings, isDashboard, isAdmin]);
 
   return <>{children}</>;
 }
