@@ -20,7 +20,7 @@ const AllergensDialog = ({ allergens }: AllergensDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-accent transition-colors">
+        <button className="text-sm tracking-[0.15em] uppercase text-muted-foreground hover:text-accent transition-colors">
           {t("Allergènes")}
         </button>
       </DialogTrigger>
