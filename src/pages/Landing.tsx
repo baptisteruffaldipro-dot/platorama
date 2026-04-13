@@ -104,7 +104,7 @@ const Landing = () => {
   const t = testimonials[testimonialIdx];
 
   return (
-    <div style={{ background: c.cream, color: c.dark, fontFamily: fontBody }}>
+    <div className="landing-layout" style={{ background: c.cream, color: c.dark, fontFamily: fontBody }}>
       {/* ── NAV ── */}
       <nav className="flex items-center justify-between px-6 md:px-12 py-5 max-w-7xl mx-auto">
         <img src={logoPlatorama} alt="Platorama" className="h-10 object-contain" />
