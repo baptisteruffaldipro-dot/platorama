@@ -348,7 +348,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
         <Button
           onClick={handlePublish}
           disabled={publishSettings.isPending}
-          className="flex-1"
+          className="flex-1 bg-accent text-accent-foreground hover:bg-accent/80"
         >
           <Send className="w-4 h-4 mr-1" />
           {publishSettings.isPending ? "Publication..." : "Publier"}
