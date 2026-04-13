@@ -258,7 +258,7 @@ const SubscriptionDialog = ({
             <Label>Features (séparées par des virgules)</Label>
             <Input value={form.features} onChange={(e) => setForm(f => ({ ...f, features: e.target.value }))} placeholder="AR, Menu personnalisé, Stats" />
           </div>
-          <Button className="w-full" onClick={() => {
+          <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/80" onClick={() => {
             if (!form.name.trim() || !form.slug.trim()) {
               toast.error("Nom et slug requis");
               return;
