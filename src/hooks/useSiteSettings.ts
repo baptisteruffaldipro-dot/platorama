@@ -1,6 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
+export interface FormulaItem {
+  label: string;
+  price: string;
+}
+
 export interface SiteSettings {
   id?: string;
   background_color: string;
@@ -14,6 +19,7 @@ export interface SiteSettings {
   subtitle: string;
   is_draft: boolean;
   restaurant_id?: string | null;
+  formulas: FormulaItem[];
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -27,6 +33,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   restaurant_name: "La Maison",
   subtitle: "Menu Virtuel",
   is_draft: false,
+  formulas: [],
 };
 
 export const FONT_OPTIONS = [
