@@ -57,6 +57,16 @@ const Index = () => {
     translateBatch(unique);
   }, [lang, dishes, translateBatch]);
 
+  // No restaurant parameter = invalid link
+  if (!restaurantId) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground gap-4">
+        <h1 className="text-2xl font-bold">Menu introuvable</h1>
+        <p className="text-muted-foreground">Ce lien n'est pas valide. Veuillez utiliser le lien fourni par votre restaurant.</p>
+      </div>
+    );
+  }
+
   if (isLoading || !dishes?.length) {
     return (
       <div className="h-full flex items-center justify-center bg-background">
