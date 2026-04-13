@@ -64,8 +64,8 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
                 <span
                   className={`text-center leading-tight transition-all duration-300 max-w-[80px] ${
                     i === activeIndex
-                      ? "text-xs font-semibold text-foreground"
-                      : "text-[11px] text-muted-foreground"
+                      ? "text-sm font-semibold text-foreground"
+                      : "text-xs text-muted-foreground"
                   }`}
                 >
                   {dish.name}
