@@ -35,6 +35,7 @@ import {
   Globe,
   Package,
 } from "lucide-react";
+import logoPlatorama from "@/assets/logo-platorama.png";
 
 /* ─── Types ─── */
 interface Restaurant {
@@ -73,10 +74,10 @@ interface DishCount {
 }
 
 /* ─── Stats card ─── */
-const StatCard = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string | number }) => (
-  <div className="bg-card border border-border rounded-xl p-3 sm:p-4 flex items-center gap-3">
-    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-accent/20 flex items-center justify-center shrink-0">
-      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
+const StatCard = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number; color?: string }) => (
+  <div className="bg-card border border-border rounded-2xl p-3 sm:p-4 flex items-center gap-3 shadow-sm">
+    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 ${color || "bg-accent/15"}`}>
+      <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${color ? "text-white" : "text-accent"}`} />
     </div>
     <div className="min-w-0">
       <p className="text-xl sm:text-2xl font-bold text-foreground truncate">{value}</p>
@@ -479,11 +480,11 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-auto dashboard-layout">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-card border-b border-border px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
-        <h1 className="text-base sm:text-xl font-bold" style={{ fontFamily: "var(--font-serif)" }}>
-          Dashboard
-        </h1>
-        <Button size="sm" variant="ghost" onClick={() => signOut()}>
+      <header className="sticky top-0 z-10 bg-card border-b border-border px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between shadow-sm">
+        <div className="flex items-center gap-3">
+          <img src={logoPlatorama} alt="Plat'O'rama" className="h-8 sm:h-10 object-contain" />
+        </div>
+        <Button size="sm" variant="ghost" onClick={() => signOut()} className="text-muted-foreground hover:text-foreground">
           <LogOut className="w-4 h-4" />
         </Button>
       </header>
@@ -492,11 +493,11 @@ const Dashboard = () => {
         {/* Stats */}
         <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
           <StatCard icon={Store} label="Restaurants" value={restaurants.length} />
-          <StatCard icon={Power} label="Actifs" value={activeCount} />
+          <StatCard icon={Power} label="Actifs" value={activeCount} color="bg-[hsl(160,35%,60%)]" />
           <StatCard icon={Users} label="Propriétaires" value={members.length} />
           <StatCard icon={UtensilsCrossed} label="Total plats" value={totalDishes} />
-          <StatCard icon={Rotate3d} label="Plats en 3D" value={totalWith3D} />
-          <StatCard icon={CreditCard} label="Revenu/mois" value={`${totalRevenue}€`} />
+          <StatCard icon={Rotate3d} label="Plats en 3D" value={totalWith3D} color="bg-accent" />
+          <StatCard icon={CreditCard} label="Revenu/mois" value={`${totalRevenue}€`} color="bg-[hsl(160,35%,60%)]" />
         </div>
 
         {/* Section tabs */}
@@ -527,7 +528,7 @@ const Dashboard = () => {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input placeholder="Rechercher un rest..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10 text-sm" />
               </div>
-              <Button size="sm" className="shrink-0 text-xs sm:text-sm" onClick={() => setCreateOpen(true)}>
+              <Button size="sm" className="shrink-0 text-xs sm:text-sm rounded-full bg-accent text-white hover:bg-accent/90" onClick={() => setCreateOpen(true)}>
                 <Plus className="w-4 h-4 sm:mr-1" />
                 <span className="hidden sm:inline">Nouveau restaurant</span>
               </Button>
@@ -549,11 +550,11 @@ const Dashboard = () => {
                   const dc = getDishCount(restaurant.id);
                   const isExpanded = expandedRestaurant === restaurant.id;
                   return (
-                    <div key={restaurant.id} className="bg-card border border-border rounded-xl overflow-hidden hover:border-accent/40 transition-colors">
+                    <div key={restaurant.id} className="bg-card border border-border rounded-2xl overflow-hidden hover:border-accent/40 transition-colors shadow-sm">
                       <div className="p-3 sm:p-4 space-y-2">
                         {/* Top row: avatar + name + status */}
                         <div className="flex items-center gap-3">
-                          <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-base sm:text-lg font-bold shrink-0 ${restaurant.is_active ? "bg-accent/20 text-accent" : "bg-muted text-muted-foreground"}`}>
+                          <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg font-bold shrink-0 ${restaurant.is_active ? "bg-accent/15 text-accent" : "bg-muted text-muted-foreground"}`}>
                             {restaurant.name.charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0 flex-1">

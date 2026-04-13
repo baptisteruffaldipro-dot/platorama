@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import logoPlatorama from "@/assets/logo-platorama.png";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -65,10 +66,8 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-6">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-foreground" style={{ fontFamily: "var(--font-serif)" }}>
-            Back-office
-          </h1>
-          <p className="text-sm text-muted-foreground mt-1">Connectez-vous pour gérer le menu</p>
+          <img src={logoPlatorama} alt="Plat'O'rama" className="h-12 mx-auto mb-4" />
+          <p className="text-sm text-muted-foreground mt-1">Connectez-vous pour gérer vos menus</p>
         </div>
 
         <div className="space-y-2">
