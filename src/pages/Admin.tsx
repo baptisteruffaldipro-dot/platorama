@@ -423,7 +423,7 @@ const Admin = () => {
         </h1>
         <div className="flex items-center gap-2">
           {tab === "menu" && (
-            <Button size="sm" onClick={openNew}>
+            <Button size="sm" onClick={openNew} className="bg-accent text-accent-foreground hover:bg-accent/90">
               <Plus className="w-4 h-4 mr-1" /> Ajouter
             </Button>
           )}
