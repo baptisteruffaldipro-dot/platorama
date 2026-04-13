@@ -25,6 +25,17 @@ import {
 const Index = () => {
   const [searchParams] = useSearchParams();
   const restaurantId = searchParams.get("restaurant");
+
+  // No restaurant parameter = invalid link
+  if (!restaurantId) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground gap-4">
+        <h1 className="text-2xl font-bold">Menu introuvable</h1>
+        <p className="text-muted-foreground">Ce lien n'est pas valide. Veuillez utiliser le lien fourni par votre restaurant.</p>
+      </div>
+    );
+  }
+
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
   const { data: dishes, isLoading } = useDishes(restaurantId);
