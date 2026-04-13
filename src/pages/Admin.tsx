@@ -87,7 +87,7 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
     fetchStats();
   }, [dishes]);
 
-  if (loading) return <p className="text-muted-foreground p-4">Chargement des stats...</p>;
+  if (loading) return <p className="text-muted-foreground p-4 text-base">Chargement des stats...</p>;
 
   const maxFav = Math.max(1, ...stats.map((s) => s.favorites));
   const maxAR = Math.max(1, ...stats.map((s) => s.ar_clicks));
@@ -96,7 +96,7 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
     <div className="p-4 space-y-8">
       {/* Favorites chart */}
       <div>
-        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
           <Star className="w-5 h-5 text-accent" />
           Favoris par plat
         </h2>
@@ -104,7 +104,7 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
           {stats.map((s) => (
             <div key={s.dish_id + "-fav"} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
               <div className="w-full bg-muted/30 rounded-t-md flex flex-col justify-end items-center" style={{ height: 160 }}>
-                <span className="text-xs font-semibold text-accent mb-1">{s.favorites}</span>
+                <span className="text-sm font-semibold text-accent mb-1">{s.favorites}</span>
                 <div
                   className="w-full bg-accent rounded-t-md transition-all duration-500"
                   style={{ height: `${Math.max(4, (s.favorites / maxFav) * 100)}%` }}
@@ -120,7 +120,7 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
 
       {/* AR clicks chart */}
       <div>
-        <h2 className="text-lg font-semibold mb-4 flex items-center gap-2">
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
           <Rotate3d className="w-5 h-5 text-accent" />
           Clics AR par plat
         </h2>
@@ -128,7 +128,7 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
           {stats.map((s) => (
             <div key={s.dish_id + "-ar"} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
               <div className="w-full bg-muted/30 rounded-t-md flex flex-col justify-end items-center" style={{ height: 160 }}>
-                <span className="text-xs font-semibold text-primary mb-1">{s.ar_clicks}</span>
+                <span className="text-sm font-semibold text-primary mb-1">{s.ar_clicks}</span>
                 <div
                   className="w-full bg-primary rounded-t-md transition-all duration-500"
                   style={{ height: `${Math.max(4, (s.ar_clicks / maxAR) * 100)}%` }}
@@ -411,7 +411,7 @@ const Admin = () => {
     <div className="min-h-screen bg-background text-foreground overflow-auto admin-layout">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-card border-b border-border px-4 py-3 flex items-center justify-between">
-        <h1 className="text-xl font-bold" style={{ fontFamily: "var(--font-serif)" }}>
+        <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-serif)" }}>
           Gestion du Menu
         </h1>
         <div className="flex items-center gap-2">
