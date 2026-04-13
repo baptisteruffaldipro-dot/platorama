@@ -191,6 +191,7 @@ export type Database = {
           button_bg_color: string
           button_text_color: string
           created_at: string
+          formulas: Json
           heading_font: string
           id: string
           is_draft: boolean
@@ -207,6 +208,7 @@ export type Database = {
           button_bg_color?: string
           button_text_color?: string
           created_at?: string
+          formulas?: Json
           heading_font?: string
           id?: string
           is_draft?: boolean
@@ -223,6 +225,7 @@ export type Database = {
           button_bg_color?: string
           button_text_color?: string
           created_at?: string
+          formulas?: Json
           heading_font?: string
           id?: string
           is_draft?: boolean
