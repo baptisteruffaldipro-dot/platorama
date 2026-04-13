@@ -110,7 +110,7 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
                   style={{ height: `${Math.max(4, (s.favorites / maxFav) * 100)}%` }}
                 />
               </div>
-              <span className="text-[10px] text-muted-foreground text-center leading-tight w-full truncate px-0.5">
+              <span className="text-xs text-muted-foreground text-center leading-tight w-full truncate px-0.5">
                 {s.dish_name}
               </span>
             </div>
@@ -134,7 +134,7 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
                   style={{ height: `${Math.max(4, (s.ar_clicks / maxAR) * 100)}%` }}
                 />
               </div>
-              <span className="text-[10px] text-muted-foreground text-center leading-tight w-full truncate px-0.5">
+              <span className="text-xs text-muted-foreground text-center leading-tight w-full truncate px-0.5">
                 {s.dish_name}
               </span>
             </div>
@@ -176,9 +176,9 @@ const SortableRow = ({
           <img src={dish.thumbnail} alt={dish.name} className="w-10 h-10 rounded-full object-contain bg-muted/20" />
         )}
       </td>
-      <td className="py-2 px-3 text-xs tracking-wider text-muted-foreground">{dish.category}</td>
-      <td className="py-2 px-3 font-medium">{dish.name}</td>
-      <td className="py-2 px-3">{dish.price.toFixed(2)} €</td>
+      <td className="py-2.5 px-3 text-sm tracking-wider text-muted-foreground">{dish.category}</td>
+      <td className="py-2.5 px-3 font-medium text-sm">{dish.name}</td>
+      <td className="py-2.5 px-3 text-sm">{dish.price.toFixed(2)} €</td>
       <td className="py-2 px-3">
         <div className="flex gap-1">
           <Button size="icon" variant="ghost" onClick={() => onEdit(dish)}>
@@ -445,7 +445,7 @@ const Admin = () => {
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            className={`flex items-center justify-center gap-2 px-4 py-3 text-sm font-medium transition-colors whitespace-nowrap ${
+            className={`flex items-center justify-center gap-2 px-4 py-3 text-sm sm:text-base font-medium transition-colors whitespace-nowrap ${
               tab === t.key
                 ? "text-accent border-b-2 border-accent"
                 : "text-muted-foreground hover:text-foreground"
@@ -465,7 +465,7 @@ const Admin = () => {
           ) : (
             <div className="overflow-x-auto">
              <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-              <table className="w-full text-sm">
+              <table className="w-full text-sm sm:text-base">
                 <thead>
                   <tr className="border-b border-border text-left text-muted-foreground">
                     <th className="py-2 px-1 w-8"></th>
