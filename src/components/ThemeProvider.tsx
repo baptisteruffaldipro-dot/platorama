@@ -56,8 +56,9 @@ function resetToDashboardTheme() {
   root.style.setProperty("--muted", DASHBOARD_DEFAULTS.muted);
   root.style.setProperty("--muted-foreground", DASHBOARD_DEFAULTS.mutedForeground);
   root.style.setProperty("--border", DASHBOARD_DEFAULTS.border);
-  root.style.setProperty("--font-serif", "'HF Gesco', 'Inter', sans-serif");
-  document.body.style.fontFamily = "'HF Gesco', 'Inter', sans-serif";
+  root.style.setProperty("--font-serif", "'Playfair Display', Georgia, serif");
+  root.style.setProperty("--font-body", "'DM Sans', 'Inter', sans-serif");
+  document.body.style.fontFamily = "'DM Sans', 'Inter', sans-serif";
 }
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
