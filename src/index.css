@@ -58,12 +58,14 @@
     min-height: 100dvh;
   }
 
-  body:has(.admin-layout) {
+  body:has(.admin-layout),
+  body:has(.dashboard-layout) {
     overflow: auto;
     height: auto;
   }
 
-  body:has(.admin-layout) #root {
+  body:has(.admin-layout) #root,
+  body:has(.dashboard-layout) #root {
     height: auto;
     overflow: auto;
   }
