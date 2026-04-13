@@ -36,7 +36,7 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
 
         {/* Dish name + favorite */}
         <div className="flex items-center gap-2 mb-1">
-          <h1 className="text-3xl sm:text-4xl font-bold text-foreground uppercase tracking-wide" style={{ fontFamily: "var(--font-serif)" }}>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground uppercase tracking-wide" style={{ fontFamily: "var(--font-serif)" }}>
             {t(dish.name)}
           </h1>
           <button
