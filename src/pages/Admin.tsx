@@ -420,7 +420,7 @@ const Admin = () => {
       <header className="sticky top-0 z-10 bg-card border-b border-border px-4 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
           {isSuperAdmin && (
-            <Button size="icon" variant="ghost" onClick={() => navigate("/")}>
+            <Button size="icon" variant="ghost" onClick={() => navigate("/dashboard")}>
               <ArrowLeft className="w-5 h-5" />
             </Button>
           )}
