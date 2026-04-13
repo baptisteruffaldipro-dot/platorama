@@ -38,6 +38,22 @@ import {
 } from "lucide-react";
 import logoPlatorama from "@/assets/logo-platorama.png";
 
+/* ─── Light palette (same as Landing) ─── */
+const c = {
+  cream: "#FDF6ED",
+  pink: "#E8657A",
+  pinkLight: "#F2A0AC",
+  mint: "#5CB8A5",
+  mintLight: "#A8DDD1",
+  dark: "#2D2D2D",
+  muted: "#8A8A8A",
+  white: "#FFFFFF",
+  border: "#E8E0D6",
+  cardBg: "#FFFFFF",
+};
+const fontBody = "'DM Sans', sans-serif";
+const fontDisplay = "'Playfair Display', serif";
+
 /* ─── Types ─── */
 interface Restaurant {
   id: string;
@@ -75,14 +91,14 @@ interface DishCount {
 }
 
 /* ─── Stats card ─── */
-const StatCard = ({ icon: Icon, label, value, color }: { icon: React.ElementType; label: string; value: string | number; color?: string }) => (
-  <div className="bg-card border border-border rounded-2xl p-3 sm:p-4 flex items-center gap-3 shadow-sm">
-    <div className={`w-8 h-8 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center shrink-0 ${color || "bg-accent/15"}`}>
-      <Icon className={`w-4 h-4 sm:w-5 sm:h-5 ${color ? "text-white" : "text-accent"}`} />
+const StatCard = ({ icon: Icon, label, value, bg }: { icon: React.ElementType; label: string; value: string | number; bg?: string }) => (
+  <div style={{ background: c.white, border: `1px solid ${c.border}`, borderRadius: 16, padding: "12px 16px", fontFamily: fontBody }} className="flex items-center gap-3 shadow-sm">
+    <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ background: bg || `${c.mint}20` }}>
+      <Icon className="w-4 h-4" style={{ color: bg ? c.white : c.mint }} />
     </div>
     <div className="min-w-0">
-      <p className="text-xl sm:text-2xl font-bold text-foreground truncate">{value}</p>
-      <p className="text-xs sm:text-sm text-muted-foreground truncate">{label}</p>
+      <p className="text-xl font-bold truncate" style={{ color: c.dark }}>{value}</p>
+      <p className="text-xs truncate" style={{ color: c.muted }}>{label}</p>
     </div>
   </div>
 );
@@ -112,17 +128,17 @@ const RestaurantInfoPanel = ({
   };
 
   return (
-    <div className="mt-3 bg-muted/30 rounded-lg p-4 space-y-3 border border-border/50">
+    <div className="mt-3 rounded-lg p-4 space-y-3" style={{ background: `${c.cream}`, border: `1px solid ${c.border}` }}>
       <div className="flex items-center justify-between">
-        <h4 className="text-sm font-semibold text-foreground">Informations client</h4>
+        <h4 className="text-sm font-semibold" style={{ color: c.dark }}>Informations client</h4>
         {!editing ? (
-          <Button size="sm" variant="ghost" onClick={() => setEditing(true)}>
-            <Pencil className="w-3 h-3 mr-1" /> Modifier
-          </Button>
+          <button onClick={() => setEditing(true)} className="flex items-center gap-1 text-xs font-medium px-3 py-1.5 rounded-lg hover:opacity-80" style={{ color: c.mint }}>
+            <Pencil className="w-3 h-3" /> Modifier
+          </button>
         ) : (
           <div className="flex gap-1">
-            <Button size="sm" variant="ghost" onClick={() => setEditing(false)}>Annuler</Button>
-            <Button size="sm" onClick={handleSave}>Sauvegarder</Button>
+            <button onClick={() => setEditing(false)} className="text-xs px-3 py-1.5 rounded-lg" style={{ color: c.muted }}>Annuler</button>
+            <button onClick={handleSave} className="text-xs px-3 py-1.5 rounded-lg font-bold text-white" style={{ background: c.mint }}>Sauvegarder</button>
           </div>
         )}
       </div>
@@ -130,11 +146,11 @@ const RestaurantInfoPanel = ({
       {editing ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="space-y-1">
-            <Label className="text-xs">Forfait</Label>
+            <Label className="text-xs" style={{ color: c.muted }}>Forfait</Label>
             <select
               value={form.subscription_id}
               onChange={(e) => setForm(f => ({ ...f, subscription_id: e.target.value }))}
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              className="w-full rounded-md px-3 py-2 text-sm" style={{ border: `1px solid ${c.border}`, background: c.white, color: c.dark }}
             >
               <option value="">Sans abonnement</option>
               {subscriptions.map((s) => (
@@ -143,40 +159,40 @@ const RestaurantInfoPanel = ({
             </select>
           </div>
           <div className="space-y-1">
-            <Label className="text-xs">Email</Label>
-            <Input value={form.contact_email} onChange={(e) => setForm(f => ({ ...f, contact_email: e.target.value }))} placeholder="contact@restaurant.com" />
+            <Label className="text-xs" style={{ color: c.muted }}>Email</Label>
+            <input value={form.contact_email} onChange={(e) => setForm(f => ({ ...f, contact_email: e.target.value }))} placeholder="contact@restaurant.com" className="w-full rounded-md px-3 py-2 text-sm" style={{ border: `1px solid ${c.border}`, background: c.white, color: c.dark }} />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs">Téléphone</Label>
-            <Input value={form.phone} onChange={(e) => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="+33 1 23 45 67 89" />
+            <Label className="text-xs" style={{ color: c.muted }}>Téléphone</Label>
+            <input value={form.phone} onChange={(e) => setForm(f => ({ ...f, phone: e.target.value }))} placeholder="+33 1 23 45 67 89" className="w-full rounded-md px-3 py-2 text-sm" style={{ border: `1px solid ${c.border}`, background: c.white, color: c.dark }} />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs">Adresse</Label>
-            <Input value={form.address} onChange={(e) => setForm(f => ({ ...f, address: e.target.value }))} placeholder="123 rue de Paris" />
+            <Label className="text-xs" style={{ color: c.muted }}>Adresse</Label>
+            <input value={form.address} onChange={(e) => setForm(f => ({ ...f, address: e.target.value }))} placeholder="123 rue de Paris" className="w-full rounded-md px-3 py-2 text-sm" style={{ border: `1px solid ${c.border}`, background: c.white, color: c.dark }} />
           </div>
           <div className="space-y-1">
-            <Label className="text-xs">Site web</Label>
-            <Input value={form.website} onChange={(e) => setForm(f => ({ ...f, website: e.target.value }))} placeholder="https://restaurant.com" />
+            <Label className="text-xs" style={{ color: c.muted }}>Site web</Label>
+            <input value={form.website} onChange={(e) => setForm(f => ({ ...f, website: e.target.value }))} placeholder="https://restaurant.com" className="w-full rounded-md px-3 py-2 text-sm" style={{ border: `1px solid ${c.border}`, background: c.white, color: c.dark }} />
           </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
-          <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="flex items-center gap-2" style={{ color: c.muted }}>
             <Mail className="w-3.5 h-3.5" />
             <span>{restaurant.contact_email || "—"}</span>
           </div>
-          <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="flex items-center gap-2" style={{ color: c.muted }}>
             <Phone className="w-3.5 h-3.5" />
             <span>{restaurant.phone || "—"}</span>
           </div>
-          <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="flex items-center gap-2" style={{ color: c.muted }}>
             <MapPin className="w-3.5 h-3.5" />
             <span>{restaurant.address || "—"}</span>
           </div>
-          <div className="flex items-center gap-2 text-muted-foreground">
+          <div className="flex items-center gap-2" style={{ color: c.muted }}>
             <Globe className="w-3.5 h-3.5" />
             {restaurant.website ? (
-              <a href={restaurant.website} target="_blank" rel="noreferrer" className="text-accent hover:underline">{restaurant.website}</a>
+              <a href={restaurant.website} target="_blank" rel="noreferrer" style={{ color: c.mint }} className="hover:underline">{restaurant.website}</a>
             ) : <span>—</span>}
           </div>
         </div>
@@ -258,7 +274,7 @@ const SubscriptionDialog = ({
             <Label>Features (séparées par des virgules)</Label>
             <Input value={form.features} onChange={(e) => setForm(f => ({ ...f, features: e.target.value }))} placeholder="AR, Menu personnalisé, Stats" />
           </div>
-          <Button className="w-full bg-accent text-accent-foreground hover:bg-accent/80" onClick={() => {
+          <button className="w-full py-2.5 rounded-lg font-bold text-white text-sm" style={{ background: c.mint }} onClick={() => {
             if (!form.name.trim() || !form.slug.trim()) {
               toast.error("Nom et slug requis");
               return;
@@ -274,7 +290,7 @@ const SubscriptionDialog = ({
             }, isNew);
           }}>
             {isNew ? "Créer" : "Enregistrer"}
-          </Button>
+          </button>
         </div>
       </DialogContent>
     </Dialog>
@@ -311,7 +327,6 @@ const Dashboard = () => {
     if (resS.data) setSubscriptions(resS.data as Subscription[]);
     if (resM.data) setMembers(resM.data);
 
-    // Compute dish counts per restaurant
     if (resD.data) {
       const counts: Record<string, DishCount> = {};
       resD.data.forEach((d: any) => {
@@ -329,7 +344,7 @@ const Dashboard = () => {
     if (isSuperAdmin) fetchData();
   }, [isSuperAdmin]);
 
-  if (authLoading) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Chargement...</div>;
+  if (authLoading) return <div className="min-h-screen flex items-center justify-center" style={{ background: c.cream, color: c.dark, fontFamily: fontBody }}>Chargement...</div>;
   if (!user || !isSuperAdmin) return <Navigate to="/login" replace />;
 
   const filtered = restaurants.filter(
@@ -438,7 +453,6 @@ const Dashboard = () => {
     }
   };
 
-  /* ─── Subscription CRUD ─── */
   const handleSaveSub = async (data: Partial<Subscription>, isNew: boolean) => {
     if (isNew) {
       const { error } = await supabase.from("subscriptions").insert({
@@ -479,43 +493,45 @@ const Dashboard = () => {
   }, 0);
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-auto dashboard-layout">
+    <div className="min-h-screen overflow-auto dashboard-layout" style={{ background: c.cream, color: c.dark, fontFamily: fontBody }}>
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-card border-b border-border px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between shadow-sm">
-        <div className="flex items-center gap-3">
-          <img src={logoPlatorama} alt="Plat'O'rama" className="h-8 sm:h-10 object-contain" />
-        </div>
-        <Button size="sm" variant="ghost" onClick={() => signOut()} className="text-muted-foreground hover:text-foreground">
+      <header className="sticky top-0 z-10 px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between shadow-sm" style={{ background: c.white, borderBottom: `1px solid ${c.border}` }}>
+        <img src={logoPlatorama} alt="Plat'O'rama" className="h-8 sm:h-10 object-contain" />
+        <button onClick={() => signOut()} className="p-2 rounded-lg hover:opacity-70 transition-opacity" style={{ color: c.muted }}>
           <LogOut className="w-4 h-4" />
-        </Button>
+        </button>
       </header>
 
       <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Stats */}
-        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
+        <div className="grid grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
           <StatCard icon={Store} label="Restaurants" value={restaurants.length} />
-          <StatCard icon={Power} label="Actifs" value={activeCount} color="bg-[hsl(160,35%,60%)]" />
+          <StatCard icon={Power} label="Actifs" value={activeCount} bg={c.mint} />
           <StatCard icon={Users} label="Propriétaires" value={members.length} />
           <StatCard icon={UtensilsCrossed} label="Total plats" value={totalDishes} />
-          <StatCard icon={Rotate3d} label="Plats en 3D" value={totalWith3D} color="bg-accent" />
-          <StatCard icon={CreditCard} label="Revenu/mois" value={`${totalRevenue}€`} color="bg-[hsl(160,35%,60%)]" />
+          <StatCard icon={Rotate3d} label="Plats en 3D" value={totalWith3D} bg={c.pink} />
+          <StatCard icon={CreditCard} label="Revenu/mois" value={`${totalRevenue}€`} bg={c.mint} />
         </div>
 
         {/* Section tabs */}
-        <div className="flex border-b border-border">
+        <div className="flex" style={{ borderBottom: `1px solid ${c.border}` }}>
           <button
             onClick={() => setActiveSection("restaurants")}
-            className={`flex items-center gap-2 px-4 py-3 text-base font-medium transition-colors ${
-              activeSection === "restaurants" ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
-            }`}
+            className="flex items-center gap-2 px-4 py-3 text-base font-medium transition-colors"
+            style={{
+              color: activeSection === "restaurants" ? c.pink : c.muted,
+              borderBottom: activeSection === "restaurants" ? `2px solid ${c.pink}` : "2px solid transparent",
+            }}
           >
             <Store className="w-4 h-4" /> Restaurants
           </button>
           <button
             onClick={() => setActiveSection("subscriptions")}
-            className={`flex items-center gap-2 px-4 py-3 text-base font-medium transition-colors ${
-              activeSection === "subscriptions" ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
-            }`}
+            className="flex items-center gap-2 px-4 py-3 text-base font-medium transition-colors"
+            style={{
+              color: activeSection === "subscriptions" ? c.pink : c.muted,
+              borderBottom: activeSection === "subscriptions" ? `2px solid ${c.pink}` : "2px solid transparent",
+            }}
           >
             <Package className="w-4 h-4" /> Abonnements
           </button>
@@ -526,20 +542,30 @@ const Dashboard = () => {
             {/* Search + Create */}
             <div className="flex items-center gap-2 sm:gap-3">
               <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input placeholder="Rechercher un rest..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10 text-sm" />
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: c.muted }} />
+                <input
+                  placeholder="Rechercher un restaurant..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl text-sm"
+                  style={{ border: `1px solid ${c.border}`, background: c.white, color: c.dark, fontFamily: fontBody }}
+                />
               </div>
-              <Button size="sm" className="shrink-0 text-xs sm:text-sm rounded-full bg-accent text-white hover:bg-accent/90" onClick={() => setCreateOpen(true)}>
-                <Plus className="w-4 h-4 sm:mr-1" />
+              <button
+                className="shrink-0 flex items-center gap-1.5 px-5 py-2.5 rounded-full text-white text-sm font-bold hover:opacity-90 active:scale-95 transition-all"
+                style={{ background: c.pink }}
+                onClick={() => setCreateOpen(true)}
+              >
+                <Plus className="w-4 h-4" />
                 <span className="hidden sm:inline">Nouveau restaurant</span>
-              </Button>
+              </button>
             </div>
 
             {/* Restaurant list */}
             {loading ? (
-              <p className="text-muted-foreground">Chargement...</p>
+              <p style={{ color: c.muted }}>Chargement...</p>
             ) : filtered.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="text-center py-12" style={{ color: c.muted }}>
                 <Store className="w-12 h-12 mx-auto mb-3 opacity-50" />
                 <p>Aucun restaurant trouvé</p>
               </div>
@@ -551,28 +577,44 @@ const Dashboard = () => {
                   const dc = getDishCount(restaurant.id);
                   const isExpanded = expandedRestaurant === restaurant.id;
                   return (
-                    <div key={restaurant.id} className="bg-card border border-border rounded-2xl overflow-hidden hover:border-accent/40 transition-colors shadow-sm">
+                    <div
+                      key={restaurant.id}
+                      className="rounded-2xl overflow-hidden transition-all shadow-sm hover:shadow-md"
+                      style={{ background: c.white, border: `1px solid ${c.border}` }}
+                    >
                       <div className="p-3 sm:p-4 space-y-2">
-                        {/* Top row: avatar + name + status */}
+                        {/* Top row */}
                         <div className="flex items-center gap-3">
-                          <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg font-bold shrink-0 ${restaurant.is_active ? "bg-accent/15 text-accent" : "bg-muted text-muted-foreground"}`}>
+                          <div
+                            className="w-10 h-10 rounded-xl flex items-center justify-center text-lg font-bold shrink-0"
+                            style={{
+                              background: restaurant.is_active ? `${c.mint}20` : `${c.muted}15`,
+                              color: restaurant.is_active ? c.mint : c.muted,
+                            }}
+                          >
                             {restaurant.name.charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2">
-                              <h3 className="font-semibold text-foreground text-base sm:text-lg truncate">{restaurant.name}</h3>
-                              <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium shrink-0 ${restaurant.is_active ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
+                              <h3 className="font-semibold text-base truncate" style={{ color: c.dark }}>{restaurant.name}</h3>
+                              <span
+                                className="text-xs px-2 py-0.5 rounded-full font-medium shrink-0"
+                                style={{
+                                  background: restaurant.is_active ? `${c.mint}20` : `${c.pink}20`,
+                                  color: restaurant.is_active ? c.mint : c.pink,
+                                }}
+                              >
                                 {restaurant.is_active ? "Actif" : "Inactif"}
                               </span>
                             </div>
-                            <p className="text-sm text-muted-foreground truncate">{restaurant.slug}</p>
+                            <p className="text-sm truncate" style={{ color: c.muted }}>{restaurant.slug}</p>
                           </div>
                         </div>
 
-                        {/* Meta info row */}
-                        <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
+                        {/* Meta info */}
+                        <div className="flex items-center gap-2 text-sm flex-wrap" style={{ color: c.muted }}>
                           {sub && (
-                            <span className="px-1.5 py-0.5 rounded bg-accent/10 text-accent text-xs font-semibold">
+                            <span className="px-2 py-0.5 rounded text-xs font-semibold" style={{ background: `${c.mint}15`, color: c.mint }}>
                               {sub.name} — {sub.price_monthly}€/mois
                             </span>
                           )}
@@ -583,38 +625,31 @@ const Dashboard = () => {
                           <span>{dc.with_3d} en 3D</span>
                         </div>
 
-                        {/* Actions row */}
-                        <div className="flex items-center justify-between border-t border-border/40 pt-2 -mx-1">
+                        {/* Actions */}
+                        <div className="flex items-center justify-between pt-2 -mx-1" style={{ borderTop: `1px solid ${c.border}` }}>
                           <div className="flex items-center">
-                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Détails" onClick={() => setExpandedRestaurant(isExpanded ? null : restaurant.id)}>
-                              {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                            </Button>
-                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Voir le menu" onClick={() => window.open(`/menu?restaurant=${restaurant.id}`, '_blank')}>
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Personnaliser" onClick={() => navigate(`/admin?restaurant=${restaurant.id}`)}>
-                              <Settings className="w-4 h-4" />
-                            </Button>
-                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Copier le lien du menu" onClick={() => {
-                              const url = `${window.location.origin}/menu?restaurant=${restaurant.id}`;
-                              navigator.clipboard.writeText(url);
-                              toast.success("Lien copié !");
-                            }}>
-                              <Link className="w-4 h-4" />
-                            </Button>
+                            {[
+                              { icon: isExpanded ? ChevronUp : ChevronDown, title: "Détails", onClick: () => setExpandedRestaurant(isExpanded ? null : restaurant.id) },
+                              { icon: Eye, title: "Voir le menu", onClick: () => window.open(`/menu?restaurant=${restaurant.id}`, '_blank') },
+                              { icon: Settings, title: "Personnaliser", onClick: () => navigate(`/admin?restaurant=${restaurant.id}`) },
+                              { icon: Link, title: "Copier le lien", onClick: () => { navigator.clipboard.writeText(`${window.location.origin}/menu?restaurant=${restaurant.id}`); toast.success("Lien copié !"); } },
+                            ].map((btn, i) => (
+                              <button key={i} onClick={btn.onClick} title={btn.title} className="p-2 rounded-lg hover:opacity-70 transition-opacity" style={{ color: c.muted }}>
+                                <btn.icon className="w-4 h-4" />
+                              </button>
+                            ))}
                           </div>
                           <div className="flex items-center">
-                            <Button size="icon" variant="ghost" className="h-8 w-8" title={restaurant.is_active ? "Désactiver" : "Activer"} onClick={() => handleToggleActive(restaurant)}>
-                              {restaurant.is_active ? <PowerOff className="w-4 h-4" /> : <Power className="w-4 h-4 text-green-400" />}
-                            </Button>
-                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Supprimer" onClick={() => handleDelete(restaurant)}>
-                              <Trash2 className="w-4 h-4 text-destructive" />
-                            </Button>
+                            <button onClick={() => handleToggleActive(restaurant)} title={restaurant.is_active ? "Désactiver" : "Activer"} className="p-2 rounded-lg hover:opacity-70" style={{ color: restaurant.is_active ? c.muted : c.mint }}>
+                              {restaurant.is_active ? <PowerOff className="w-4 h-4" /> : <Power className="w-4 h-4" />}
+                            </button>
+                            <button onClick={() => handleDelete(restaurant)} title="Supprimer" className="p-2 rounded-lg hover:opacity-70" style={{ color: c.pink }}>
+                              <Trash2 className="w-4 h-4" />
+                            </button>
                           </div>
                         </div>
                       </div>
 
-                      {/* Expanded info panel */}
                       {isExpanded && (
                         <div className="px-4 pb-4">
                           <RestaurantInfoPanel restaurant={restaurant} subscriptions={subscriptions} onSave={handleUpdateRestaurantInfo} />
@@ -630,14 +665,18 @@ const Dashboard = () => {
           /* ─── Subscriptions Section ─── */
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Forfaits d'abonnement</h2>
-              <Button onClick={() => { setEditingSub(null); setSubDialogOpen(true); }}>
-                <Plus className="w-4 h-4 mr-2" /> Nouveau forfait
-              </Button>
+              <h2 className="text-lg font-semibold" style={{ color: c.dark }}>Forfaits d'abonnement</h2>
+              <button
+                className="flex items-center gap-1.5 px-5 py-2.5 rounded-full text-white text-sm font-bold hover:opacity-90"
+                style={{ background: c.mint }}
+                onClick={() => { setEditingSub(null); setSubDialogOpen(true); }}
+              >
+                <Plus className="w-4 h-4" /> Nouveau forfait
+              </button>
             </div>
 
             {subscriptions.length === 0 ? (
-              <div className="text-center py-12 text-muted-foreground">
+              <div className="text-center py-12" style={{ color: c.muted }}>
                 <Package className="w-12 h-12 mx-auto mb-3 opacity-50" />
                 <p>Aucun forfait</p>
               </div>
@@ -646,46 +685,45 @@ const Dashboard = () => {
                 {subscriptions.map((sub) => {
                   const usedBy = restaurants.filter(r => r.subscription_id === sub.id).length;
                   return (
-                    <div key={sub.id} className="bg-card border border-border rounded-xl p-5 space-y-3">
+                    <div key={sub.id} className="rounded-xl p-5 space-y-3" style={{ background: c.white, border: `1px solid ${c.border}` }}>
                       <div className="flex items-center justify-between">
-                        <h3 className="font-semibold text-foreground text-lg">{sub.name}</h3>
+                        <h3 className="font-semibold text-lg" style={{ color: c.dark }}>{sub.name}</h3>
                         <div className="flex gap-1">
-                          <Button size="icon" variant="ghost" onClick={() => { setEditingSub(sub); setSubDialogOpen(true); }}>
+                          <button className="p-1.5 rounded hover:opacity-70" style={{ color: c.muted }} onClick={() => { setEditingSub(sub); setSubDialogOpen(true); }}>
                             <Pencil className="w-4 h-4" />
-                          </Button>
-                          <Button size="icon" variant="ghost" onClick={() => handleDeleteSub(sub)}>
-                            <Trash2 className="w-4 h-4 text-destructive" />
-                          </Button>
+                          </button>
+                          <button className="p-1.5 rounded hover:opacity-70" style={{ color: c.pink }} onClick={() => handleDeleteSub(sub)}>
+                            <Trash2 className="w-4 h-4" />
+                          </button>
                         </div>
                       </div>
-                      <p className="text-2xl font-bold text-accent">{sub.price_monthly}€<span className="text-sm font-normal text-muted-foreground">/mois</span></p>
-                      <div className="text-xs text-muted-foreground space-y-1">
+                      <p className="text-2xl font-bold" style={{ color: c.mint }}>{sub.price_monthly}€<span className="text-sm font-normal" style={{ color: c.muted }}>/mois</span></p>
+                      <div className="text-xs space-y-1" style={{ color: c.muted }}>
                         <p>Max {sub.max_dishes} plats</p>
                         <p>{usedBy} restaurant{usedBy !== 1 ? "s" : ""} abonné{usedBy !== 1 ? "s" : ""}</p>
                       </div>
                       {Array.isArray(sub.features) && sub.features.length > 0 && (
                         <div className="flex flex-wrap gap-1">
                           {sub.features.map((f, i) => (
-                            <span key={i} className="text-[10px] px-2 py-0.5 rounded-full bg-accent/10 text-accent font-medium">{String(f)}</span>
+                            <span key={i} className="text-[10px] px-2 py-0.5 rounded-full font-medium" style={{ background: `${c.mint}15`, color: c.mint }}>{String(f)}</span>
                           ))}
                         </div>
                       )}
-                      {/* Active subscribers list */}
                       {(() => {
                         const subscribers = restaurants.filter(r => r.subscription_id === sub.id && r.is_active);
                         if (subscribers.length === 0) return null;
                         return (
-                          <div className="border-t border-border/50 pt-3 mt-2 space-y-1.5">
-                            <p className="text-xs font-semibold text-foreground">Abonnés actifs</p>
+                          <div className="pt-3 mt-2 space-y-1.5" style={{ borderTop: `1px solid ${c.border}` }}>
+                            <p className="text-xs font-semibold" style={{ color: c.dark }}>Abonnés actifs</p>
                             {subscribers.map(r => (
                               <div key={r.id} className="flex items-center justify-between text-xs">
-                                <span className="text-muted-foreground">{r.name}</span>
-                                <span className="text-accent font-medium">{sub.price_monthly}€/mois</span>
+                                <span style={{ color: c.muted }}>{r.name}</span>
+                                <span className="font-medium" style={{ color: c.mint }}>{sub.price_monthly}€/mois</span>
                               </div>
                             ))}
-                            <div className="flex items-center justify-between text-xs font-semibold border-t border-border/30 pt-1.5 mt-1.5">
-                              <span className="text-foreground">Total</span>
-                              <span className="text-accent">{subscribers.length * sub.price_monthly}€/mois</span>
+                            <div className="flex items-center justify-between text-xs font-semibold pt-1.5 mt-1.5" style={{ borderTop: `1px solid ${c.border}` }}>
+                              <span style={{ color: c.dark }}>Total</span>
+                              <span style={{ color: c.mint }}>{subscribers.length * sub.price_monthly}€/mois</span>
                             </div>
                           </div>
                         );
@@ -722,20 +760,19 @@ const Dashboard = () => {
             </div>
             <div className="space-y-1">
               <Label>Slug (sous-domaine)</Label>
-              <div className="flex items-center gap-1">
-                <Input
-                  value={newRestaurant.slug}
-                  onChange={(e) => setNewRestaurant((f) => ({ ...f, slug: e.target.value }))}
-                  placeholder="la-maison"
-                />
-              </div>
+              <Input
+                value={newRestaurant.slug}
+                onChange={(e) => setNewRestaurant((f) => ({ ...f, slug: e.target.value }))}
+                placeholder="la-maison"
+              />
             </div>
             <div className="space-y-1">
               <Label>Abonnement</Label>
               <select
                 value={newRestaurant.subscription_id}
                 onChange={(e) => setNewRestaurant((f) => ({ ...f, subscription_id: e.target.value }))}
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                className="w-full rounded-md px-3 py-2 text-sm"
+                style={{ border: `1px solid ${c.border}`, background: c.white, color: c.dark }}
               >
                 <option value="">Sans abonnement</option>
                 {subscriptions.map((s) => (
@@ -746,8 +783,8 @@ const Dashboard = () => {
               </select>
             </div>
 
-            <div className="border-t border-border pt-4 space-y-3">
-              <p className="text-sm font-medium text-foreground">Compte propriétaire</p>
+            <div className="pt-4 space-y-3" style={{ borderTop: `1px solid ${c.border}` }}>
+              <p className="text-sm font-medium" style={{ color: c.dark }}>Compte propriétaire</p>
               <div className="space-y-1">
                 <Label>Email du propriétaire</Label>
                 <Input
@@ -768,9 +805,14 @@ const Dashboard = () => {
               </div>
             </div>
 
-            <Button className="w-full" onClick={handleCreate} disabled={saving}>
+            <button
+              className="w-full py-2.5 rounded-lg font-bold text-white text-sm"
+              style={{ background: c.pink }}
+              onClick={handleCreate}
+              disabled={saving}
+            >
               {saving ? "Création..." : "Créer le restaurant"}
-            </Button>
+            </button>
           </div>
         </DialogContent>
       </Dialog>
