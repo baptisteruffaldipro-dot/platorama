@@ -192,8 +192,8 @@ const Index = () => {
       </div>
 
       <div className="flex-1 flex items-center justify-center relative">
-        <ErrorBoundary fallback={<DishViewerErrorFallback dish={dish} />}>
-          <DishViewer dish={dish} />
+        <ErrorBoundary key={dish.id} fallback={<DishViewerErrorFallback dish={dish} />}>
+          <DishViewer key={dish.id} dish={dish} />
         </ErrorBoundary>
       </div>
 
