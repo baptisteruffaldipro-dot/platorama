@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
       });
 
     if (createError) {
-      // If user already exists, look them up
+      // If user already exists, look them up and update password
       if (createError.message.includes("already been registered")) {
         const { data: listData, error: listError } =
           await supabaseAdmin.auth.admin.listUsers();
@@ -94,6 +94,9 @@ Deno.serve(async (req) => {
           });
         }
         userId = existingUser.id;
+
+        // Update password to the new one provided
+        await supabaseAdmin.auth.admin.updateUserById(userId, { password });
       } else {
         return new Response(JSON.stringify({ error: createError.message }), {
           status: 400,
