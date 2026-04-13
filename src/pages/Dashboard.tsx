@@ -34,6 +34,7 @@ import {
   Phone,
   Globe,
   Package,
+  Link,
 } from "lucide-react";
 import logoPlatorama from "@/assets/logo-platorama.png";
 
@@ -593,6 +594,13 @@ const Dashboard = () => {
                             </Button>
                             <Button size="icon" variant="ghost" className="h-8 w-8" title="Personnaliser" onClick={() => navigate(`/admin?restaurant=${restaurant.id}`)}>
                               <Settings className="w-4 h-4" />
+                            </Button>
+                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Copier le lien du menu" onClick={() => {
+                              const url = `${window.location.origin}/menu?restaurant=${restaurant.id}`;
+                              navigator.clipboard.writeText(url);
+                              toast.success("Lien copié !");
+                            }}>
+                              <Link className="w-4 h-4" />
                             </Button>
                           </div>
                           <div className="flex items-center">
