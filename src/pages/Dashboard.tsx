@@ -79,8 +79,8 @@ const StatCard = ({ icon: Icon, label, value }: { icon: React.ElementType; label
       <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
     </div>
     <div className="min-w-0">
-      <p className="text-lg sm:text-2xl font-bold text-foreground truncate">{value}</p>
-      <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{label}</p>
+      <p className="text-xl sm:text-2xl font-bold text-foreground truncate">{value}</p>
+      <p className="text-xs sm:text-sm text-muted-foreground truncate">{label}</p>
     </div>
   </div>
 );
@@ -503,7 +503,7 @@ const Dashboard = () => {
         <div className="flex border-b border-border">
           <button
             onClick={() => setActiveSection("restaurants")}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
+            className={`flex items-center gap-2 px-4 py-3 text-base font-medium transition-colors ${
               activeSection === "restaurants" ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -511,7 +511,7 @@ const Dashboard = () => {
           </button>
           <button
             onClick={() => setActiveSection("subscriptions")}
-            className={`flex items-center gap-2 px-4 py-3 text-sm font-medium transition-colors ${
+            className={`flex items-center gap-2 px-4 py-3 text-base font-medium transition-colors ${
               activeSection === "subscriptions" ? "text-accent border-b-2 border-accent" : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -558,19 +558,19 @@ const Dashboard = () => {
                           </div>
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2">
-                              <h3 className="font-semibold text-foreground text-sm sm:text-base truncate">{restaurant.name}</h3>
-                              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium shrink-0 ${restaurant.is_active ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
+                              <h3 className="font-semibold text-foreground text-base sm:text-lg truncate">{restaurant.name}</h3>
+                              <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium shrink-0 ${restaurant.is_active ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
                                 {restaurant.is_active ? "Actif" : "Inactif"}
                               </span>
                             </div>
-                            <p className="text-xs text-muted-foreground truncate">{restaurant.slug}</p>
+                            <p className="text-sm text-muted-foreground truncate">{restaurant.slug}</p>
                           </div>
                         </div>
 
                         {/* Meta info row */}
-                        <div className="flex items-center gap-2 text-[11px] text-muted-foreground flex-wrap">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground flex-wrap">
                           {sub && (
-                            <span className="px-1.5 py-0.5 rounded bg-accent/10 text-accent text-[10px] font-semibold">
+                            <span className="px-1.5 py-0.5 rounded bg-accent/10 text-accent text-xs font-semibold">
                               {sub.name} — {sub.price_monthly}€/mois
                             </span>
                           )}
