@@ -10,7 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
-import { LogOut, Plus, Pencil, Trash2, Upload, Star, Rotate3d, BarChart3, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Upload, Star, Rotate3d, BarChart3, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail, ArrowLeft } from "lucide-react";
 import SettingsPanel from "@/components/SettingsPanel";
 import UsersPanel from "@/components/UsersPanel";
 import InfoPanel from "@/components/InfoPanel";
@@ -418,9 +418,16 @@ const Admin = () => {
     <div className="min-h-screen bg-background text-foreground overflow-auto admin-layout">
       {/* Header */}
       <header className="sticky top-0 z-10 bg-card border-b border-border px-4 py-3 flex items-center justify-between">
-        <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-serif)" }}>
-          Gestion du Menu
-        </h1>
+        <div className="flex items-center gap-3">
+          {isSuperAdmin && (
+            <Button size="icon" variant="ghost" onClick={() => navigate("/")}>
+              <ArrowLeft className="w-5 h-5" />
+            </Button>
+          )}
+          <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-serif)" }}>
+            Gestion du Menu
+          </h1>
+        </div>
         <div className="flex items-center gap-2">
           {tab === "menu" && (
             <Button size="sm" onClick={openNew} className="bg-accent text-accent-foreground hover:bg-accent/90">
@@ -443,12 +450,14 @@ const Admin = () => {
       {/* Tabs */}
       <div className="flex border-b border-border overflow-x-auto">
         {([
-          { key: "menu", icon: UtensilsCrossed, label: "Menu" },
-          { key: "stats", icon: BarChart3, label: "Stats" },
-          { key: "users", icon: Users, label: "Utilisateurs" },
-          { key: "info", icon: Mail, label: "Infos" },
-          { key: "settings", icon: Settings, label: "Réglages" },
-        ] as const).map((t) => (
+          { key: "menu", icon: UtensilsCrossed, label: "Menu", superOnly: false },
+          { key: "stats", icon: BarChart3, label: "Stats", superOnly: false },
+          { key: "settings", icon: Settings, label: "Réglages", superOnly: false },
+          { key: "users", icon: Users, label: "Utilisateurs", superOnly: true },
+          { key: "info", icon: Mail, label: "Infos", superOnly: true },
+        ] as const)
+          .filter((t) => !t.superOnly || isSuperAdmin)
+          .map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
