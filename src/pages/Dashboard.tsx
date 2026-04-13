@@ -587,7 +587,7 @@ const Dashboard = () => {
                             <Button size="icon" variant="ghost" className="h-8 w-8" title="Détails" onClick={() => setExpandedRestaurant(isExpanded ? null : restaurant.id)}>
                               {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                             </Button>
-                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Voir le menu" onClick={() => window.open(`/?restaurant=${restaurant.id}`, '_blank')}>
+                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Voir le menu" onClick={() => window.open(`/menu?restaurant=${restaurant.id}`, '_blank')}>
                               <Eye className="w-4 h-4" />
                             </Button>
                             <Button size="icon" variant="ghost" className="h-8 w-8" title="Personnaliser" onClick={() => navigate(`/admin?restaurant=${restaurant.id}`)}>

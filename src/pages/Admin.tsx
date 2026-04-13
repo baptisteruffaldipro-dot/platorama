@@ -430,7 +430,7 @@ const Admin = () => {
           <Button size="sm" variant="outline" onClick={() => {
             const params = new URLSearchParams(window.location.search);
             const rid = params.get("restaurant");
-            window.open(rid ? `/?restaurant=${rid}` : "/", "_blank");
+            window.open(rid ? `/menu?restaurant=${rid}` : "/menu", "_blank");
           }}>
             <Eye className="w-4 h-4 mr-1" /> Voir le menu
           </Button>
