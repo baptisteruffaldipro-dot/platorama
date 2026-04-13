@@ -122,53 +122,38 @@ const Index = () => {
 
       {/* Top-left icon buttons */}
       <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
-        {/* Formulas / Info */}
-        <Dialog>
-          <DialogTrigger asChild>
-            <button
-              className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
-              aria-label="Voir les formules"
-            >
-              <Info className="w-5 h-5 text-muted-foreground" />
-            </button>
-          </DialogTrigger>
-          <DialogContent className="bg-card border-border max-w-xs">
-            <DialogHeader>
-              <DialogTitle
-                className="text-xl text-foreground tracking-wide uppercase text-center"
-                style={{ fontFamily: "var(--font-serif)" }}
+        {/* Formulas / Info — only show if formulas exist */}
+        {formulas.length > 0 && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
+                aria-label="Voir les formules"
               >
-                {t("Nos Formules")}
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-3 pt-2 text-center" style={{ fontFamily: "var(--font-serif)" }}>
-              <div className="space-y-1">
-                <p className="text-sm text-foreground">{t("Entrée / Plat / Dessert")}</p>
-                <p className="text-lg font-semibold text-accent">56 €</p>
+                <Info className="w-5 h-5 text-muted-foreground" />
+              </button>
+            </DialogTrigger>
+            <DialogContent className="bg-card border-border max-w-xs">
+              <DialogHeader>
+                <DialogTitle
+                  className="text-xl text-foreground tracking-wide uppercase text-center"
+                  style={{ fontFamily: "var(--font-serif)" }}
+                >
+                  {t("Nos Formules")}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-3 pt-2 text-center" style={{ fontFamily: "var(--font-serif)" }}>
+                {formulas.map((f, i) => (
+                  <div key={i}>
+                    {i > 0 && <div className="border-t border-border mb-3" />}
+                    <p className="text-sm text-foreground">{t(f.label)}</p>
+                    <p className="text-lg font-semibold text-accent">{f.price}</p>
+                  </div>
+                ))}
               </div>
-              <div className="border-t border-border" />
-              <div className="space-y-1">
-                <p className="text-sm text-foreground">{t("Entrée / Plat ou Plat / Dessert")}</p>
-                <p className="text-lg font-semibold text-accent">48 €</p>
-              </div>
-              <div className="border-t border-border" />
-              <div className="grid grid-cols-3 gap-2 pt-1">
-                <div>
-                  <p className="text-xs text-muted-foreground">{t("Entrée")}</p>
-                  <p className="text-sm font-semibold text-accent">17 €</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">{t("Plat")}</p>
-                  <p className="text-sm font-semibold text-accent">34 €</p>
-                </div>
-                <div>
-                  <p className="text-xs text-muted-foreground">{t("Dessert")}</p>
-                  <p className="text-sm font-semibold text-accent">14 €</p>
-                </div>
-              </div>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogContent>
+          </Dialog>
+        )}
 
         {/* Chef note */}
         {dish.chef_note && (
