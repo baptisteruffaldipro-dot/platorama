@@ -63,14 +63,35 @@ function resetToDashboardTheme() {
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   const restaurantId = new URLSearchParams(window.location.search).get("restaurant");
-  const isDashboard = (window.location.pathname === "/" || window.location.pathname === "/login") && !window.location.search.includes("restaurant");
+  const pathname = window.location.pathname;
+  const isDashboard = (pathname === "/" || pathname === "/login") && !restaurantId;
+  const isAdmin = pathname === "/admin";
 
   const { data: settings } = usePublishedSettings(isDashboard ? null : restaurantId);
 
   useEffect(() => {
-    // Dashboard and login always use default theme
+    // Dashboard and login always use Plat'O'rama theme
     if (isDashboard) {
       resetToDashboardTheme();
+      return;
+    }
+
+    // Admin page: use restaurant theme for colors but keep admin-friendly layout
+    if (isAdmin && settings) {
+      const root = document.documentElement;
+      root.style.setProperty("--background", hexToHSL(settings.background_color));
+      root.style.setProperty("--card", hexToHSL(settings.background_color));
+      root.style.setProperty("--foreground", hexToHSL(settings.text_color));
+      root.style.setProperty("--card-foreground", hexToHSL(settings.text_color));
+      root.style.setProperty("--primary", hexToHSL(settings.text_color));
+      root.style.setProperty("--accent", hexToHSL(settings.button_bg_color));
+      root.style.setProperty("--accent-foreground", hexToHSL(settings.button_text_color));
+      root.style.setProperty("--muted", hexToHSL(settings.background_color));
+      root.style.setProperty("--muted-foreground", hexToHSL(settings.text_color));
+      root.style.setProperty("--border", hexToHSL(settings.text_color));
+      root.style.setProperty("--font-serif", `'${settings.heading_font}', Georgia, serif`);
+      root.style.setProperty("--font-body", `'${settings.body_font}', Georgia, serif`);
+      document.body.style.fontFamily = `'${settings.body_font}', Georgia, serif`;
       return;
     }
 
@@ -98,7 +119,7 @@ export default function ThemeProvider({ children }: { children: React.ReactNode 
         document.head.appendChild(link);
       }
     });
-  }, [settings, isDashboard]);
+  }, [settings, isDashboard, isAdmin]);
 
   return <>{children}</>;
 }
