@@ -528,7 +528,7 @@ const Dashboard = () => {
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input placeholder="Rechercher un rest..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10 text-sm" />
               </div>
-              <Button size="sm" className="shrink-0 text-xs sm:text-sm" onClick={() => setCreateOpen(true)}>
+              <Button size="sm" className="shrink-0 text-xs sm:text-sm rounded-full bg-accent text-white hover:bg-accent/90" onClick={() => setCreateOpen(true)}>
                 <Plus className="w-4 h-4 sm:mr-1" />
                 <span className="hidden sm:inline">Nouveau restaurant</span>
               </Button>
@@ -550,11 +550,11 @@ const Dashboard = () => {
                   const dc = getDishCount(restaurant.id);
                   const isExpanded = expandedRestaurant === restaurant.id;
                   return (
-                    <div key={restaurant.id} className="bg-card border border-border rounded-xl overflow-hidden hover:border-accent/40 transition-colors">
+                    <div key={restaurant.id} className="bg-card border border-border rounded-2xl overflow-hidden hover:border-accent/40 transition-colors shadow-sm">
                       <div className="p-3 sm:p-4 space-y-2">
                         {/* Top row: avatar + name + status */}
                         <div className="flex items-center gap-3">
-                          <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-base sm:text-lg font-bold shrink-0 ${restaurant.is_active ? "bg-accent/20 text-accent" : "bg-muted text-muted-foreground"}`}>
+                          <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg font-bold shrink-0 ${restaurant.is_active ? "bg-accent/15 text-accent" : "bg-muted text-muted-foreground"}`}>
                             {restaurant.name.charAt(0).toUpperCase()}
                           </div>
                           <div className="min-w-0 flex-1">
