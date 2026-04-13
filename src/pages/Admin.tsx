@@ -224,7 +224,7 @@ const Admin = () => {
     }
 
     if (isSuperAdmin) {
-      navigate("/dashboard", { replace: true });
+      navigate("/", { replace: true });
       return;
     }
 
