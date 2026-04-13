@@ -22,12 +22,14 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-/** Prefetch all 3D model files so they're cached when user taps AR */
-function usePrefetchModels(dishes: ReturnType<typeof useDishes>["data"]) {
+/** Prefetch only the next/prev model, not all at once */
+function usePrefetchAdjacentModels(dishes: ReturnType<typeof useDishes>["data"], activeIndex: number) {
   useEffect(() => {
     if (!dishes?.length) return;
     const ios = isIOS();
-    dishes.forEach((d) => {
+    const indices = [activeIndex - 1, activeIndex + 1].filter(i => i >= 0 && i < dishes.length);
+    indices.forEach((i) => {
+      const d = dishes[i];
       const url = ios ? d.model_ios : d.model_android;
       if (url) {
         const link = document.createElement("link");
@@ -38,7 +40,7 @@ function usePrefetchModels(dishes: ReturnType<typeof useDishes>["data"]) {
         document.head.appendChild(link);
       }
     });
-  }, [dishes]);
+  }, [dishes, activeIndex]);
 }
 
 const Index = () => {
