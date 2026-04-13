@@ -31,7 +31,7 @@ const SplashScreen = ({
           {settings?.restaurant_name || "La Maison"}
         </h1>
         <div className="w-12 h-px bg-accent mx-auto mt-4" />
-        <p className="text-xs tracking-[0.4em] uppercase text-muted-foreground mt-3">
+        <p className="text-sm tracking-[0.4em] uppercase text-muted-foreground mt-3">
           {settings?.subtitle || "Menu Virtuel"}
         </p>
       </motion.div>
