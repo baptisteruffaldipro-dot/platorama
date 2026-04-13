@@ -62,13 +62,15 @@
   }
 
   body:has(.admin-layout),
-  body:has(.dashboard-layout) {
+  body:has(.dashboard-layout),
+  body:has(.landing-layout) {
     overflow: auto;
     height: auto;
   }
 
   body:has(.admin-layout) #root,
-  body:has(.dashboard-layout) #root {
+  body:has(.dashboard-layout) #root,
+  body:has(.landing-layout) #root {
     height: auto;
     overflow: auto;
   }
