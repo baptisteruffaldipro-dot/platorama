@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { compressGlb } from "@/lib/compressGlb";
 import { useAuth } from "@/hooks/useAuth";
 import { useDishes, type Dish } from "@/hooks/useDishes";
 import { supabase } from "@/integrations/supabase/client";
@@ -313,9 +314,15 @@ const Admin = () => {
   };
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "thumbnail" | "model_ios" | "model_android") => {
-    const file = e.target.files?.[0];
+    let file = e.target.files?.[0];
     if (!file) return;
     try {
+      // Auto-compress GLB files with Draco before upload
+      if (field === "model_android" && file.name.endsWith(".glb")) {
+        toast.info("Compression du modèle 3D en cours...");
+        file = await compressGlb(file);
+        toast.success("Modèle compressé avec succès");
+      }
       const folder = field === "thumbnail" ? "thumbnails" : "models";
       const url = await uploadFile(file, folder);
       setForm((f) => ({ ...f, [field]: url }));
