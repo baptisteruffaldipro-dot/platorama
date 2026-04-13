@@ -74,13 +74,13 @@ interface DishCount {
 
 /* ─── Stats card ─── */
 const StatCard = ({ icon: Icon, label, value }: { icon: React.ElementType; label: string; value: string | number }) => (
-  <div className="bg-card border border-border rounded-xl p-4 flex items-center gap-4">
-    <div className="w-10 h-10 rounded-lg bg-accent/20 flex items-center justify-center">
-      <Icon className="w-5 h-5 text-accent" />
+  <div className="bg-card border border-border rounded-xl p-3 sm:p-4 flex items-center gap-3">
+    <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-accent/20 flex items-center justify-center shrink-0">
+      <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
     </div>
-    <div>
-      <p className="text-2xl font-bold text-foreground">{value}</p>
-      <p className="text-xs text-muted-foreground">{label}</p>
+    <div className="min-w-0">
+      <p className="text-lg sm:text-2xl font-bold text-foreground truncate">{value}</p>
+      <p className="text-[10px] sm:text-xs text-muted-foreground truncate">{label}</p>
     </div>
   </div>
 );
@@ -479,18 +479,18 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-auto dashboard-layout">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-card border-b border-border px-6 py-4 flex items-center justify-between">
-        <h1 className="text-xl font-bold" style={{ fontFamily: "var(--font-serif)" }}>
-          Dashboard Super Admin
+      <header className="sticky top-0 z-10 bg-card border-b border-border px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
+        <h1 className="text-base sm:text-xl font-bold" style={{ fontFamily: "var(--font-serif)" }}>
+          Dashboard
         </h1>
         <Button size="sm" variant="ghost" onClick={() => signOut()}>
           <LogOut className="w-4 h-4" />
         </Button>
       </header>
 
-      <div className="max-w-6xl mx-auto p-6 space-y-6">
+      <div className="max-w-6xl mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4">
           <StatCard icon={Store} label="Restaurants" value={restaurants.length} />
           <StatCard icon={Power} label="Actifs" value={activeCount} />
           <StatCard icon={Users} label="Propriétaires" value={members.length} />
@@ -522,13 +522,14 @@ const Dashboard = () => {
         {activeSection === "restaurants" ? (
           <>
             {/* Search + Create */}
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input placeholder="Rechercher un restaurant..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10" />
+                <Input placeholder="Rechercher un rest..." value={search} onChange={(e) => setSearch(e.target.value)} className="pl-10 text-sm" />
               </div>
-              <Button onClick={() => setCreateOpen(true)}>
-                <Plus className="w-4 h-4 mr-2" /> Nouveau restaurant
+              <Button size="sm" className="shrink-0 text-xs sm:text-sm" onClick={() => setCreateOpen(true)}>
+                <Plus className="w-4 h-4 sm:mr-1" />
+                <span className="hidden sm:inline">Nouveau restaurant</span>
               </Button>
             </div>
 
@@ -549,48 +550,58 @@ const Dashboard = () => {
                   const isExpanded = expandedRestaurant === restaurant.id;
                   return (
                     <div key={restaurant.id} className="bg-card border border-border rounded-xl overflow-hidden hover:border-accent/40 transition-colors">
-                      <div className="p-4 flex items-center justify-between gap-4">
-                        <div className="flex items-center gap-4 flex-1 min-w-0">
-                          <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-lg font-bold ${restaurant.is_active ? "bg-accent/20 text-accent" : "bg-muted text-muted-foreground"}`}>
+                      <div className="p-3 sm:p-4 space-y-2">
+                        {/* Top row: avatar + name + status */}
+                        <div className="flex items-center gap-3">
+                          <div className={`w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-base sm:text-lg font-bold shrink-0 ${restaurant.is_active ? "bg-accent/20 text-accent" : "bg-muted text-muted-foreground"}`}>
                             {restaurant.name.charAt(0).toUpperCase()}
                           </div>
-                          <div className="min-w-0">
+                          <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2">
-                              <h3 className="font-semibold text-foreground truncate">{restaurant.name}</h3>
-                              <span className={`text-[10px] px-2 py-0.5 rounded-full font-medium ${restaurant.is_active ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
+                              <h3 className="font-semibold text-foreground text-sm sm:text-base truncate">{restaurant.name}</h3>
+                              <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium shrink-0 ${restaurant.is_active ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
                                 {restaurant.is_active ? "Actif" : "Inactif"}
                               </span>
                             </div>
-                            <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5 flex-wrap">
-                              <span>{restaurant.slug}</span>
-                              {sub && (
-                                <span className="px-1.5 py-0.5 rounded bg-accent/10 text-accent text-[10px] font-semibold">
-                                  {sub.name} — {sub.price_monthly}€/mois
-                                </span>
-                              )}
-                              <span>{memberCount} membre{memberCount !== 1 ? "s" : ""}</span>
-                              <span>{dc.total} plat{dc.total !== 1 ? "s" : ""}</span>
-                              <span>{dc.with_3d} en 3D</span>
-                            </div>
+                            <p className="text-xs text-muted-foreground truncate">{restaurant.slug}</p>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-1 shrink-0">
-                          <Button size="icon" variant="ghost" title="Détails" onClick={() => setExpandedRestaurant(isExpanded ? null : restaurant.id)}>
-                            {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                          </Button>
-                          <Button size="icon" variant="ghost" title="Voir le menu" onClick={() => window.open(`/?restaurant=${restaurant.id}`, '_blank')}>
-                            <Eye className="w-4 h-4" />
-                          </Button>
-                          <Button size="icon" variant="ghost" title="Personnaliser" onClick={() => navigate(`/admin?restaurant=${restaurant.id}`)}>
-                            <Settings className="w-4 h-4" />
-                          </Button>
-                          <Button size="icon" variant="ghost" title={restaurant.is_active ? "Désactiver" : "Activer"} onClick={() => handleToggleActive(restaurant)}>
-                            {restaurant.is_active ? <PowerOff className="w-4 h-4" /> : <Power className="w-4 h-4 text-green-400" />}
-                          </Button>
-                          <Button size="icon" variant="ghost" title="Supprimer" onClick={() => handleDelete(restaurant)}>
-                            <Trash2 className="w-4 h-4 text-destructive" />
-                          </Button>
+                        {/* Meta info row */}
+                        <div className="flex items-center gap-2 text-[11px] text-muted-foreground flex-wrap">
+                          {sub && (
+                            <span className="px-1.5 py-0.5 rounded bg-accent/10 text-accent text-[10px] font-semibold">
+                              {sub.name} — {sub.price_monthly}€/mois
+                            </span>
+                          )}
+                          <span>{memberCount} membre{memberCount !== 1 ? "s" : ""}</span>
+                          <span>·</span>
+                          <span>{dc.total} plat{dc.total !== 1 ? "s" : ""}</span>
+                          <span>·</span>
+                          <span>{dc.with_3d} en 3D</span>
+                        </div>
+
+                        {/* Actions row */}
+                        <div className="flex items-center justify-between border-t border-border/40 pt-2 -mx-1">
+                          <div className="flex items-center">
+                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Détails" onClick={() => setExpandedRestaurant(isExpanded ? null : restaurant.id)}>
+                              {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                            </Button>
+                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Voir le menu" onClick={() => window.open(`/?restaurant=${restaurant.id}`, '_blank')}>
+                              <Eye className="w-4 h-4" />
+                            </Button>
+                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Personnaliser" onClick={() => navigate(`/admin?restaurant=${restaurant.id}`)}>
+                              <Settings className="w-4 h-4" />
+                            </Button>
+                          </div>
+                          <div className="flex items-center">
+                            <Button size="icon" variant="ghost" className="h-8 w-8" title={restaurant.is_active ? "Désactiver" : "Activer"} onClick={() => handleToggleActive(restaurant)}>
+                              {restaurant.is_active ? <PowerOff className="w-4 h-4" /> : <Power className="w-4 h-4 text-green-400" />}
+                            </Button>
+                            <Button size="icon" variant="ghost" className="h-8 w-8" title="Supprimer" onClick={() => handleDelete(restaurant)}>
+                              <Trash2 className="w-4 h-4 text-destructive" />
+                            </Button>
+                          </div>
                         </div>
                       </div>
 
