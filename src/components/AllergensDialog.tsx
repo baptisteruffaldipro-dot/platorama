@@ -20,8 +20,11 @@ const AllergensDialog = ({ allergens }: AllergensDialogProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="text-xs tracking-[0.15em] uppercase text-muted-foreground hover:text-accent transition-colors">
-          {t("Allergènes")}
+        <button
+          className="w-10 h-10 rounded-full border border-muted-foreground/40 flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
+          aria-label="Allergènes"
+        >
+          <AlertTriangle className="w-5 h-5 text-muted-foreground" />
         </button>
       </DialogTrigger>
       <DialogContent className="bg-card border-border max-w-xs">
