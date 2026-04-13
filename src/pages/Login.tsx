@@ -44,14 +44,20 @@ const Login = () => {
           return;
         }
 
-        const { data: membership } = await supabase
+        const { data: memberships } = await supabase
           .from("restaurant_members")
           .select("restaurant_id")
           .eq("user_id", u.id)
-          .limit(1)
-          .maybeSingle();
+          .order("created_at", { ascending: false });
 
-        navigate(membership?.restaurant_id ? `/admin?restaurant=${membership.restaurant_id}` : "/admin");
+        if (memberships && memberships.length > 1) {
+          // Multiple restaurants — redirect to most recently added
+          navigate(`/admin?restaurant=${memberships[0].restaurant_id}`);
+        } else if (memberships && memberships.length === 1) {
+          navigate(`/admin?restaurant=${memberships[0].restaurant_id}`);
+        } else {
+          navigate("/admin");
+        }
       } else {
         navigate("/admin");
       }
