@@ -198,9 +198,6 @@ const Login = () => {
           background: `linear-gradient(135deg, ${c.pink} 0%, #F4A261 100%)`,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "48px",
           position: "relative",
           overflow: "hidden",
         }}
@@ -212,74 +209,75 @@ const Login = () => {
           background: "rgba(255,255,255,0.08)",
         }} />
         <div style={{
-          position: "absolute", bottom: -40, left: -40,
+          position: "absolute", bottom: 60, left: -40,
           width: 160, height: 160, borderRadius: "50%",
           background: "rgba(255,255,255,0.06)",
         }} />
 
+        {/* Main content — centered */}
         <div style={{
-          maxWidth: 420,
-          textAlign: "center",
-          color: c.white,
-          position: "relative",
-          zIndex: 1,
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "48px 48px 24px",
         }}>
-          <h2 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16, lineHeight: 1.2 }}>
-            Votre menu en 3D,<br />accessible en un clic
-          </h2>
-          <p style={{ fontSize: 16, opacity: 0.9, lineHeight: 1.6, marginBottom: 40 }}>
-            Offrez à vos clients une expérience immersive unique. Gérez vos plats, personnalisez votre carte et impressionnez vos convives.
-          </p>
+          <div style={{ maxWidth: 420, textAlign: "center", color: c.white, position: "relative", zIndex: 1 }}>
+            <h2 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16, lineHeight: 1.2 }}>
+              Votre menu en 3D,<br />accessible en un clic
+            </h2>
+            <p style={{ fontSize: 16, opacity: 0.9, lineHeight: 1.6, marginBottom: 40 }}>
+              Offrez à vos clients une expérience immersive unique. Gérez vos plats, personnalisez votre carte et impressionnez vos convives.
+            </p>
 
-          <div style={{ display: "flex", gap: 24, justifyContent: "center" }}>
-            {[
-              { icon: <Utensils size={28} />, label: "Gestion des plats" },
-              { icon: <View size={28} />, label: "Aperçu 3D" },
-              { icon: <Sparkles size={28} />, label: "Personnalisation" },
-            ].map((item, i) => (
-              <div key={i} style={{
-                display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
-              }}>
-                <div style={{
-                  width: 56, height: 56, borderRadius: 16,
-                  background: "rgba(255,255,255,0.18)",
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                }}>
-                  {item.icon}
+            <div style={{ display: "flex", gap: 24, justifyContent: "center" }}>
+              {[
+                { icon: <Utensils size={28} />, label: "Gestion des plats" },
+                { icon: <View size={28} />, label: "Aperçu 3D" },
+                { icon: <Sparkles size={28} />, label: "Personnalisation" },
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <div style={{
+                    width: 56, height: 56, borderRadius: 16,
+                    background: "rgba(255,255,255,0.18)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    {item.icon}
+                  </div>
+                  <span style={{ fontSize: 12, fontWeight: 500, opacity: 0.9 }}>{item.label}</span>
                 </div>
-                <span style={{ fontSize: 12, fontWeight: 500, opacity: 0.9 }}>{item.label}</span>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
+        </div>
 
-          {/* Contact bar */}
-          <div style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            background: "rgba(255,255,255,0.95)",
-            padding: "16px 32px",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 40,
-            borderTop: "1px solid rgba(0,0,0,0.05)",
+        {/* Contact bar — pinned bottom */}
+        <div style={{
+          background: "rgba(255,255,255,0.95)",
+          padding: "14px 32px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 36,
+          position: "relative",
+          zIndex: 2,
+          borderRadius: "16px 16px 0 0",
+          margin: "0 16px",
+        }}>
+          <span style={{ fontWeight: 700, color: c.dark, fontSize: 13, letterSpacing: 0.5 }}>BESOIN D'AIDE ?</span>
+          <a href="mailto:bonjour@platorama.fr" style={{
+            display: "flex", alignItems: "center", gap: 8,
+            color: c.dark, textDecoration: "none", fontSize: 13,
           }}>
-            <span style={{ fontWeight: 700, color: c.dark, fontSize: 14 }}>BESOIN D'AIDE ?</span>
-            <a href="mailto:bonjour@platorama.fr" style={{
-              display: "flex", alignItems: "center", gap: 8,
-              color: c.dark, textDecoration: "none", fontSize: 13,
-            }}>
-              <Mail size={16} color={c.pink} /> bonjour@platorama.fr
-            </a>
-            <a href="tel:+33695199427" style={{
-              display: "flex", alignItems: "center", gap: 8,
-              color: c.dark, textDecoration: "none", fontSize: 13,
-            }}>
-              <Phone size={16} color={c.pink} /> 06 95 19 94 27
-            </a>
-          </div>
+            <Mail size={16} color={c.pink} /> bonjour@platorama.fr
+          </a>
+          <a href="tel:+33695199427" style={{
+            display: "flex", alignItems: "center", gap: 8,
+            color: c.dark, textDecoration: "none", fontSize: 13,
+          }}>
+            <Phone size={16} color={c.pink} /> 06 95 19 94 27
+          </a>
         </div>
       </div>
     </div>
