@@ -191,71 +191,59 @@ const Login = () => {
         </form>
       </div>
 
-      {/* Right — Promo panel (hidden on mobile) */}
+      {/* Right — Photo panel (hidden on mobile) */}
       <div
         className="max-md:!hidden"
         style={{
           flex: 1,
-          background: `linear-gradient(135deg, ${c.pink} 0%, #F4A261 100%)`,
-          display: "flex",
-          flexDirection: "column",
           position: "relative",
           overflow: "hidden",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
-        {/* Decorative circles */}
+        {/* Hero image */}
+        <img
+          src={loginHero}
+          alt="Expérience restaurant"
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+          }}
+        />
+
+        {/* Overlay gradient */}
         <div style={{
-          position: "absolute", top: -60, right: -60,
-          width: 200, height: 200, borderRadius: "50%",
-          background: "rgba(255,255,255,0.08)",
-        }} />
-        <div style={{
-          position: "absolute", bottom: 60, left: -40,
-          width: 160, height: 160, borderRadius: "50%",
-          background: "rgba(255,255,255,0.06)",
+          position: "absolute",
+          inset: 0,
+          background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.05) 100%)",
         }} />
 
-        {/* Main content — centered */}
+        {/* Text overlay */}
         <div style={{
           flex: 1,
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          padding: "48px 48px 24px",
+          justifyContent: "flex-end",
+          padding: "48px 40px 80px",
+          position: "relative",
+          zIndex: 1,
         }}>
-          <div style={{ maxWidth: 420, textAlign: "center", color: c.white, position: "relative", zIndex: 1 }}>
-            <h2 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16, lineHeight: 1.2 }}>
-              Votre menu en 3D,<br />accessible en un clic
-            </h2>
-            <p style={{ fontSize: 16, opacity: 0.9, lineHeight: 1.6, marginBottom: 40 }}>
-              Offrez à vos clients une expérience immersive unique. Gérez vos plats, personnalisez votre carte et impressionnez vos convives.
-            </p>
-
-            <div style={{ display: "flex", gap: 24, justifyContent: "center" }}>
-              {[
-                { icon: <Utensils size={28} />, label: "Gestion des plats" },
-                { icon: <View size={28} />, label: "Aperçu 3D" },
-                { icon: <Sparkles size={28} />, label: "Personnalisation" },
-              ].map((item, i) => (
-                <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
-                  <div style={{
-                    width: 56, height: 56, borderRadius: 16,
-                    background: "rgba(255,255,255,0.18)",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    {item.icon}
-                  </div>
-                  <span style={{ fontSize: 12, fontWeight: 500, opacity: 0.9 }}>{item.label}</span>
-                </div>
-              ))}
-            </div>
-          </div>
+          <h2 style={{ fontSize: 30, fontWeight: 700, color: c.white, lineHeight: 1.2, marginBottom: 12 }}>
+            Votre menu en 3D,<br />accessible en un clic
+          </h2>
+          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.85)", lineHeight: 1.5, maxWidth: 380 }}>
+            Offrez à vos clients une expérience immersive unique.
+          </p>
         </div>
 
         {/* Contact bar — pinned bottom */}
         <div style={{
           background: "rgba(255,255,255,0.95)",
+          backdropFilter: "blur(10px)",
           padding: "14px 32px",
           display: "flex",
           alignItems: "center",
@@ -263,8 +251,6 @@ const Login = () => {
           gap: 36,
           position: "relative",
           zIndex: 2,
-          borderRadius: "16px 16px 0 0",
-          margin: "0 16px",
         }}>
           <span style={{ fontWeight: 700, color: c.dark, fontSize: 13, letterSpacing: 0.5 }}>BESOIN D'AIDE ?</span>
           <a href="mailto:bonjour@platorama.fr" style={{
