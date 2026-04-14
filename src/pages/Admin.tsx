@@ -417,33 +417,41 @@ const Admin = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-auto admin-layout">
       {/* Header */}
-      <header className="sticky top-0 z-10 bg-card border-b border-border px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          {isSuperAdmin && (
-            <Button size="icon" variant="ghost" onClick={() => navigate("/dashboard")}>
-              <ArrowLeft className="w-5 h-5" />
+      <header
+        className="sticky top-0 z-10 border-b border-border bg-card px-3 pb-2 sm:px-4"
+        style={{ paddingTop: "calc(env(safe-area-inset-top) + 0.5rem)" }}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <div className="min-w-0 flex items-center gap-2 sm:gap-3">
+            {isSuperAdmin && (
+              <Button size="icon" variant="ghost" className="h-8 w-8 shrink-0 sm:h-10 sm:w-10" onClick={() => navigate("/dashboard")}>
+                <ArrowLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+              </Button>
+            )}
+            <h1 className="truncate text-lg font-bold leading-none sm:text-2xl" style={{ fontFamily: "var(--font-serif)" }}>
+              <span className="sm:hidden">Menu</span>
+              <span className="hidden sm:inline">Gestion du Menu</span>
+            </h1>
+          </div>
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+            {tab === "menu" && (
+              <Button size="sm" onClick={openNew} className="h-9 bg-accent px-2 text-accent-foreground hover:bg-accent/90 sm:px-3">
+                <Plus className="w-4 h-4 sm:mr-1" />
+                <span className="hidden sm:inline">Ajouter</span>
+              </Button>
+            )}
+            <Button size="sm" variant="outline" className="h-9 px-2 sm:px-3" onClick={() => {
+              const params = new URLSearchParams(window.location.search);
+              const rid = params.get("restaurant");
+              window.open(rid ? `/menu?restaurant=${rid}` : "/menu", "_blank");
+            }}>
+              <Eye className="w-4 h-4 sm:mr-1" />
+              <span className="hidden sm:inline">Voir le menu</span>
             </Button>
-          )}
-          <h1 className="text-2xl font-bold" style={{ fontFamily: "var(--font-serif)" }}>
-            Gestion du Menu
-          </h1>
-        </div>
-        <div className="flex items-center gap-2">
-          {tab === "menu" && (
-            <Button size="sm" onClick={openNew} className="bg-accent text-accent-foreground hover:bg-accent/90">
-              <Plus className="w-4 h-4 mr-1" /> Ajouter
+            <Button size="icon" variant="ghost" className="h-9 w-9" onClick={() => signOut()}>
+              <LogOut className="w-4 h-4" />
             </Button>
-          )}
-          <Button size="sm" variant="outline" onClick={() => {
-            const params = new URLSearchParams(window.location.search);
-            const rid = params.get("restaurant");
-            window.open(rid ? `/menu?restaurant=${rid}` : "/menu", "_blank");
-          }}>
-            <Eye className="w-4 h-4 mr-1" /> Voir le menu
-          </Button>
-          <Button size="sm" variant="ghost" onClick={() => signOut()}>
-            <LogOut className="w-4 h-4" />
-          </Button>
+          </div>
         </div>
       </header>
 
