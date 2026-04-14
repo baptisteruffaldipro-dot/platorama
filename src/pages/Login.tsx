@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Eye, EyeOff, Utensils, View, Sparkles } from "lucide-react";
+import { Eye, EyeOff, Utensils, View, Sparkles, Mail, Phone } from "lucide-react";
 import logoPlatorama from "@/assets/logo-platorama.png";
 
 const c = {
