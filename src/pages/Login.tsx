@@ -236,6 +236,26 @@ const Login = () => {
           padding: "48px 48px 24px",
         }}>
           <div style={{ maxWidth: 420, textAlign: "center", color: c.white, position: "relative", zIndex: 1 }}>
+            {/* @ts-ignore */}
+            <model-viewer
+              src="/models/agneau-hero.glb"
+              alt="Plat 3D"
+              auto-rotate
+              auto-rotate-delay="0"
+              rotation-per-second="18deg"
+              camera-controls
+              interaction-prompt="none"
+              shadow-intensity="0.3"
+              exposure="1.1"
+              style={{
+                width: "260px",
+                height: "200px",
+                margin: "0 auto 16px",
+                background: "transparent",
+                "--poster-color": "transparent",
+              } as React.CSSProperties}
+            />
+
             <h2 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16, lineHeight: 1.2 }}>
               Votre menu en 3D,<br />accessible en un clic
             </h2>
