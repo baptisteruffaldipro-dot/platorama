@@ -23,7 +23,7 @@ const App = () => (
         <BrowserRouter>
           <ThemeProvider>
             <Routes>
-              <Route path="/" element={<Landing />} />
+              <Route path="/" element={<Login />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/menu" element={<Index />} />
               <Route path="/login" element={<Login />} />
