@@ -3,9 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Eye, EyeOff, Mail, Phone } from "lucide-react";
+import { Eye, EyeOff, Utensils, View, Sparkles, Mail, Phone } from "lucide-react";
 import logoPlatorama from "@/assets/logo-platorama.png";
-import loginHero from "@/assets/login-hero.jpg";
 
 const c = {
   cream: "#FDF6ED",
@@ -191,67 +190,80 @@ const Login = () => {
         </form>
       </div>
 
-      {/* Right — Photo panel (hidden on mobile) */}
+      {/* Right — Promo panel (hidden on mobile) */}
       <div
         className="max-md:!hidden"
         style={{
           flex: 1,
-          background: c.cream,
+          background: `linear-gradient(135deg, ${c.pink} 0%, #F4A261 100%)`,
+          display: "flex",
+          flexDirection: "column",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Decorative circles */}
+        <div style={{
+          position: "absolute", top: -60, right: -60,
+          width: 200, height: 200, borderRadius: "50%",
+          background: "rgba(255,255,255,0.08)",
+        }} />
+        <div style={{
+          position: "absolute", bottom: 60, left: -40,
+          width: 160, height: 160, borderRadius: "50%",
+          background: "rgba(255,255,255,0.06)",
+        }} />
+
+        {/* Main content — centered */}
+        <div style={{
+          flex: 1,
           display: "flex",
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          padding: "48px",
-          position: "relative",
-        }}
-      >
-        {/* Photo in a frame */}
-        <div style={{
-          width: "80%",
-          maxWidth: 420,
-          aspectRatio: "3 / 4",
-          borderRadius: 20,
-          overflow: "hidden",
-          boxShadow: "0 20px 60px rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.08)",
-          border: `6px solid ${c.white}`,
-          position: "relative",
+          padding: "48px 48px 24px",
         }}>
-          <img
-            src={loginHero}
-            alt="Expérience restaurant"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-            }}
-          />
-        </div>
+          <div style={{ maxWidth: 420, textAlign: "center", color: c.white, position: "relative", zIndex: 1 }}>
+            <h2 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16, lineHeight: 1.2 }}>
+              Votre menu en 3D,<br />accessible en un clic
+            </h2>
+            <p style={{ fontSize: 16, opacity: 0.9, lineHeight: 1.6, marginBottom: 40 }}>
+              Offrez à vos clients une expérience immersive unique. Gérez vos plats, personnalisez votre carte et impressionnez vos convives.
+            </p>
 
-        {/* Caption below photo */}
-        <p style={{
-          marginTop: 24,
-          fontSize: 15,
-          color: c.muted,
-          textAlign: "center",
-          fontStyle: "italic",
-          maxWidth: 320,
-        }}>
-          Votre menu en 3D, accessible en un clic
-        </p>
+            <div style={{ display: "flex", gap: 24, justifyContent: "center" }}>
+              {[
+                { icon: <Utensils size={28} />, label: "Gestion des plats" },
+                { icon: <View size={28} />, label: "Aperçu 3D" },
+                { icon: <Sparkles size={28} />, label: "Personnalisation" },
+              ].map((item, i) => (
+                <div key={i} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+                  <div style={{
+                    width: 56, height: 56, borderRadius: 16,
+                    background: "rgba(255,255,255,0.18)",
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                  }}>
+                    {item.icon}
+                  </div>
+                  <span style={{ fontSize: 12, fontWeight: 500, opacity: 0.9 }}>{item.label}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
 
         {/* Contact bar — pinned bottom */}
         <div style={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          background: c.white,
+          background: "rgba(255,255,255,0.95)",
           padding: "14px 32px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           gap: 36,
-          borderTop: "1px solid rgba(0,0,0,0.06)",
+          position: "relative",
+          zIndex: 2,
+          borderRadius: "16px 16px 0 0",
+          margin: "0 16px",
         }}>
           <span style={{ fontWeight: 700, color: c.dark, fontSize: 13, letterSpacing: 0.5 }}>BESOIN D'AIDE ?</span>
           <a href="mailto:bonjour@platorama.fr" style={{
