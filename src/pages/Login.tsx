@@ -251,6 +251,35 @@ const Login = () => {
               </div>
             ))}
           </div>
+
+          {/* Contact bar */}
+          <div style={{
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            background: "rgba(255,255,255,0.95)",
+            padding: "16px 32px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 40,
+            borderTop: "1px solid rgba(0,0,0,0.05)",
+          }}>
+            <span style={{ fontWeight: 700, color: c.dark, fontSize: 14 }}>BESOIN D'AIDE ?</span>
+            <a href="mailto:bonjour@platorama.fr" style={{
+              display: "flex", alignItems: "center", gap: 8,
+              color: c.dark, textDecoration: "none", fontSize: 13,
+            }}>
+              <Mail size={16} color={c.pink} /> bonjour@platorama.fr
+            </a>
+            <a href="tel:+33695199427" style={{
+              display: "flex", alignItems: "center", gap: 8,
+              color: c.dark, textDecoration: "none", fontSize: 13,
+            }}>
+              <Phone size={16} color={c.pink} /> 06 95 19 94 27
+            </a>
+          </div>
         </div>
       </div>
     </div>
