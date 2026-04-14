@@ -196,61 +196,62 @@ const Login = () => {
         className="max-md:!hidden"
         style={{
           flex: 1,
-          position: "relative",
-          overflow: "hidden",
+          background: c.cream,
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "48px",
+          position: "relative",
         }}
       >
-        {/* Hero image */}
-        <img
-          src={loginHero}
-          alt="Expérience restaurant"
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-          }}
-        />
-
-        {/* Overlay gradient */}
+        {/* Photo in a frame */}
         <div style={{
-          position: "absolute",
-          inset: 0,
-          background: "linear-gradient(to top, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.1) 50%, rgba(0,0,0,0.05) 100%)",
-        }} />
-
-        {/* Text overlay */}
-        <div style={{
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-end",
-          padding: "48px 40px 80px",
+          width: "80%",
+          maxWidth: 420,
+          aspectRatio: "3 / 4",
+          borderRadius: 20,
+          overflow: "hidden",
+          boxShadow: "0 20px 60px rgba(0,0,0,0.15), 0 4px 16px rgba(0,0,0,0.08)",
+          border: `6px solid ${c.white}`,
           position: "relative",
-          zIndex: 1,
         }}>
-          <h2 style={{ fontSize: 30, fontWeight: 700, color: c.white, lineHeight: 1.2, marginBottom: 12 }}>
-            Votre menu en 3D,<br />accessible en un clic
-          </h2>
-          <p style={{ fontSize: 15, color: "rgba(255,255,255,0.85)", lineHeight: 1.5, maxWidth: 380 }}>
-            Offrez à vos clients une expérience immersive unique.
-          </p>
+          <img
+            src={loginHero}
+            alt="Expérience restaurant"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+            }}
+          />
         </div>
+
+        {/* Caption below photo */}
+        <p style={{
+          marginTop: 24,
+          fontSize: 15,
+          color: c.muted,
+          textAlign: "center",
+          fontStyle: "italic",
+          maxWidth: 320,
+        }}>
+          Votre menu en 3D, accessible en un clic
+        </p>
 
         {/* Contact bar — pinned bottom */}
         <div style={{
-          background: "rgba(255,255,255,0.95)",
-          backdropFilter: "blur(10px)",
+          position: "absolute",
+          bottom: 0,
+          left: 0,
+          right: 0,
+          background: c.white,
           padding: "14px 32px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           gap: 36,
-          position: "relative",
-          zIndex: 2,
+          borderTop: "1px solid rgba(0,0,0,0.06)",
         }}>
           <span style={{ fontWeight: 700, color: c.dark, fontSize: 13, letterSpacing: 0.5 }}>BESOIN D'AIDE ?</span>
           <a href="mailto:bonjour@platorama.fr" style={{
