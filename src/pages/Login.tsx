@@ -2,15 +2,23 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
 import logoPlatorama from "@/assets/logo-platorama.png";
+
+const c = {
+  cream: "#FDF6ED",
+  pink: "#E8657A",
+  dark: "#2D2D2D",
+  inputBg: "#EDE8F0",
+  inputBorder: "#D0C9D6",
+  muted: "#6B7280",
+};
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const { signIn } = useAuth();
   const navigate = useNavigate();
@@ -21,25 +29,19 @@ const Login = () => {
 
     try {
       const { error } = await signIn(email, password);
-
       if (error) {
         toast.error("Identifiants incorrects");
         return;
       }
 
-      const {
-        data: { user: u },
-      } = await supabase.auth.getUser();
-
+      const { data: { user: u } } = await supabase.auth.getUser();
       if (u) {
         const { data: roles } = await supabase
           .from("user_roles")
           .select("role")
           .eq("user_id", u.id);
 
-        const isSA = roles?.some((r) => r.role === "super_admin");
-
-        if (isSA) {
+        if (roles?.some((r) => r.role === "super_admin")) {
           navigate("/dashboard");
           return;
         }
@@ -50,10 +52,7 @@ const Login = () => {
           .eq("user_id", u.id)
           .order("created_at", { ascending: false });
 
-        if (memberships && memberships.length > 1) {
-          // Multiple restaurants — redirect to most recently added
-          navigate(`/admin?restaurant=${memberships[0].restaurant_id}`);
-        } else if (memberships && memberships.length === 1) {
+        if (memberships && memberships.length >= 1) {
           navigate(`/admin?restaurant=${memberships[0].restaurant_id}`);
         } else {
           navigate("/admin");
@@ -68,39 +67,131 @@ const Login = () => {
     }
   };
 
+  const inputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "16px 20px",
+    fontSize: "16px",
+    borderRadius: "999px",
+    border: `1.5px solid ${c.inputBorder}`,
+    background: c.inputBg,
+    color: c.dark,
+    outline: "none",
+    transition: "border-color 0.2s",
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <form onSubmit={handleSubmit} className="w-full max-w-sm space-y-6">
-        <div className="text-center">
-          <img src={logoPlatorama} alt="Plat'O'rama" className="h-12 mx-auto mb-4" />
-          <p className="text-sm text-muted-foreground mt-1">Connectez-vous pour gérer vos menus</p>
-        </div>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: c.cream,
+        padding: "24px",
+      }}
+    >
+      <form
+        onSubmit={handleSubmit}
+        style={{
+          width: "100%",
+          maxWidth: "440px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "28px",
+        }}
+      >
+        {/* Logo */}
+        <img src={logoPlatorama} alt="Plat'O'rama" style={{ height: 48, objectFit: "contain" }} />
 
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
+        {/* Separator */}
+        <div style={{ width: "60%", height: 1, background: c.inputBorder }} />
 
-        <div className="space-y-2">
-          <Label htmlFor="password">Mot de passe</Label>
-          <Input
-            id="password"
-            type="password"
+        {/* Title */}
+        <h1 style={{ fontSize: 28, fontWeight: 400, color: c.dark, margin: 0, fontFamily: "inherit" }}>
+          Connexion
+        </h1>
+
+        {/* Email */}
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          style={inputStyle}
+          onFocus={(e) => (e.currentTarget.style.borderColor = c.pink)}
+          onBlur={(e) => (e.currentTarget.style.borderColor = c.inputBorder)}
+        />
+
+        {/* Password */}
+        <div style={{ position: "relative", width: "100%" }}>
+          <input
+            type={showPassword ? "text" : "password"}
+            placeholder="Mot de passe"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
+            style={{ ...inputStyle, paddingRight: "52px" }}
+            onFocus={(e) => (e.currentTarget.style.borderColor = c.pink)}
+            onBlur={(e) => (e.currentTarget.style.borderColor = c.inputBorder)}
           />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            style={{
+              position: "absolute",
+              right: 16,
+              top: "50%",
+              transform: "translateY(-50%)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              color: c.muted,
+              padding: 4,
+            }}
+          >
+            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+          </button>
         </div>
 
-        <Button type="submit" className="w-full" disabled={loading}>
-          {loading ? "Connexion..." : "Se connecter"}
-        </Button>
+        {/* Reset link */}
+        <a
+          href="#"
+          onClick={(e) => {
+            e.preventDefault();
+            toast.info("Contactez votre administrateur pour réinitialiser votre mot de passe.");
+          }}
+          style={{
+            color: c.dark,
+            fontSize: 14,
+            textDecoration: "underline",
+            textUnderlineOffset: 4,
+          }}
+        >
+          Réinitialiser mon mot de passe
+        </a>
+
+        {/* Submit */}
+        <button
+          type="submit"
+          disabled={loading}
+          style={{
+            width: "70%",
+            padding: "14px 0",
+            borderRadius: "999px",
+            border: "none",
+            background: loading ? c.muted : c.pink,
+            color: "#fff",
+            fontSize: 17,
+            fontWeight: 600,
+            cursor: loading ? "not-allowed" : "pointer",
+            transition: "background 0.2s, transform 0.1s",
+            boxShadow: "0 4px 12px rgba(232,101,122,0.3)",
+          }}
+        >
+          {loading ? "Connexion..." : "Je me connecte"}
+        </button>
       </form>
     </div>
   );
