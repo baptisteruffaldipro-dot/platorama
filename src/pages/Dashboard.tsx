@@ -495,9 +495,16 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen overflow-auto dashboard-layout" style={{ background: c.cream, color: c.dark, fontFamily: fontBody }}>
       {/* Header */}
-      <header className="sticky top-0 z-10 px-4 sm:px-6 py-2 sm:py-4 flex items-center justify-between shadow-sm" style={{ background: c.white, borderBottom: `1px solid ${c.border}` }}>
-        <img src={logoPlatorama} alt="Plat'O'rama" className="h-6 sm:h-10 object-contain" />
-        <button onClick={() => signOut()} className="p-2 rounded-lg hover:opacity-70 transition-opacity" style={{ color: c.muted }}>
+      <header
+        className="sticky top-0 z-10 flex items-center justify-between px-4 pb-2 shadow-sm sm:px-6"
+        style={{
+          background: c.white,
+          borderBottom: `1px solid ${c.border}`,
+          paddingTop: "calc(env(safe-area-inset-top) + 0.5rem)",
+        }}
+      >
+        <img src={logoPlatorama} alt="Plat'O'rama" className="h-6 object-contain sm:h-10" />
+        <button onClick={() => signOut()} className="rounded-lg p-2 transition-opacity hover:opacity-70" style={{ color: c.muted }}>
           <LogOut className="w-4 h-4" />
         </button>
       </header>
