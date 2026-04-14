@@ -159,9 +159,21 @@ const Login = () => {
 
           <a
             href="#"
-            onClick={(e) => {
+            onClick={async (e) => {
               e.preventDefault();
-              toast.info("Contactez votre administrateur pour réinitialiser votre mot de passe.");
+              if (!email) {
+                toast.error("Veuillez entrer votre email d'abord.");
+                return;
+              }
+              try {
+                const { error } = await supabase.auth.resetPasswordForEmail(email, {
+                  redirectTo: `${window.location.origin}/reset-password`,
+                });
+                if (error) throw error;
+                toast.success("Un email de réinitialisation a été envoyé.");
+              } catch {
+                toast.error("Erreur lors de l'envoi de l'email.");
+              }
             }}
             style={{ color: c.dark, fontSize: 13, textDecoration: "underline", textUnderlineOffset: 4 }}
           >
