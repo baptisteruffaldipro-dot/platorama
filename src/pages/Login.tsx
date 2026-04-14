@@ -3,16 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, Utensils, View, Sparkles } from "lucide-react";
 import logoPlatorama from "@/assets/logo-platorama.png";
 
 const c = {
   cream: "#FDF6ED",
   pink: "#E8657A",
+  mint: "#5CB8A5",
   dark: "#2D2D2D",
-  inputBg: "#EDE8F0",
+  inputBg: "#F3EFF5",
   inputBorder: "#D0C9D6",
   muted: "#6B7280",
+  white: "#FFFFFF",
 };
 
 const Login = () => {
@@ -69,9 +71,9 @@ const Login = () => {
 
   const inputStyle: React.CSSProperties = {
     width: "100%",
-    padding: "16px 20px",
-    fontSize: "16px",
-    borderRadius: "999px",
+    padding: "14px 18px",
+    fontSize: "15px",
+    borderRadius: "12px",
     border: `1.5px solid ${c.inputBorder}`,
     background: c.inputBg,
     color: c.dark,
@@ -80,119 +82,177 @@ const Login = () => {
   };
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: c.cream,
-        padding: "24px",
-      }}
-    >
-      <form
-        onSubmit={handleSubmit}
+    <div style={{ minHeight: "100vh", display: "flex", background: c.white }}>
+      {/* Left — Login form */}
+      <div
         style={{
-          width: "100%",
-          maxWidth: "440px",
+          flex: "0 0 480px",
+          maxWidth: "480px",
           display: "flex",
           flexDirection: "column",
+          justifyContent: "center",
           alignItems: "center",
-          gap: "28px",
+          padding: "48px 40px",
+          background: c.white,
         }}
+        className="max-md:!flex-[1_1_100%] max-md:!max-w-none"
       >
-        {/* Logo */}
-        <img src={logoPlatorama} alt="Plat'O'rama" style={{ height: 48, objectFit: "contain" }} />
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            width: "100%",
+            maxWidth: "360px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: "24px",
+          }}
+        >
+          <img src={logoPlatorama} alt="Plat'O'rama" style={{ height: 44, objectFit: "contain" }} />
 
-        {/* Separator */}
-        <div style={{ width: "60%", height: 1, background: c.inputBorder }} />
+          <div style={{ width: "70%", height: 1, background: c.inputBorder }} />
 
-        {/* Title */}
-        <h1 style={{ fontSize: 28, fontWeight: 400, color: c.dark, margin: 0, fontFamily: "inherit" }}>
-          Connexion
-        </h1>
+          <h1 style={{ fontSize: 24, fontWeight: 400, color: c.dark, margin: 0 }}>
+            Connexion
+          </h1>
 
-        {/* Email */}
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={inputStyle}
-          onFocus={(e) => (e.currentTarget.style.borderColor = c.pink)}
-          onBlur={(e) => (e.currentTarget.style.borderColor = c.inputBorder)}
-        />
-
-        {/* Password */}
-        <div style={{ position: "relative", width: "100%" }}>
           <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Mot de passe"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             required
-            style={{ ...inputStyle, paddingRight: "52px" }}
+            style={inputStyle}
             onFocus={(e) => (e.currentTarget.style.borderColor = c.pink)}
             onBlur={(e) => (e.currentTarget.style.borderColor = c.inputBorder)}
           />
+
+          <div style={{ position: "relative", width: "100%" }}>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Mot de passe"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ ...inputStyle, paddingRight: "48px" }}
+              onFocus={(e) => (e.currentTarget.style.borderColor = c.pink)}
+              onBlur={(e) => (e.currentTarget.style.borderColor = c.inputBorder)}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: "absolute",
+                right: 14,
+                top: "50%",
+                transform: "translateY(-50%)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                color: c.muted,
+                padding: 4,
+              }}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </button>
+          </div>
+
+          <a
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              toast.info("Contactez votre administrateur pour réinitialiser votre mot de passe.");
+            }}
+            style={{ color: c.dark, fontSize: 13, textDecoration: "underline", textUnderlineOffset: 4 }}
+          >
+            Réinitialiser mon mot de passe
+          </a>
+
           <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
+            type="submit"
+            disabled={loading}
             style={{
-              position: "absolute",
-              right: 16,
-              top: "50%",
-              transform: "translateY(-50%)",
-              background: "none",
+              width: "80%",
+              padding: "13px 0",
+              borderRadius: "999px",
               border: "none",
-              cursor: "pointer",
-              color: c.muted,
-              padding: 4,
+              background: loading ? c.muted : c.pink,
+              color: "#fff",
+              fontSize: 16,
+              fontWeight: 600,
+              cursor: loading ? "not-allowed" : "pointer",
+              transition: "background 0.2s",
+              boxShadow: "0 4px 14px rgba(232,101,122,0.25)",
             }}
           >
-            {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+            {loading ? "Connexion..." : "Je me connecte"}
           </button>
+        </form>
+      </div>
+
+      {/* Right — Promo panel (hidden on mobile) */}
+      <div
+        className="max-md:!hidden"
+        style={{
+          flex: 1,
+          background: `linear-gradient(135deg, ${c.pink} 0%, #F4A261 100%)`,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "48px",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Decorative circles */}
+        <div style={{
+          position: "absolute", top: -60, right: -60,
+          width: 200, height: 200, borderRadius: "50%",
+          background: "rgba(255,255,255,0.08)",
+        }} />
+        <div style={{
+          position: "absolute", bottom: -40, left: -40,
+          width: 160, height: 160, borderRadius: "50%",
+          background: "rgba(255,255,255,0.06)",
+        }} />
+
+        <div style={{
+          maxWidth: 420,
+          textAlign: "center",
+          color: c.white,
+          position: "relative",
+          zIndex: 1,
+        }}>
+          <h2 style={{ fontSize: 32, fontWeight: 700, marginBottom: 16, lineHeight: 1.2 }}>
+            Votre menu en 3D,<br />accessible en un clic
+          </h2>
+          <p style={{ fontSize: 16, opacity: 0.9, lineHeight: 1.6, marginBottom: 40 }}>
+            Offrez à vos clients une expérience immersive unique. Gérez vos plats, personnalisez votre carte et impressionnez vos convives.
+          </p>
+
+          <div style={{ display: "flex", gap: 24, justifyContent: "center" }}>
+            {[
+              { icon: <Utensils size={28} />, label: "Gestion des plats" },
+              { icon: <View size={28} />, label: "Aperçu 3D" },
+              { icon: <Sparkles size={28} />, label: "Personnalisation" },
+            ].map((item, i) => (
+              <div key={i} style={{
+                display: "flex", flexDirection: "column", alignItems: "center", gap: 8,
+              }}>
+                <div style={{
+                  width: 56, height: 56, borderRadius: 16,
+                  background: "rgba(255,255,255,0.18)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                }}>
+                  {item.icon}
+                </div>
+                <span style={{ fontSize: 12, fontWeight: 500, opacity: 0.9 }}>{item.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
-
-        {/* Reset link */}
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            toast.info("Contactez votre administrateur pour réinitialiser votre mot de passe.");
-          }}
-          style={{
-            color: c.dark,
-            fontSize: 14,
-            textDecoration: "underline",
-            textUnderlineOffset: 4,
-          }}
-        >
-          Réinitialiser mon mot de passe
-        </a>
-
-        {/* Submit */}
-        <button
-          type="submit"
-          disabled={loading}
-          style={{
-            width: "70%",
-            padding: "14px 0",
-            borderRadius: "999px",
-            border: "none",
-            background: loading ? c.muted : c.pink,
-            color: "#fff",
-            fontSize: 17,
-            fontWeight: 600,
-            cursor: loading ? "not-allowed" : "pointer",
-            transition: "background 0.2s, transform 0.1s",
-            boxShadow: "0 4px 12px rgba(232,101,122,0.3)",
-          }}
-        >
-          {loading ? "Connexion..." : "Je me connecte"}
-        </button>
-      </form>
+      </div>
     </div>
   );
 };
