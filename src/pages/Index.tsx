@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDishes } from "@/hooks/useDishes";
 import { usePublishedSettings } from "@/hooks/useSiteSettings";
+import { useSubscriptionFeatures } from "@/hooks/useSubscriptionFeatures";
 import { supabase } from "@/integrations/supabase/client";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -34,6 +35,7 @@ const Index = () => {
   const { data: siteSettings } = usePublishedSettings(restaurantId);
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
   const { isFavorite, toggle } = useFavorites();
+  const features = useSubscriptionFeatures(restaurantId);
   const { lang, t, translateBatch } = useTranslation();
 
   // Trigger translation when language or dishes change
