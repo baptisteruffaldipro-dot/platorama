@@ -361,6 +361,12 @@ const Admin = () => {
       sort_order: parseInt(form.sort_order) || 0,
       allergens: form.allergens.split(",").map((a) => a.trim()).filter(Boolean),
       chef_note: form.chef_note,
+      prep_time: form.prep_time ? parseInt(form.prep_time) : null,
+      is_available: form.is_available,
+      badge: form.badge || null,
+      time_slot: form.time_slot,
+      story_text: form.story_text,
+      story_image: form.story_image,
     };
 
     let error;
