@@ -618,8 +618,67 @@ const Admin = () => {
               />
             </div>
 
-            <div className="space-y-1">
-              <Label>Thumbnail</Label>
+            {/* New fields separator */}
+            <div className="border-t border-border pt-4 space-y-4">
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Options avancées</h3>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label>Temps de préparation (min)</Label>
+                  <Input value={form.prep_time} onChange={(e) => setForm((f) => ({ ...f, prep_time: e.target.value }))} type="number" placeholder="15" />
+                </div>
+                <div className="space-y-1">
+                  <Label>Badge</Label>
+                  <select
+                    value={form.badge}
+                    onChange={(e) => setForm((f) => ({ ...f, badge: e.target.value }))}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="">Aucun</option>
+                    <option value="bestseller">🔥 Best seller</option>
+                    <option value="coup_de_coeur">❤️ Coup de cœur</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label>Créneau horaire</Label>
+                  <select
+                    value={form.time_slot}
+                    onChange={(e) => setForm((f) => ({ ...f, time_slot: e.target.value }))}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="both">Midi & Soir</option>
+                    <option value="midi">Midi uniquement</option>
+                    <option value="soir">Soir uniquement</option>
+                  </select>
+                </div>
+                <div className="flex items-end pb-1">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={form.is_available}
+                      onChange={(e) => setForm((f) => ({ ...f, is_available: e.target.checked }))}
+                      className="rounded border-input accent-accent w-4 h-4"
+                    />
+                    <span className="text-sm font-medium">Disponible</span>
+                  </label>
+                </div>
+              </div>
+
+              <div className="space-y-1">
+                <Label>Storytelling (histoire du plat)</Label>
+                <textarea
+                  value={form.story_text}
+                  onChange={(e) => setForm((f) => ({ ...f, story_text: e.target.value }))}
+                  placeholder="L'histoire de ce plat, son origine, l'inspiration du chef…"
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm min-h-[60px] resize-y"
+                />
+              </div>
+            </div>
+
+
               <div className="flex items-center gap-2">
                 <Input value={form.thumbnail} onChange={(e) => setForm((f) => ({ ...f, thumbnail: e.target.value }))} placeholder="URL ou upload" className="flex-1" />
                 <label className="cursor-pointer">
