@@ -62,6 +62,15 @@ const Index = () => {
     translateBatch(unique);
   }, [lang, dishes, translateBatch]);
 
+  const safeIndex = Math.min(activeIndex, (dishes?.length ?? 1) - 1);
+  const currentDish = dishes?.[safeIndex];
+
+  // Track dish view events for Business stats
+  useEffect(() => {
+    if (!currentDish) return;
+    supabase.from("dish_events").insert({ dish_id: currentDish.id, event_type: "view" }).then();
+  }, [currentDish?.id]);
+
   // No restaurant parameter = invalid link
   if (!restaurantId) {
     return (
@@ -72,7 +81,7 @@ const Index = () => {
     );
   }
 
-  if (isLoading || !dishes?.length) {
+  if (isLoading || !dishes?.length || !currentDish) {
     return (
       <div className="h-full flex items-center justify-center bg-background">
         {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
@@ -80,14 +89,7 @@ const Index = () => {
     );
   }
 
-  const safeIndex = Math.min(activeIndex, (dishes?.length ?? 1) - 1);
-  const dish = dishes?.[safeIndex];
-
-  // Track dish view events for Business stats
-  useEffect(() => {
-    if (!dish) return;
-    supabase.from("dish_events").insert({ dish_id: dish.id, event_type: "view" }).then();
-  }, [dish?.id]);
+  const dish = currentDish;
 
   const handleLaunchAR = () => {
     const hostname = window.location.hostname;
