@@ -66,16 +66,23 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         return;
       }
 
-      const counters: Record<string, { favorites: number; ar_clicks: number; views: number }> = {};
+      const counters: Record<string, { favorites: number; ar_clicks: number; views: number; totalTime: number; timeCount: number }> = {};
       dishes.forEach((d) => {
-        counters[d.id] = { favorites: 0, ar_clicks: 0, views: 0 };
+        counters[d.id] = { favorites: 0, ar_clicks: 0, views: 0, totalTime: 0, timeCount: 0 };
       });
 
       data?.forEach((ev) => {
-        if (!counters[ev.dish_id]) counters[ev.dish_id] = { favorites: 0, ar_clicks: 0, views: 0 };
+        if (!counters[ev.dish_id]) counters[ev.dish_id] = { favorites: 0, ar_clicks: 0, views: 0, totalTime: 0, timeCount: 0 };
         if (ev.event_type === "favorite") counters[ev.dish_id].favorites++;
-        if (ev.event_type === "ar_click") counters[ev.dish_id].ar_clicks++;
-        if (ev.event_type === "view") counters[ev.dish_id].views++;
+        else if (ev.event_type === "ar_click") counters[ev.dish_id].ar_clicks++;
+        else if (ev.event_type === "view") counters[ev.dish_id].views++;
+        else if (ev.event_type.startsWith("view_duration_")) {
+          const secs = parseInt(ev.event_type.replace("view_duration_", ""));
+          if (!isNaN(secs)) {
+            counters[ev.dish_id].totalTime += secs;
+            counters[ev.dish_id].timeCount++;
+          }
+        }
       });
 
       const result: DishStats[] = dishes.map((d) => ({
@@ -84,6 +91,7 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         favorites: counters[d.id]?.favorites ?? 0,
         ar_clicks: counters[d.id]?.ar_clicks ?? 0,
         views: counters[d.id]?.views ?? 0,
+        avg_time: counters[d.id]?.timeCount ? Math.round(counters[d.id].totalTime / counters[d.id].timeCount) : 0,
       }));
 
       setStats(result);
