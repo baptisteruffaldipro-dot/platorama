@@ -544,13 +544,13 @@ const Admin = () => {
       {/* Tabs */}
       <div className="flex border-b border-border overflow-x-auto">
         {([
-          { key: "menu", icon: UtensilsCrossed, label: "Menu", superOnly: false },
-          { key: "stats", icon: BarChart3, label: "Stats", superOnly: false },
-          { key: "settings", icon: Settings, label: "Réglages", superOnly: false },
-          { key: "users", icon: Users, label: "Utilisateurs", superOnly: true },
-          { key: "info", icon: Mail, label: "Infos", superOnly: true },
+          { key: "menu", icon: UtensilsCrossed, label: "Menu", superOnly: false, needsFeature: null },
+          { key: "stats", icon: BarChart3, label: "Stats", superOnly: false, needsFeature: "hasStats" as const },
+          { key: "settings", icon: Settings, label: "Réglages", superOnly: false, needsFeature: null },
+          { key: "users", icon: Users, label: "Utilisateurs", superOnly: true, needsFeature: null },
+          { key: "info", icon: Mail, label: "Infos", superOnly: true, needsFeature: null },
         ] as const)
-          .filter((t) => !t.superOnly || isSuperAdmin)
+          .filter((t) => (!t.superOnly || isSuperAdmin) && (!t.needsFeature || (features as any)[t.needsFeature]))
           .map((t) => (
           <button
             key={t.key}
