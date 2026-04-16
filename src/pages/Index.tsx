@@ -14,7 +14,7 @@ import SplashScreen from "@/components/SplashScreen";
 import LanguageSelector from "@/components/LanguageSelector";
 import AllergensDialog from "@/components/AllergensDialog";
 import { isIOS } from "@/lib/platform";
-import { Rotate3d, Info, ChefHat } from "lucide-react";
+import { Rotate3d, Info, ChefHat, BookOpen } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -28,7 +28,9 @@ const Index = () => {
   const restaurantId = searchParams.get("restaurant");
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
-  const { data: dishes, isLoading } = useDishes(restaurantId);
+  const { data: allDishes, isLoading } = useDishes(restaurantId);
+  // Filter out unavailable dishes for the public menu
+  const dishes = allDishes?.filter(d => d.is_available);
   const { data: siteSettings } = usePublishedSettings(restaurantId);
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
   const { isFavorite, toggle } = useFavorites();
@@ -60,6 +62,15 @@ const Index = () => {
     translateBatch(unique);
   }, [lang, dishes, translateBatch]);
 
+  const safeIndex = Math.min(activeIndex, (dishes?.length ?? 1) - 1);
+  const currentDish = dishes?.[safeIndex];
+
+  // Track dish view events for Business stats
+  useEffect(() => {
+    if (!currentDish) return;
+    supabase.from("dish_events").insert({ dish_id: currentDish.id, event_type: "view" }).then();
+  }, [currentDish?.id]);
+
   // No restaurant parameter = invalid link
   if (!restaurantId) {
     return (
@@ -70,7 +81,7 @@ const Index = () => {
     );
   }
 
-  if (isLoading || !dishes?.length) {
+  if (isLoading || !dishes?.length || !currentDish) {
     return (
       <div className="h-full flex items-center justify-center bg-background">
         {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
@@ -78,8 +89,7 @@ const Index = () => {
     );
   }
 
-  const safeIndex = Math.min(activeIndex, dishes.length - 1);
-  const dish = dishes[safeIndex];
+  const dish = currentDish;
 
   const handleLaunchAR = () => {
     const hostname = window.location.hostname;
@@ -186,6 +196,37 @@ const Index = () => {
         {/* Allergens */}
         {dish.allergens && dish.allergens.length > 0 && (
           <AllergensDialog allergens={dish.allergens} />
+        )}
+
+        {/* Storytelling */}
+        {dish.story_text && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
+                aria-label="Histoire du plat"
+              >
+                <BookOpen className="w-5 h-5 text-muted-foreground" />
+              </button>
+            </DialogTrigger>
+            <DialogContent className="bg-card border-border max-w-sm">
+              <DialogHeader>
+                <DialogTitle
+                  className="text-xl text-foreground tracking-wide uppercase text-center flex items-center justify-center gap-2"
+                  style={{ fontFamily: "var(--font-serif)" }}
+                >
+                  <BookOpen className="w-5 h-5 text-accent" />
+                  {t("L'histoire du plat")}
+                </DialogTitle>
+              </DialogHeader>
+              {dish.story_image && (
+                <img src={dish.story_image} alt="" className="w-full h-40 object-cover rounded-lg" />
+              )}
+              <p className="text-sm text-foreground leading-relaxed italic text-center pt-2" style={{ fontFamily: "var(--font-serif)" }}>
+                {t(dish.story_text)}
+              </p>
+            </DialogContent>
+          </Dialog>
         )}
       </div>
 

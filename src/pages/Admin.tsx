@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { compressGlb } from "@/lib/compressGlb";
 import { useAuth } from "@/hooks/useAuth";
 import { useDishes, type Dish } from "@/hooks/useDishes";
+import { useSubscriptionFeatures } from "@/hooks/useSubscriptionFeatures";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -44,6 +45,7 @@ interface DishStats {
   dish_name: string;
   favorites: number;
   ar_clicks: number;
+  views: number;
 }
 
 /* ─── Stats Panel ─── */
@@ -63,15 +65,16 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         return;
       }
 
-      const counters: Record<string, { favorites: number; ar_clicks: number }> = {};
+      const counters: Record<string, { favorites: number; ar_clicks: number; views: number }> = {};
       dishes.forEach((d) => {
-        counters[d.id] = { favorites: 0, ar_clicks: 0 };
+        counters[d.id] = { favorites: 0, ar_clicks: 0, views: 0 };
       });
 
       data?.forEach((ev) => {
-        if (!counters[ev.dish_id]) counters[ev.dish_id] = { favorites: 0, ar_clicks: 0 };
+        if (!counters[ev.dish_id]) counters[ev.dish_id] = { favorites: 0, ar_clicks: 0, views: 0 };
         if (ev.event_type === "favorite") counters[ev.dish_id].favorites++;
         if (ev.event_type === "ar_click") counters[ev.dish_id].ar_clicks++;
+        if (ev.event_type === "view") counters[ev.dish_id].views++;
       });
 
       const result: DishStats[] = dishes.map((d) => ({
@@ -79,6 +82,7 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         dish_name: d.name,
         favorites: counters[d.id]?.favorites ?? 0,
         ar_clicks: counters[d.id]?.ar_clicks ?? 0,
+        views: counters[d.id]?.views ?? 0,
       }));
 
       setStats(result);
@@ -92,9 +96,65 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
 
   const maxFav = Math.max(1, ...stats.map((s) => s.favorites));
   const maxAR = Math.max(1, ...stats.map((s) => s.ar_clicks));
+  const maxViews = Math.max(1, ...stats.map((s) => s.views));
+
+  // Sort by views for heatmap
+  const heatmapStats = [...stats].sort((a, b) => b.views - a.views);
 
   return (
     <div className="p-4 space-y-8">
+      {/* Views chart (most consulted) */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          <Eye className="w-5 h-5 text-accent" />
+          Plats les plus consultés
+        </h2>
+        <div className="flex items-end gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ minHeight: 200 }}>
+          {stats.map((s) => (
+            <div key={s.dish_id + "-views"} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
+              <div className="w-full bg-muted/30 rounded-t-md flex flex-col justify-end items-center" style={{ height: 160 }}>
+                <span className="text-sm font-semibold text-blue-400 mb-1">{s.views}</span>
+                <div
+                  className="w-full bg-blue-500 rounded-t-md transition-all duration-500"
+                  style={{ height: `${Math.max(4, (s.views / maxViews) * 100)}%` }}
+                />
+              </div>
+              <span className="text-xs text-muted-foreground text-center leading-tight w-full truncate px-0.5">
+                {s.dish_name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Heatmap */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          🔥 Heatmap du menu
+        </h2>
+        <div className="space-y-1.5">
+          {heatmapStats.map((s) => {
+            const ratio = s.views / maxViews;
+            const hue = 120 * (1 - ratio); // green to red
+            return (
+              <div key={s.dish_id + "-heat"} className="flex items-center gap-3">
+                <span className="text-sm w-32 truncate">{s.dish_name}</span>
+                <div className="flex-1 h-6 bg-muted/20 rounded overflow-hidden">
+                  <div
+                    className="h-full rounded transition-all duration-500"
+                    style={{
+                      width: `${Math.max(4, ratio * 100)}%`,
+                      backgroundColor: `hsl(${hue}, 80%, 50%)`,
+                    }}
+                  />
+                </div>
+                <span className="text-xs text-muted-foreground w-12 text-right">{s.views} vues</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Favorites chart */}
       <div>
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
@@ -165,7 +225,7 @@ const SortableRow = ({
   };
 
   return (
-    <tr ref={setNodeRef} style={style} className="border-b border-border/50 hover:bg-card/50">
+    <tr ref={setNodeRef} style={style} className={`border-b border-border/50 hover:bg-card/50 ${!dish.is_available ? "opacity-40" : ""}`}>
       <td className="py-2 px-1 w-8">
         <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing p-1 text-muted-foreground hover:text-foreground touch-none">
           <GripVertical className="w-4 h-4" />
@@ -178,7 +238,14 @@ const SortableRow = ({
         )}
       </td>
       <td className="py-2.5 px-3 text-sm tracking-wider text-muted-foreground">{dish.category}</td>
-      <td className="py-2.5 px-3 font-medium text-sm">{dish.name}</td>
+      <td className="py-2.5 px-3 font-medium text-sm">
+        <div className="flex items-center gap-1.5">
+          {dish.name}
+          {dish.badge === "bestseller" && <span title="Best seller">🔥</span>}
+          {dish.badge === "coup_de_coeur" && <span title="Coup de cœur">❤️</span>}
+          {!dish.is_available && <span className="text-[10px] px-1.5 py-0.5 rounded bg-destructive/20 text-destructive font-semibold">Indispo</span>}
+        </div>
+      </td>
       <td className="py-2.5 px-3 text-sm">{dish.price.toFixed(2)} €</td>
       <td className="py-2 px-3">
         <div className="flex gap-1">
@@ -201,6 +268,7 @@ const Admin = () => {
   const [searchParams] = useSearchParams();
   const restaurantId = searchParams.get("restaurant");
   const { data: dishes, isLoading } = useDishes(restaurantId);
+  const features = useSubscriptionFeatures(restaurantId);
   const queryClient = useQueryClient();
   const [editDish, setEditDish] = useState<Dish | null>(null);
   const [isNew, setIsNew] = useState(false);
@@ -271,6 +339,12 @@ const Admin = () => {
     sort_order: "",
     allergens: "",
     chef_note: "",
+    prep_time: "",
+    is_available: true,
+    badge: "",
+    time_slot: "both",
+    story_text: "",
+    story_image: "",
   });
 
   if (authLoading || isResolvingRestaurant) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Chargement...</div>;
@@ -282,7 +356,7 @@ const Admin = () => {
     setIsNew(true);
     setEditDish(null);
     const maxOrder = dishes?.length ? Math.max(...dishes.map((d) => d.sort_order)) : 0;
-    setForm({ category: "ENTRÉE", name: "", ingredients: "", price: "", thumbnail: "", model_ios: "", model_android: "", sort_order: String(maxOrder + 1), allergens: "", chef_note: "" });
+    setForm({ category: "ENTRÉE", name: "", ingredients: "", price: "", thumbnail: "", model_ios: "", model_android: "", sort_order: String(maxOrder + 1), allergens: "", chef_note: "", prep_time: "", is_available: true, badge: "", time_slot: "both", story_text: "", story_image: "" });
     setDialogOpen(true);
   };
 
@@ -300,6 +374,12 @@ const Admin = () => {
       sort_order: String(dish.sort_order),
       allergens: (dish.allergens ?? []).join(", "),
       chef_note: dish.chef_note ?? "",
+      prep_time: dish.prep_time != null ? String(dish.prep_time) : "",
+      is_available: dish.is_available ?? true,
+      badge: dish.badge ?? "",
+      time_slot: dish.time_slot ?? "both",
+      story_text: dish.story_text ?? "",
+      story_image: dish.story_image ?? "",
     });
     setDialogOpen(true);
   };
@@ -349,6 +429,12 @@ const Admin = () => {
       sort_order: parseInt(form.sort_order) || 0,
       allergens: form.allergens.split(",").map((a) => a.trim()).filter(Boolean),
       chef_note: form.chef_note,
+      prep_time: form.prep_time ? parseInt(form.prep_time) : null,
+      is_available: form.is_available,
+      badge: form.badge || null,
+      time_slot: form.time_slot,
+      story_text: form.story_text,
+      story_image: form.story_image,
     };
 
     let error;
@@ -458,13 +544,13 @@ const Admin = () => {
       {/* Tabs */}
       <div className="flex border-b border-border overflow-x-auto">
         {([
-          { key: "menu", icon: UtensilsCrossed, label: "Menu", superOnly: false },
-          { key: "stats", icon: BarChart3, label: "Stats", superOnly: false },
-          { key: "settings", icon: Settings, label: "Réglages", superOnly: false },
-          { key: "users", icon: Users, label: "Utilisateurs", superOnly: true },
-          { key: "info", icon: Mail, label: "Infos", superOnly: true },
+          { key: "menu", icon: UtensilsCrossed, label: "Menu", superOnly: false, needsFeature: null },
+          { key: "stats", icon: BarChart3, label: "Stats", superOnly: false, needsFeature: "hasStats" as const },
+          { key: "settings", icon: Settings, label: "Réglages", superOnly: false, needsFeature: null },
+          { key: "users", icon: Users, label: "Utilisateurs", superOnly: true, needsFeature: null },
+          { key: "info", icon: Mail, label: "Infos", superOnly: true, needsFeature: null },
         ] as const)
-          .filter((t) => !t.superOnly || isSuperAdmin)
+          .filter((t) => (!t.superOnly || isSuperAdmin) && (!t.needsFeature || (features as any)[t.needsFeature]))
           .map((t) => (
           <button
             key={t.key}
@@ -598,6 +684,70 @@ const Admin = () => {
                 placeholder="Description du chef pour ce plat…"
                 className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm min-h-[80px] resize-y"
               />
+            </div>
+
+            {/* New fields separator */}
+            <div className="border-t border-border pt-4 space-y-4">
+              <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Options avancées</h3>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <Label>Temps de préparation (min)</Label>
+                  <Input value={form.prep_time} onChange={(e) => setForm((f) => ({ ...f, prep_time: e.target.value }))} type="number" placeholder="15" />
+                </div>
+                <div className="space-y-1">
+                  <Label>Badge</Label>
+                  <select
+                    value={form.badge}
+                    onChange={(e) => setForm((f) => ({ ...f, badge: e.target.value }))}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    <option value="">Aucun</option>
+                    <option value="bestseller">🔥 Best seller</option>
+                    <option value="coup_de_coeur">❤️ Coup de cœur</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                {features.hasTimeSlots && (
+                  <div className="space-y-1">
+                    <Label>Créneau horaire</Label>
+                    <select
+                      value={form.time_slot}
+                      onChange={(e) => setForm((f) => ({ ...f, time_slot: e.target.value }))}
+                      className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    >
+                      <option value="both">Midi & Soir</option>
+                      <option value="midi">Midi uniquement</option>
+                      <option value="soir">Soir uniquement</option>
+                    </select>
+                  </div>
+                )}
+                <div className="flex items-end pb-1">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      checked={form.is_available}
+                      onChange={(e) => setForm((f) => ({ ...f, is_available: e.target.checked }))}
+                      className="rounded border-input accent-accent w-4 h-4"
+                    />
+                    <span className="text-sm font-medium">Disponible</span>
+                  </label>
+                </div>
+              </div>
+
+              {features.hasStorytelling && (
+                <div className="space-y-1">
+                  <Label>Storytelling (histoire du plat)</Label>
+                  <textarea
+                    value={form.story_text}
+                    onChange={(e) => setForm((f) => ({ ...f, story_text: e.target.value }))}
+                    placeholder="L'histoire de ce plat, son origine, l'inspiration du chef…"
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm min-h-[60px] resize-y"
+                  />
+                </div>
+              )}
             </div>
 
             <div className="space-y-1">
