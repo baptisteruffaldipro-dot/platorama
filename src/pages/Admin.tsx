@@ -678,7 +678,8 @@ const Admin = () => {
               </div>
             </div>
 
-
+            <div className="space-y-1">
+              <Label>Thumbnail</Label>
               <div className="flex items-center gap-2">
                 <Input value={form.thumbnail} onChange={(e) => setForm((f) => ({ ...f, thumbnail: e.target.value }))} placeholder="URL ou upload" className="flex-1" />
                 <label className="cursor-pointer">
