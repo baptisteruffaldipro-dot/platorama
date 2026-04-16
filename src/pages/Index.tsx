@@ -80,8 +80,14 @@ const Index = () => {
     );
   }
 
-  const safeIndex = Math.min(activeIndex, dishes.length - 1);
-  const dish = dishes[safeIndex];
+  const safeIndex = Math.min(activeIndex, (dishes?.length ?? 1) - 1);
+  const dish = dishes?.[safeIndex];
+
+  // Track dish view events for Business stats
+  useEffect(() => {
+    if (!dish) return;
+    supabase.from("dish_events").insert({ dish_id: dish.id, event_type: "view" }).then();
+  }, [dish?.id]);
 
   const handleLaunchAR = () => {
     const hostname = window.location.hostname;
