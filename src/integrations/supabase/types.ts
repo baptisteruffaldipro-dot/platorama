@@ -46,50 +46,68 @@ export type Database = {
       dishes: {
         Row: {
           allergens: string[]
+          badge: string | null
           category: string
           chef_note: string
           created_at: string
           id: string
           ingredients: string
+          is_available: boolean
           model_android: string
           model_ios: string
           name: string
+          prep_time: number | null
           price: number
           restaurant_id: string | null
           sort_order: number
+          story_image: string
+          story_text: string
           thumbnail: string
+          time_slot: string
           updated_at: string
         }
         Insert: {
           allergens?: string[]
+          badge?: string | null
           category: string
           chef_note?: string
           created_at?: string
           id?: string
           ingredients?: string
+          is_available?: boolean
           model_android?: string
           model_ios?: string
           name: string
+          prep_time?: number | null
           price?: number
           restaurant_id?: string | null
           sort_order?: number
+          story_image?: string
+          story_text?: string
           thumbnail?: string
+          time_slot?: string
           updated_at?: string
         }
         Update: {
           allergens?: string[]
+          badge?: string | null
           category?: string
           chef_note?: string
           created_at?: string
           id?: string
           ingredients?: string
+          is_available?: boolean
           model_android?: string
           model_ios?: string
           name?: string
+          prep_time?: number | null
           price?: number
           restaurant_id?: string | null
           sort_order?: number
+          story_image?: string
+          story_text?: string
           thumbnail?: string
+          time_slot?: string
           updated_at?: string
         }
         Relationships: [
