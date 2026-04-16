@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useDishes } from "@/hooks/useDishes";
 import { usePublishedSettings } from "@/hooks/useSiteSettings";
+import { useSubscriptionFeatures } from "@/hooks/useSubscriptionFeatures";
 import { supabase } from "@/integrations/supabase/client";
 import { useFavorites } from "@/hooks/useFavorites";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -34,6 +35,7 @@ const Index = () => {
   const { data: siteSettings } = usePublishedSettings(restaurantId);
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
   const { isFavorite, toggle } = useFavorites();
+  const features = useSubscriptionFeatures(restaurantId);
   const { lang, t, translateBatch } = useTranslation();
 
   // Trigger translation when language or dishes change
@@ -69,6 +71,20 @@ const Index = () => {
   useEffect(() => {
     if (!currentDish) return;
     supabase.from("dish_events").insert({ dish_id: currentDish.id, event_type: "view" }).then();
+  }, [currentDish?.id]);
+
+  // Track time spent on each dish
+  const viewStartRef = useRef<number>(Date.now());
+  useEffect(() => {
+    viewStartRef.current = Date.now();
+    return () => {
+      if (!currentDish) return;
+      const duration = Math.round((Date.now() - viewStartRef.current) / 1000);
+      if (duration >= 2) {
+        // Only track if viewed for at least 2 seconds
+        supabase.from("dish_events").insert({ dish_id: currentDish.id, event_type: `view_duration_${duration}` }).then();
+      }
+    };
   }, [currentDish?.id]);
 
   // No restaurant parameter = invalid link
@@ -128,7 +144,7 @@ const Index = () => {
   return (
     <div className="h-full flex flex-col relative overflow-hidden bg-background">
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
-      <LanguageSelector />
+      <LanguageSelector multilingual={features.hasMultilingual} />
 
       {/* Top-left icon buttons */}
       <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">

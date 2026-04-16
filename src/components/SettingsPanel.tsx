@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Upload, Save, Send, Eye, CreditCard, Plus, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
+import QRCodePanel from "@/components/QRCodePanel";
 import {
   useDraftSettings,
   usePublishedSettings,
@@ -303,6 +304,11 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
           </Button>
         </div>
       </div>
+
+      {/* QR Code */}
+      {restaurantId && (
+        <QRCodePanel restaurantId={restaurantId} restaurantName={form.restaurant_name} />
+      )}
 
       {/* Abonnement actif */}
       <div>

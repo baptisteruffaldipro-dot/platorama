@@ -46,6 +46,7 @@ interface DishStats {
   favorites: number;
   ar_clicks: number;
   views: number;
+  avg_time: number; // average seconds spent
 }
 
 /* ─── Stats Panel ─── */
@@ -65,16 +66,23 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         return;
       }
 
-      const counters: Record<string, { favorites: number; ar_clicks: number; views: number }> = {};
+      const counters: Record<string, { favorites: number; ar_clicks: number; views: number; totalTime: number; timeCount: number }> = {};
       dishes.forEach((d) => {
-        counters[d.id] = { favorites: 0, ar_clicks: 0, views: 0 };
+        counters[d.id] = { favorites: 0, ar_clicks: 0, views: 0, totalTime: 0, timeCount: 0 };
       });
 
       data?.forEach((ev) => {
-        if (!counters[ev.dish_id]) counters[ev.dish_id] = { favorites: 0, ar_clicks: 0, views: 0 };
+        if (!counters[ev.dish_id]) counters[ev.dish_id] = { favorites: 0, ar_clicks: 0, views: 0, totalTime: 0, timeCount: 0 };
         if (ev.event_type === "favorite") counters[ev.dish_id].favorites++;
-        if (ev.event_type === "ar_click") counters[ev.dish_id].ar_clicks++;
-        if (ev.event_type === "view") counters[ev.dish_id].views++;
+        else if (ev.event_type === "ar_click") counters[ev.dish_id].ar_clicks++;
+        else if (ev.event_type === "view") counters[ev.dish_id].views++;
+        else if (ev.event_type.startsWith("view_duration_")) {
+          const secs = parseInt(ev.event_type.replace("view_duration_", ""));
+          if (!isNaN(secs)) {
+            counters[ev.dish_id].totalTime += secs;
+            counters[ev.dish_id].timeCount++;
+          }
+        }
       });
 
       const result: DishStats[] = dishes.map((d) => ({
@@ -83,6 +91,7 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         favorites: counters[d.id]?.favorites ?? 0,
         ar_clicks: counters[d.id]?.ar_clicks ?? 0,
         views: counters[d.id]?.views ?? 0,
+        avg_time: counters[d.id]?.timeCount ? Math.round(counters[d.id].totalTime / counters[d.id].timeCount) : 0,
       }));
 
       setStats(result);
@@ -155,7 +164,30 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         </div>
       </div>
 
-      {/* Favorites chart */}
+      {/* Time spent per dish */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          ⏱️ Temps moyen passé par plat
+        </h2>
+        <div className="space-y-1.5">
+          {[...stats].sort((a, b) => b.avg_time - a.avg_time).map((s) => {
+            const maxTime = Math.max(1, ...stats.map((x) => x.avg_time));
+            return (
+              <div key={s.dish_id + "-time"} className="flex items-center gap-3">
+                <span className="text-sm w-32 truncate">{s.dish_name}</span>
+                <div className="flex-1 h-6 bg-muted/20 rounded overflow-hidden">
+                  <div
+                    className="h-full rounded bg-accent/70 transition-all duration-500"
+                    style={{ width: `${Math.max(4, (s.avg_time / maxTime) * 100)}%` }}
+                  />
+                </div>
+                <span className="text-xs text-muted-foreground w-12 text-right">{s.avg_time}s</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <div>
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
           <Star className="w-5 h-5 text-accent" />
