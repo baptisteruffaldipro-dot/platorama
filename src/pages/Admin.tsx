@@ -164,7 +164,30 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         </div>
       </div>
 
-      {/* Favorites chart */}
+      {/* Time spent per dish */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          ⏱️ Temps moyen passé par plat
+        </h2>
+        <div className="space-y-1.5">
+          {[...stats].sort((a, b) => b.avg_time - a.avg_time).map((s) => {
+            const maxTime = Math.max(1, ...stats.map((x) => x.avg_time));
+            return (
+              <div key={s.dish_id + "-time"} className="flex items-center gap-3">
+                <span className="text-sm w-32 truncate">{s.dish_name}</span>
+                <div className="flex-1 h-6 bg-muted/20 rounded overflow-hidden">
+                  <div
+                    className="h-full rounded bg-accent/70 transition-all duration-500"
+                    style={{ width: `${Math.max(4, (s.avg_time / maxTime) * 100)}%` }}
+                  />
+                </div>
+                <span className="text-xs text-muted-foreground w-12 text-right">{s.avg_time}s</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       <div>
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
           <Star className="w-5 h-5 text-accent" />
