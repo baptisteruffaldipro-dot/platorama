@@ -44,6 +44,7 @@ interface DishStats {
   dish_name: string;
   favorites: number;
   ar_clicks: number;
+  views: number;
 }
 
 /* ─── Stats Panel ─── */
@@ -63,15 +64,16 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         return;
       }
 
-      const counters: Record<string, { favorites: number; ar_clicks: number }> = {};
+      const counters: Record<string, { favorites: number; ar_clicks: number; views: number }> = {};
       dishes.forEach((d) => {
-        counters[d.id] = { favorites: 0, ar_clicks: 0 };
+        counters[d.id] = { favorites: 0, ar_clicks: 0, views: 0 };
       });
 
       data?.forEach((ev) => {
-        if (!counters[ev.dish_id]) counters[ev.dish_id] = { favorites: 0, ar_clicks: 0 };
+        if (!counters[ev.dish_id]) counters[ev.dish_id] = { favorites: 0, ar_clicks: 0, views: 0 };
         if (ev.event_type === "favorite") counters[ev.dish_id].favorites++;
         if (ev.event_type === "ar_click") counters[ev.dish_id].ar_clicks++;
+        if (ev.event_type === "view") counters[ev.dish_id].views++;
       });
 
       const result: DishStats[] = dishes.map((d) => ({
@@ -79,6 +81,7 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         dish_name: d.name,
         favorites: counters[d.id]?.favorites ?? 0,
         ar_clicks: counters[d.id]?.ar_clicks ?? 0,
+        views: counters[d.id]?.views ?? 0,
       }));
 
       setStats(result);
