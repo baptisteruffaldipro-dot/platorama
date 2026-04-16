@@ -73,6 +73,20 @@ const Index = () => {
     supabase.from("dish_events").insert({ dish_id: currentDish.id, event_type: "view" }).then();
   }, [currentDish?.id]);
 
+  // Track time spent on each dish
+  const viewStartRef = useRef<number>(Date.now());
+  useEffect(() => {
+    viewStartRef.current = Date.now();
+    return () => {
+      if (!currentDish) return;
+      const duration = Math.round((Date.now() - viewStartRef.current) / 1000);
+      if (duration >= 2) {
+        // Only track if viewed for at least 2 seconds
+        supabase.from("dish_events").insert({ dish_id: currentDish.id, event_type: `view_duration_${duration}` }).then();
+      }
+    };
+  }, [currentDish?.id]);
+
   // No restaurant parameter = invalid link
   if (!restaurantId) {
     return (
@@ -130,7 +144,7 @@ const Index = () => {
   return (
     <div className="h-full flex flex-col relative overflow-hidden bg-background">
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
-      <LanguageSelector />
+      <LanguageSelector multilingual={features.hasMultilingual} />
 
       {/* Top-left icon buttons */}
       <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
