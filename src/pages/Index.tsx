@@ -14,7 +14,7 @@ import SplashScreen from "@/components/SplashScreen";
 import LanguageSelector from "@/components/LanguageSelector";
 import AllergensDialog from "@/components/AllergensDialog";
 import { isIOS } from "@/lib/platform";
-import { Rotate3d, Info, ChefHat } from "lucide-react";
+import { Rotate3d, Info, ChefHat, BookOpen } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -196,6 +196,37 @@ const Index = () => {
         {/* Allergens */}
         {dish.allergens && dish.allergens.length > 0 && (
           <AllergensDialog allergens={dish.allergens} />
+        )}
+
+        {/* Storytelling */}
+        {dish.story_text && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
+                aria-label="Histoire du plat"
+              >
+                <BookOpen className="w-5 h-5 text-muted-foreground" />
+              </button>
+            </DialogTrigger>
+            <DialogContent className="bg-card border-border max-w-sm">
+              <DialogHeader>
+                <DialogTitle
+                  className="text-xl text-foreground tracking-wide uppercase text-center flex items-center justify-center gap-2"
+                  style={{ fontFamily: "var(--font-serif)" }}
+                >
+                  <BookOpen className="w-5 h-5 text-accent" />
+                  {t("L'histoire du plat")}
+                </DialogTitle>
+              </DialogHeader>
+              {dish.story_image && (
+                <img src={dish.story_image} alt="" className="w-full h-40 object-cover rounded-lg" />
+              )}
+              <p className="text-sm text-foreground leading-relaxed italic text-center pt-2" style={{ fontFamily: "var(--font-serif)" }}>
+                {t(dish.story_text)}
+              </p>
+            </DialogContent>
+          </Dialog>
         )}
       </div>
 
