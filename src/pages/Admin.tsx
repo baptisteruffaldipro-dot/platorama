@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { compressGlb } from "@/lib/compressGlb";
 import { useAuth } from "@/hooks/useAuth";
 import { useDishes, type Dish } from "@/hooks/useDishes";
+import { useSubscriptionFeatures } from "@/hooks/useSubscriptionFeatures";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useNavigate, useSearchParams } from "react-router-dom";
