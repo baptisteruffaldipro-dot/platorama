@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { Star } from "lucide-react";
+import { Star, Clock, Flame, Heart } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 
 interface DishInfoProps {
@@ -11,10 +11,28 @@ interface DishInfoProps {
     price: number;
     allergens?: string[];
     chef_note?: string;
+    prep_time?: number | null;
+    badge?: string | null;
   };
   isFavorite: boolean;
   onToggleFavorite: () => void;
 }
+
+const BadgeChip = ({ badge }: { badge: string }) => {
+  const config: Record<string, { icon: React.ElementType; label: string; className: string }> = {
+    bestseller: { icon: Flame, label: "Best seller", className: "bg-orange-500/20 text-orange-400 border-orange-500/30" },
+    coup_de_coeur: { icon: Heart, label: "Coup de cœur", className: "bg-pink-500/20 text-pink-400 border-pink-500/30" },
+  };
+  const c = config[badge];
+  if (!c) return null;
+  const Icon = c.icon;
+  return (
+    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${c.className}`}>
+      <Icon className="w-3 h-3" />
+      {c.label}
+    </span>
+  );
+};
 
 const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
   const { t } = useTranslation();
@@ -29,6 +47,13 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
         transition={{ duration: 0.35, ease: "easeOut" }}
         className="flex flex-col items-center text-center px-6"
       >
+        {/* Badge */}
+        {dish.badge && (
+          <div className="mb-1.5">
+            <BadgeChip badge={dish.badge} />
+          </div>
+        )}
+
         {/* Category label */}
         <span className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-1">
           {t(dish.category)}
@@ -59,10 +84,18 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite }: DishInfoProps) => {
           {t(dish.ingredients)}
         </p>
 
-        {/* Price - tighter spacing */}
-        <p className="text-xl sm:text-2xl font-semibold text-accent" style={{ fontFamily: "var(--font-serif)" }}>
-          {dish.price.toFixed(2)} €
-        </p>
+        {/* Price + prep time */}
+        <div className="flex items-center gap-3">
+          <p className="text-xl sm:text-2xl font-semibold text-accent" style={{ fontFamily: "var(--font-serif)" }}>
+            {dish.price.toFixed(2)} €
+          </p>
+          {dish.prep_time && (
+            <span className="flex items-center gap-1 text-xs text-muted-foreground">
+              <Clock className="w-3.5 h-3.5" />
+              ~{dish.prep_time} min
+            </span>
+          )}
+        </div>
       </motion.div>
     </AnimatePresence>
   );

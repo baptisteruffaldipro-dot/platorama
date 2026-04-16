@@ -14,6 +14,13 @@ export interface Dish {
   allergens: string[];
   chef_note: string;
   restaurant_id?: string | null;
+  // New fields
+  prep_time: number | null;
+  is_available: boolean;
+  badge: string | null;
+  time_slot: string;
+  story_text: string;
+  story_image: string;
 }
 
 export const useDishes = (restaurantId?: string | null) => {
@@ -31,7 +38,7 @@ export const useDishes = (restaurantId?: string | null) => {
 
       const { data, error } = await query;
       if (error) throw error;
-      return data;
+      return data as Dish[];
     },
   });
 };
