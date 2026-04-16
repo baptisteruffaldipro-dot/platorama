@@ -46,6 +46,7 @@ interface DishStats {
   favorites: number;
   ar_clicks: number;
   views: number;
+  avg_time: number; // average seconds spent
 }
 
 /* ─── Stats Panel ─── */
