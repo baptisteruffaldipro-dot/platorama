@@ -288,7 +288,7 @@ const Admin = () => {
     setIsNew(true);
     setEditDish(null);
     const maxOrder = dishes?.length ? Math.max(...dishes.map((d) => d.sort_order)) : 0;
-    setForm({ category: "ENTRÉE", name: "", ingredients: "", price: "", thumbnail: "", model_ios: "", model_android: "", sort_order: String(maxOrder + 1), allergens: "", chef_note: "" });
+    setForm({ category: "ENTRÉE", name: "", ingredients: "", price: "", thumbnail: "", model_ios: "", model_android: "", sort_order: String(maxOrder + 1), allergens: "", chef_note: "", prep_time: "", is_available: true, badge: "", time_slot: "both", story_text: "", story_image: "" });
     setDialogOpen(true);
   };
 
@@ -306,6 +306,12 @@ const Admin = () => {
       sort_order: String(dish.sort_order),
       allergens: (dish.allergens ?? []).join(", "),
       chef_note: dish.chef_note ?? "",
+      prep_time: dish.prep_time != null ? String(dish.prep_time) : "",
+      is_available: dish.is_available ?? true,
+      badge: dish.badge ?? "",
+      time_slot: dish.time_slot ?? "both",
+      story_text: dish.story_text ?? "",
+      story_image: dish.story_image ?? "",
     });
     setDialogOpen(true);
   };
