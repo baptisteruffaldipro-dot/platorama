@@ -1,7 +1,37 @@
 import { createContext, useContext, useState, useCallback, ReactNode } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
-type Lang = "fr" | "en";
+export type Lang = "fr" | "en" | "es" | "de" | "it" | "pt" | "zh" | "ja" | "ar" | "ru";
+
+const LANG_LABELS: Record<Lang, string> = {
+  fr: "Français",
+  en: "English",
+  es: "Español",
+  de: "Deutsch",
+  it: "Italiano",
+  pt: "Português",
+  zh: "中文",
+  ja: "日本語",
+  ar: "العربية",
+  ru: "Русский",
+};
+
+const LANG_TARGETS: Record<Lang, string> = {
+  fr: "French",
+  en: "English",
+  es: "Spanish",
+  de: "German",
+  it: "Italian",
+  pt: "Portuguese",
+  zh: "Chinese",
+  ja: "Japanese",
+  ar: "Arabic",
+  ru: "Russian",
+};
+
+export const ALL_LANGUAGES: { code: Lang; label: string }[] = Object.entries(LANG_LABELS).map(
+  ([code, label]) => ({ code: code as Lang, label })
+);
 
 interface TranslationContextType {
   lang: Lang;
@@ -44,8 +74,9 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
 
     setIsTranslating(true);
     try {
+      const targetLang = LANG_TARGETS[lang] || "English";
       const { data, error } = await supabase.functions.invoke("translate", {
-        body: { texts: uncached, target_lang: "English" },
+        body: { texts: uncached, target_lang: targetLang },
       });
 
       if (error) throw error;
