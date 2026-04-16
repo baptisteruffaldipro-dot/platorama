@@ -95,9 +95,65 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
 
   const maxFav = Math.max(1, ...stats.map((s) => s.favorites));
   const maxAR = Math.max(1, ...stats.map((s) => s.ar_clicks));
+  const maxViews = Math.max(1, ...stats.map((s) => s.views));
+
+  // Sort by views for heatmap
+  const heatmapStats = [...stats].sort((a, b) => b.views - a.views);
 
   return (
     <div className="p-4 space-y-8">
+      {/* Views chart (most consulted) */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          <Eye className="w-5 h-5 text-accent" />
+          Plats les plus consultés
+        </h2>
+        <div className="flex items-end gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ minHeight: 200 }}>
+          {stats.map((s) => (
+            <div key={s.dish_id + "-views"} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
+              <div className="w-full bg-muted/30 rounded-t-md flex flex-col justify-end items-center" style={{ height: 160 }}>
+                <span className="text-sm font-semibold text-blue-400 mb-1">{s.views}</span>
+                <div
+                  className="w-full bg-blue-500 rounded-t-md transition-all duration-500"
+                  style={{ height: `${Math.max(4, (s.views / maxViews) * 100)}%` }}
+                />
+              </div>
+              <span className="text-xs text-muted-foreground text-center leading-tight w-full truncate px-0.5">
+                {s.dish_name}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Heatmap */}
+      <div>
+        <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
+          🔥 Heatmap du menu
+        </h2>
+        <div className="space-y-1.5">
+          {heatmapStats.map((s) => {
+            const ratio = s.views / maxViews;
+            const hue = 120 * (1 - ratio); // green to red
+            return (
+              <div key={s.dish_id + "-heat"} className="flex items-center gap-3">
+                <span className="text-sm w-32 truncate">{s.dish_name}</span>
+                <div className="flex-1 h-6 bg-muted/20 rounded overflow-hidden">
+                  <div
+                    className="h-full rounded transition-all duration-500"
+                    style={{
+                      width: `${Math.max(4, ratio * 100)}%`,
+                      backgroundColor: `hsl(${hue}, 80%, 50%)`,
+                    }}
+                  />
+                </div>
+                <span className="text-xs text-muted-foreground w-12 text-right">{s.views} vues</span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Favorites chart */}
       <div>
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
