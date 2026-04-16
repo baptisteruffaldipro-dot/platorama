@@ -271,6 +271,12 @@ const Admin = () => {
     sort_order: "",
     allergens: "",
     chef_note: "",
+    prep_time: "",
+    is_available: true,
+    badge: "",
+    time_slot: "both",
+    story_text: "",
+    story_image: "",
   });
 
   if (authLoading || isResolvingRestaurant) return <div className="min-h-screen flex items-center justify-center bg-background text-foreground">Chargement...</div>;

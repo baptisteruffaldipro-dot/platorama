@@ -28,7 +28,9 @@ const Index = () => {
   const restaurantId = searchParams.get("restaurant");
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
-  const { data: dishes, isLoading } = useDishes(restaurantId);
+  const { data: allDishes, isLoading } = useDishes(restaurantId);
+  // Filter out unavailable dishes for the public menu
+  const dishes = allDishes?.filter(d => d.is_available);
   const { data: siteSettings } = usePublishedSettings(restaurantId);
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
   const { isFavorite, toggle } = useFavorites();
