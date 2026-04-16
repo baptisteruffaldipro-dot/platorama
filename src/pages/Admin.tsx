@@ -165,7 +165,7 @@ const SortableRow = ({
   };
 
   return (
-    <tr ref={setNodeRef} style={style} className="border-b border-border/50 hover:bg-card/50">
+    <tr ref={setNodeRef} style={style} className={`border-b border-border/50 hover:bg-card/50 ${!dish.is_available ? "opacity-40" : ""}`}>
       <td className="py-2 px-1 w-8">
         <button {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing p-1 text-muted-foreground hover:text-foreground touch-none">
           <GripVertical className="w-4 h-4" />
@@ -178,7 +178,14 @@ const SortableRow = ({
         )}
       </td>
       <td className="py-2.5 px-3 text-sm tracking-wider text-muted-foreground">{dish.category}</td>
-      <td className="py-2.5 px-3 font-medium text-sm">{dish.name}</td>
+      <td className="py-2.5 px-3 font-medium text-sm">
+        <div className="flex items-center gap-1.5">
+          {dish.name}
+          {dish.badge === "bestseller" && <span title="Best seller">🔥</span>}
+          {dish.badge === "coup_de_coeur" && <span title="Coup de cœur">❤️</span>}
+          {!dish.is_available && <span className="text-[10px] px-1.5 py-0.5 rounded bg-destructive/20 text-destructive font-semibold">Indispo</span>}
+        </div>
+      </td>
       <td className="py-2.5 px-3 text-sm">{dish.price.toFixed(2)} €</td>
       <td className="py-2 px-3">
         <div className="flex gap-1">
