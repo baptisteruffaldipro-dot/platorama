@@ -141,23 +141,25 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
           🔥 Heatmap du menu
         </h2>
-        <div className="space-y-1.5">
+        <div className="flex items-end gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ minHeight: 200 }}>
           {heatmapStats.map((s) => {
             const ratio = s.views / maxViews;
-            const hue = 120 * (1 - ratio); // green to red
+            const hue = 120 * (1 - ratio);
             return (
-              <div key={s.dish_id + "-heat"} className="flex items-center gap-3">
-                <span className="text-sm w-32 truncate">{s.dish_name}</span>
-                <div className="flex-1 h-6 bg-muted/20 rounded overflow-hidden">
+              <div key={s.dish_id + "-heat"} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
+                <div className="w-full bg-muted/30 rounded-t-md flex flex-col justify-end items-center" style={{ height: 160 }}>
+                  <span className="text-sm font-semibold mb-1" style={{ color: `hsl(${hue}, 80%, 50%)` }}>{s.views}</span>
                   <div
-                    className="h-full rounded transition-all duration-500"
+                    className="w-full rounded-t-md transition-all duration-500"
                     style={{
-                      width: `${Math.max(4, ratio * 100)}%`,
+                      height: `${Math.max(4, ratio * 100)}%`,
                       backgroundColor: `hsl(${hue}, 80%, 50%)`,
                     }}
                   />
                 </div>
-                <span className="text-xs text-muted-foreground w-12 text-right">{s.views} vues</span>
+                <span className="text-xs text-muted-foreground text-center leading-tight w-full truncate px-0.5">
+                  {s.dish_name}
+                </span>
               </div>
             );
           })}
@@ -169,23 +171,28 @@ const StatsPanel = ({ dishes }: { dishes: Dish[] }) => {
         <h2 className="text-xl font-semibold mb-4 flex items-center gap-2">
           ⏱️ Temps moyen passé par plat
         </h2>
-        <div className="space-y-1.5">
-          {[...stats].sort((a, b) => b.avg_time - a.avg_time).map((s) => {
-            const maxTime = Math.max(1, ...stats.map((x) => x.avg_time));
-            return (
-              <div key={s.dish_id + "-time"} className="flex items-center gap-3">
-                <span className="text-sm w-32 truncate">{s.dish_name}</span>
-                <div className="flex-1 h-6 bg-muted/20 rounded overflow-hidden">
-                  <div
-                    className="h-full rounded bg-accent/70 transition-all duration-500"
-                    style={{ width: `${Math.max(4, (s.avg_time / maxTime) * 100)}%` }}
-                  />
+        {(() => {
+          const maxTime = Math.max(1, ...stats.map((x) => x.avg_time));
+          const sorted = [...stats].sort((a, b) => b.avg_time - a.avg_time);
+          return (
+            <div className="flex items-end gap-2 overflow-x-auto pb-2 scrollbar-hide" style={{ minHeight: 200 }}>
+              {sorted.map((s) => (
+                <div key={s.dish_id + "-time"} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
+                  <div className="w-full bg-muted/30 rounded-t-md flex flex-col justify-end items-center" style={{ height: 160 }}>
+                    <span className="text-sm font-semibold text-accent mb-1">{s.avg_time}s</span>
+                    <div
+                      className="w-full bg-accent/70 rounded-t-md transition-all duration-500"
+                      style={{ height: `${Math.max(4, (s.avg_time / maxTime) * 100)}%` }}
+                    />
+                  </div>
+                  <span className="text-xs text-muted-foreground text-center leading-tight w-full truncate px-0.5">
+                    {s.dish_name}
+                  </span>
                 </div>
-                <span className="text-xs text-muted-foreground w-12 text-right">{s.avg_time}s</span>
-              </div>
-            );
-          })}
-        </div>
+              ))}
+            </div>
+          );
+        })()}
       </div>
 
       <div>
