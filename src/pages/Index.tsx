@@ -20,6 +20,7 @@ import MenuListView from "@/components/MenuListView";
 import PopSwipeView from "@/components/menu-views/PopSwipeView";
 import OrganicStoriesView from "@/components/menu-views/OrganicStoriesView";
 import VintageBookView from "@/components/menu-views/VintageBookView";
+import WalletStackView from "@/components/menu-views/WalletStackView";
 import type { Dish } from "@/hooks/useDishes";
 import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS } from "@/lib/platform";
@@ -291,6 +292,14 @@ const Index = () => {
           )}
           {layout === "organic" && (
             <OrganicStoriesView
+              dishes={dishes}
+              onLaunchAR={(d) => handleLaunchAR(d)}
+              isFavorite={isFavorite}
+              onToggleFavorite={toggle}
+            />
+          )}
+          {layout === "wallet" && (
+            <WalletStackView
               dishes={dishes}
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
