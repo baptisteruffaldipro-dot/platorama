@@ -63,18 +63,18 @@ export default function OrganicStoriesView({
             key={d.id}
             className="snap-start h-full w-full relative flex flex-col justify-end"
           >
-            {/* Centered 3D viewer (or contained PNG fallback) — fond uni, sans dégradé */}
-            <div className="absolute inset-x-0 top-28 bottom-[42%] flex items-center justify-center px-6">
+            {/* 3D viewer (or contained PNG fallback) — agrandi et descendu */}
+            <div className="absolute inset-x-0 top-40 bottom-[36%] flex items-center justify-center px-2">
               {hasARModel(d) ? (
                 <ErrorBoundary key={d.id} fallback={
                   <img
                     src={d.thumbnail}
                     alt={d.name}
-                    className="max-w-full max-h-full object-contain"
+                    className="max-w-full max-h-full object-contain scale-110"
                     loading={i < 2 ? "eager" : "lazy"}
                   />
                 }>
-                  <div className="w-full h-full">
+                  <div className="w-full h-full scale-110">
                     <DishViewer dish={d} />
                   </div>
                 </ErrorBoundary>
@@ -82,7 +82,7 @@ export default function OrganicStoriesView({
                 <img
                   src={d.thumbnail}
                   alt={d.name}
-                  className="max-w-full max-h-full object-contain"
+                  className="max-w-full max-h-full object-contain scale-110"
                   loading={i < 2 ? "eager" : "lazy"}
                 />
               )}
