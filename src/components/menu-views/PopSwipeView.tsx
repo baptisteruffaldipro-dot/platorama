@@ -61,7 +61,7 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
   if (!dish) return null;
 
   return (
-    <div className="h-full flex flex-col items-center justify-start px-4 pt-32 pb-24 relative">
+    <div className="h-full flex flex-col items-center justify-center px-4 pt-20 pb-20 relative">
       {/* Counter */}
       <div className="flex gap-1.5 z-10 mb-3">
         {dishes.map((_, i) => (
