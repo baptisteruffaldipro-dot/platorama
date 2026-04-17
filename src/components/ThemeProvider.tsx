@@ -1,6 +1,7 @@
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, matchPath } from "react-router-dom";
 import { usePublishedSettings } from "@/hooks/useSiteSettings";
+import { useRestaurantBySlug } from "@/hooks/useRestaurantBySlug";
 
 function hexToHSL(hex: string): string {
   let r = 0, g = 0, b = 0;
@@ -93,21 +94,24 @@ function applyRestaurantTheme(settings: { background_color: string; text_color: 
 
 export default function ThemeProvider({ children }: { children: React.ReactNode }) {
   const location = useLocation();
-  const restaurantId = new URLSearchParams(location.search).get("restaurant");
-  const isDashboard = (location.pathname === "/" || location.pathname === "/login") && !restaurantId;
+  // Resolve restaurant from /m/:slug route
+  const match = matchPath("/m/:slug", location.pathname);
+  const slug = (match?.params as { slug?: string } | undefined)?.slug ?? null;
+  const { data: restaurant } = useRestaurantBySlug(slug);
+  const restaurantId = restaurant?.id ?? null;
+  const isMenuRoute = !!slug;
 
-  const { data: settings } = usePublishedSettings(isDashboard ? null : restaurantId);
+  const { data: settings } = usePublishedSettings(isMenuRoute ? restaurantId : null);
 
   useEffect(() => {
-    if (isDashboard) {
+    if (!isMenuRoute) {
       resetToDashboardTheme();
       return;
     }
-
     if (settings) {
       applyRestaurantTheme(settings);
     }
-  }, [settings, isDashboard, location.pathname, location.search]);
+  }, [settings, isMenuRoute, location.pathname]);
 
   return <>{children}</>;
 }
