@@ -99,6 +99,14 @@ const Index = () => {
     };
   }, [currentDish?.id]);
 
+  // Mettre à jour le title de la page avec le nom du restaurant une fois chargé
+  useEffect(() => {
+    if (siteSettings?.restaurant_name) {
+      const sub = siteSettings.subtitle || "Menu";
+      document.title = `${siteSettings.restaurant_name} — ${sub}`;
+    }
+  }, [siteSettings?.restaurant_name, siteSettings?.subtitle]);
+
   // Invalid slug or restaurant inactive/unknown
   if (!loadingRestaurant && (!slug || !restaurantInfo || restaurantErr)) {
     return (
