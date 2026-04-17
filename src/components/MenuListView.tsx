@@ -188,15 +188,22 @@ function VintageList({ grouped, categories, t, onLaunchAR, isFavorite, onToggleF
                   {d.badge && <BadgeChip badge={d.badge} />}
                 </div>
                 {hasARModel(d) && (
-                  <div>
-                    <button
+                  <div className="mt-1">
+                    <motion.button
                       onClick={() => onLaunchAR(d)}
-                      className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] px-4 py-1.5 border-2 border-accent/30 text-accent hover:bg-accent hover:text-accent-foreground transition-colors"
-                      style={{ fontFamily: "var(--font-serif)" }}
+                      animate={{ scale: [1, 1.04, 1] }}
+                      transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                      whileTap={{ scale: 0.96 }}
+                      className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] px-5 py-2.5 rounded-full font-bold shadow-lg shadow-accent/30"
+                      style={{
+                        fontFamily: "var(--font-serif)",
+                        background: "hsl(var(--accent))",
+                        color: "hsl(var(--accent-foreground))",
+                      }}
                     >
-                      <Rotate3d className="w-3 h-3" />
+                      <Rotate3d className="w-3.5 h-3.5" />
                       Voir sur ma table
-                    </button>
+                    </motion.button>
                   </div>
                 )}
                 {i < grouped[cat].length - 1 && (
