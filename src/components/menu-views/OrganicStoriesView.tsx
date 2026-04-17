@@ -140,13 +140,20 @@ export default function OrganicStoriesView({
                   {d.price.toFixed(2)} €
                 </span>
                 {hasARModel(d) && (
-                  <button
+                  <motion.button
                     onClick={() => onLaunchAR(d)}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground text-background text-sm font-semibold active:scale-95 shadow-xl"
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                    className="inline-flex items-center gap-2 px-6 py-3 rounded-full text-sm font-bold uppercase tracking-wider active:scale-95"
+                    style={{
+                      background: "hsl(var(--accent))",
+                      color: "hsl(var(--accent-foreground))",
+                      boxShadow: "0 10px 30px -8px hsl(var(--accent) / 0.6)",
+                    }}
                   >
                     <Rotate3d className="w-4 h-4" />
                     {t("Voir en AR")}
-                  </button>
+                  </motion.button>
                 )}
               </div>
             </motion.div>
