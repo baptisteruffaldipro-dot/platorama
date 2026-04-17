@@ -217,6 +217,7 @@ export type Database = {
           restaurant_id: string | null
           restaurant_name: string
           subtitle: string
+          template_id: string
           text_color: string
           updated_at: string
         }
@@ -234,6 +235,7 @@ export type Database = {
           restaurant_id?: string | null
           restaurant_name?: string
           subtitle?: string
+          template_id?: string
           text_color?: string
           updated_at?: string
         }
@@ -251,6 +253,7 @@ export type Database = {
           restaurant_id?: string | null
           restaurant_name?: string
           subtitle?: string
+          template_id?: string
           text_color?: string
           updated_at?: string
         }

@@ -412,6 +412,7 @@ const Dashboard = () => {
       restaurant_id: restaurant.id,
       restaurant_name: newRestaurant.name,
       is_draft: false,
+      template_id: newRestaurant.template_id,
       ...(tpl?.settings ?? {}),
     });
 

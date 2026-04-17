@@ -99,6 +99,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
     restaurant_name: initial.restaurant_name,
     subtitle: initial.subtitle,
     formulas: initial.formulas ?? [],
+    template_id: initial.template_id ?? "dark-luxe",
   });
 
   // Sync when draft/published loads
@@ -115,6 +116,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
       restaurant_name: src.restaurant_name,
       subtitle: src.subtitle,
       formulas: src.formulas ?? [],
+      template_id: src.template_id ?? "dark-luxe",
     });
   }, [draft, published]);
 
@@ -188,8 +190,8 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
 
       {/* Templates */}
       <TemplateGallery
-        currentSettings={form}
-        onApply={(tpl) => setForm((f) => ({ ...f, ...tpl }))}
+        currentTemplateId={form.template_id}
+        onApply={(tpl) => setForm((f) => ({ ...f, ...tpl.settings, template_id: tpl.id }))}
       />
 
       {/* Restaurant name */}

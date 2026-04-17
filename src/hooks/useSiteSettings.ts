@@ -21,6 +21,7 @@ export interface SiteSettings {
   is_draft: boolean;
   restaurant_id?: string | null;
   formulas: FormulaItem[];
+  template_id: string;
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -35,6 +36,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   subtitle: "Menu Virtuel",
   is_draft: false,
   formulas: [],
+  template_id: "dark-luxe",
 };
 
 export const FONT_OPTIONS = [
@@ -56,6 +58,7 @@ function parseRow(row: any): SiteSettings {
   return {
     ...row,
     formulas: Array.isArray(row.formulas) ? row.formulas : [],
+    template_id: row.template_id || "dark-luxe",
   } as SiteSettings;
 }
 
