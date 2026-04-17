@@ -1,11 +1,14 @@
 // 5 templates de menu virtuel pré-configurés.
-// Chaque template définit une palette + typographie cohérente.
-// Sert de point de départ : tout reste éditable ensuite.
+// Chaque template définit une palette + typographie + LAYOUT.
+// Sert de point de départ : couleurs/polices restent éditables ensuite.
+
+export type LayoutVariant = "classic" | "editorial" | "vintage" | "pop" | "organic";
 
 export interface MenuTemplate {
   id: string;
   name: string;
   description: string;
+  layout: LayoutVariant;
   preview: {
     background: string;
     text: string;
@@ -27,6 +30,7 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
     id: "dark-luxe",
     name: "Dark Luxe",
     description: "Élégant et raffiné — gastronomie haut de gamme",
+    layout: "classic",
     preview: {
       background: "#0d0d0d",
       text: "#ece5d5",
@@ -46,6 +50,7 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
     id: "light-minimal",
     name: "Light Minimal",
     description: "Épuré et lumineux — bistronomie moderne",
+    layout: "editorial",
     preview: {
       background: "#fafaf7",
       text: "#1a1a1a",
@@ -65,6 +70,7 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
     id: "vintage-bistro",
     name: "Vintage Bistro",
     description: "Chaleureux et authentique — cuisine de tradition",
+    layout: "vintage",
     preview: {
       background: "#f4ead5",
       text: "#3d2817",
@@ -84,6 +90,7 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
     id: "modern-pop",
     name: "Modern Pop",
     description: "Coloré et joyeux — street food, brunch, café",
+    layout: "pop",
     preview: {
       background: "#fff5ec",
       text: "#2d2d2d",
@@ -103,6 +110,7 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
     id: "nature-bio",
     name: "Nature Bio",
     description: "Frais et organique — bio, végétal, healthy",
+    layout: "organic",
     preview: {
       background: "#f1f0e6",
       text: "#2c3a25",
@@ -122,4 +130,8 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
 
 export function getTemplateById(id: string): MenuTemplate | undefined {
   return MENU_TEMPLATES.find((t) => t.id === id);
+}
+
+export function getLayoutVariant(templateId: string | undefined | null): LayoutVariant {
+  return getTemplateById(templateId ?? "dark-luxe")?.layout ?? "classic";
 }
