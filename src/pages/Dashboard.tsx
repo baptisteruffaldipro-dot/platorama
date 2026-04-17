@@ -770,10 +770,10 @@ const Dashboard = () => {
               />
             </div>
             <div className="space-y-1">
-              <Label>Slug (sous-domaine)</Label>
+              <Label>Slug — lien public : /m/le-slug</Label>
               <Input
                 value={newRestaurant.slug}
-                onChange={(e) => setNewRestaurant((f) => ({ ...f, slug: e.target.value }))}
+                onChange={(e) => setNewRestaurant((f) => ({ ...f, slug: slugify(e.target.value) }))}
                 placeholder="la-maison"
               />
             </div>
