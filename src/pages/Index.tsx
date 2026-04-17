@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useRestaurantBySlug } from "@/hooks/useRestaurantBySlug";
 import { useDishes } from "@/hooks/useDishes";
 import { usePublishedSettings } from "@/hooks/useSiteSettings";
 import { useSubscriptionFeatures } from "@/hooks/useSubscriptionFeatures";
@@ -32,8 +33,10 @@ import {
 } from "@/components/ui/dialog";
 
 const Index = () => {
-  const [searchParams] = useSearchParams();
-  const restaurantId = searchParams.get("restaurant");
+  const { slug } = useParams<{ slug: string }>();
+  const { data: restaurantInfo, isLoading: loadingRestaurant, isError: restaurantErr } =
+    useRestaurantBySlug(slug);
+  const restaurantId = restaurantInfo?.id ?? null;
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
   const { data: allDishes, isLoading } = useDishes(restaurantId);
@@ -94,12 +97,14 @@ const Index = () => {
     };
   }, [currentDish?.id]);
 
-  // No restaurant parameter = invalid link
-  if (!restaurantId) {
+  // Invalid slug or restaurant inactive/unknown
+  if (!loadingRestaurant && (!slug || !restaurantInfo || restaurantErr)) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground gap-4">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground gap-4 p-6 text-center">
         <h1 className="text-2xl font-bold">Menu introuvable</h1>
-        <p className="text-muted-foreground">Ce lien n'est pas valide. Veuillez utiliser le lien fourni par votre restaurant.</p>
+        <p className="text-muted-foreground max-w-md">
+          Ce lien n'est pas valide ou le restaurant est indisponible. Veuillez utiliser le lien fourni par votre restaurant.
+        </p>
       </div>
     );
   }

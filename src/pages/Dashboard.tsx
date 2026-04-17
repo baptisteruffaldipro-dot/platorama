@@ -641,9 +641,9 @@ const Dashboard = () => {
                           <div className="flex items-center">
                             {[
                               { icon: isExpanded ? ChevronUp : ChevronDown, title: "Détails", onClick: () => setExpandedRestaurant(isExpanded ? null : restaurant.id) },
-                              { icon: Eye, title: "Voir le menu", onClick: () => window.open(`/menu?restaurant=${restaurant.id}`, '_blank') },
+                              { icon: Eye, title: "Voir le menu", onClick: () => window.open(`/m/${restaurant.slug}`, '_blank') },
                               { icon: Settings, title: "Personnaliser", onClick: () => navigate(`/admin?restaurant=${restaurant.id}`) },
-                              { icon: Link, title: "Copier le lien", onClick: () => { navigator.clipboard.writeText(`${window.location.origin}/menu?restaurant=${restaurant.id}`); toast.success("Lien copié !"); } },
+                              { icon: Link, title: "Copier le lien", onClick: () => { navigator.clipboard.writeText(`${window.location.origin}/m/${restaurant.slug}`); toast.success("Lien copié !"); } },
                             ].map((btn, i) => (
                               <button key={i} onClick={btn.onClick} title={btn.title} className="p-2 rounded-lg hover:opacity-70 transition-opacity" style={{ color: c.muted }}>
                                 <btn.icon className="w-4 h-4" />
@@ -770,10 +770,10 @@ const Dashboard = () => {
               />
             </div>
             <div className="space-y-1">
-              <Label>Slug (sous-domaine)</Label>
+              <Label>Slug — lien public : /m/le-slug</Label>
               <Input
                 value={newRestaurant.slug}
-                onChange={(e) => setNewRestaurant((f) => ({ ...f, slug: e.target.value }))}
+                onChange={(e) => setNewRestaurant((f) => ({ ...f, slug: slugify(e.target.value) }))}
                 placeholder="la-maison"
               />
             </div>

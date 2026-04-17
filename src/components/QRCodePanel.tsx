@@ -1,17 +1,41 @@
 import { QRCodeSVG } from "qrcode.react";
 import { Button } from "@/components/ui/button";
 import { Download, QrCode } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { buildMenuUrl } from "@/lib/slug";
 
 interface QRCodePanelProps {
   restaurantId: string;
   restaurantName?: string;
+  /** Optional: pre-known slug (avoids extra fetch) */
+  slug?: string;
 }
 
-const QRCodePanel = ({ restaurantId, restaurantName }: QRCodePanelProps) => {
+const QRCodePanel = ({ restaurantId, restaurantName, slug: slugProp }: QRCodePanelProps) => {
   const svgRef = useRef<HTMLDivElement>(null);
+  const [slug, setSlug] = useState<string | null>(slugProp ?? null);
 
-  const menuUrl = `${window.location.origin}/menu?restaurant=${restaurantId}`;
+  useEffect(() => {
+    if (slugProp) {
+      setSlug(slugProp);
+      return;
+    }
+    let cancelled = false;
+    supabase
+      .from("restaurants")
+      .select("slug")
+      .eq("id", restaurantId)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!cancelled && data?.slug) setSlug(data.slug);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [restaurantId, slugProp]);
+
+  const menuUrl = slug ? buildMenuUrl(slug) : "";
 
   const handleDownload = () => {
     const svg = svgRef.current?.querySelector("svg");
@@ -48,12 +72,18 @@ const QRCodePanel = ({ restaurantId, restaurantName }: QRCodePanelProps) => {
       </h3>
       <div className="flex flex-col sm:flex-row items-center gap-4">
         <div ref={svgRef} className="bg-white p-4 rounded-lg">
-          <QRCodeSVG
-            value={menuUrl}
-            size={180}
-            level="H"
-            includeMargin={false}
-          />
+          {menuUrl ? (
+            <QRCodeSVG
+              value={menuUrl}
+              size={180}
+              level="H"
+              includeMargin={false}
+            />
+          ) : (
+            <div className="w-[180px] h-[180px] flex items-center justify-center text-xs text-muted-foreground">
+              Chargement…
+            </div>
+          )}
         </div>
         <div className="flex-1 space-y-2 text-center sm:text-left">
           <p className="text-sm text-muted-foreground">
