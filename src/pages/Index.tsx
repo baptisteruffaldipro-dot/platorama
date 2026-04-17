@@ -14,8 +14,10 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import SplashScreen from "@/components/SplashScreen";
 import LanguageSelector from "@/components/LanguageSelector";
 import AllergensDialog from "@/components/AllergensDialog";
+import ARButton from "@/components/ARButton";
+import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS } from "@/lib/platform";
-import { Rotate3d, Info, ChefHat, BookOpen } from "lucide-react";
+import { Info, ChefHat, BookOpen } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -253,18 +255,19 @@ const Index = () => {
       </div>
 
       <div className="pb-safe relative">
-        <DishInfo dish={dish} isFavorite={isFavorite(dish.id)} onToggleFavorite={() => toggle(dish.id)} />
+        <DishInfo
+          dish={dish}
+          isFavorite={isFavorite(dish.id)}
+          onToggleFavorite={() => toggle(dish.id)}
+          layout={getLayoutVariant(siteSettings?.template_id)}
+        />
 
-        {/* CTA button */}
-        <div className="flex justify-center mt-3">
-          <button
-            onClick={handleLaunchAR}
-            className="flex items-center gap-2.5 px-8 py-3.5 rounded-full bg-accent text-accent-foreground text-base font-bold tracking-wide backdrop-blur-md transition-all active:scale-95 animate-ar-pulse"
-          >
-            <Rotate3d className="w-6 h-6" />
-            {t("Voir sur ma table")}
-          </button>
-        </div>
+        {/* CTA AR — animé + tooltip 1ère visite */}
+        <ARButton
+          onClick={handleLaunchAR}
+          layout={getLayoutVariant(siteSettings?.template_id)}
+          restaurantId={restaurantId}
+        />
 
         <div className="mt-2 pb-4">
           <DishCarousel
