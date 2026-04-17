@@ -27,7 +27,7 @@ const PASTEL_PALETTE = [
 // Hauteur de la "tête" visible d'une carte fermée dans la pile
 const CARD_PEEK = 78;
 // Hauteur d'une carte ouverte
-const CARD_OPEN = 460;
+const CARD_OPEN = 380;
 
 /**
  * Wallet : 1 plat = 1 carte empilée style Apple Wallet.
@@ -172,8 +172,8 @@ export default function WalletStackView({
                           )}
                         </div>
 
-                        {/* Infos + actions */}
-                        <div className="px-5 pb-4 pt-2">
+                        {/* Infos + actions — compactes */}
+                        <div className="px-5 pb-3 pt-1">
                           <p
                             className="text-xs italic line-clamp-2 opacity-80"
                             style={{ fontFamily: "var(--font-body)" }}
