@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { useRestaurantBySlug } from "@/hooks/useRestaurantBySlug";
 import { useDishes } from "@/hooks/useDishes";
 import { usePublishedSettings } from "@/hooks/useSiteSettings";
 import { useSubscriptionFeatures } from "@/hooks/useSubscriptionFeatures";
@@ -32,8 +33,10 @@ import {
 } from "@/components/ui/dialog";
 
 const Index = () => {
-  const [searchParams] = useSearchParams();
-  const restaurantId = searchParams.get("restaurant");
+  const { slug } = useParams<{ slug: string }>();
+  const { data: restaurantInfo, isLoading: loadingRestaurant, isError: restaurantErr } =
+    useRestaurantBySlug(slug);
+  const restaurantId = restaurantInfo?.id ?? null;
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
   const { data: allDishes, isLoading } = useDishes(restaurantId);
