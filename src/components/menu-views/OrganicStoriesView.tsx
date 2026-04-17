@@ -4,6 +4,8 @@ import { Rotate3d, Star, Leaf, ChevronUp } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
 import { hasARModel } from "@/lib/dishHasAR";
+import DishViewer from "@/components/DishViewer";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface Props {
   dishes: Dish[];
