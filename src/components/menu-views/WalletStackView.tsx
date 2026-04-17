@@ -182,7 +182,7 @@ export default function WalletStackView({
                         </div>
 
                         {/* Infos + actions — compactes */}
-                        <div className="px-5 pb-3 pt-1">
+                        <div className="px-5 pb-6 pt-1">
                           <p
                             className="text-xs italic line-clamp-2 opacity-80"
                             style={{ fontFamily: "var(--font-body)" }}
@@ -205,14 +205,34 @@ export default function WalletStackView({
                               />
                             </button>
                             {hasARModel(d) && (
-                              <button
+                              <motion.button
                                 onClick={() => onLaunchAR(d)}
-                                className="flex-1 inline-flex items-center justify-center gap-2 h-10 rounded-full text-xs font-bold uppercase tracking-wider active:scale-95"
+                                animate={{
+                                  scale: [1, 1.04, 1],
+                                  boxShadow: [
+                                    `0 0 0 0 ${color.accent}66`,
+                                    `0 0 0 10px ${color.accent}00`,
+                                    `0 0 0 0 ${color.accent}00`,
+                                  ],
+                                }}
+                                transition={{
+                                  duration: 1.8,
+                                  repeat: Infinity,
+                                  ease: "easeInOut",
+                                }}
+                                whileTap={{ scale: 0.95 }}
+                                className="flex-1 inline-flex items-center justify-center gap-2 h-10 rounded-full text-xs font-bold uppercase tracking-wider"
                                 style={{ background: color.accent, color: color.bg }}
                               >
-                                <Rotate3d className="w-4 h-4" />
+                                <motion.span
+                                  animate={{ rotate: [0, 360] }}
+                                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                                  className="inline-flex"
+                                >
+                                  <Rotate3d className="w-4 h-4" />
+                                </motion.span>
                                 {t("Voir en AR")}
-                              </button>
+                              </motion.button>
                             )}
                           </div>
                         </div>
