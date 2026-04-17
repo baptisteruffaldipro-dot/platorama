@@ -60,19 +60,30 @@ export default function OrganicStoriesView({
             key={d.id}
             className="snap-start h-full w-full relative flex flex-col justify-end"
           >
+            {/* Background blurred fill */}
             <img
               src={d.thumbnail}
-              alt={d.name}
-              className="absolute inset-0 w-full h-full object-cover"
+              alt=""
+              aria-hidden
+              className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-40"
               loading={i < 2 ? "eager" : "lazy"}
             />
+            {/* Centered contained dish image */}
+            <div className="absolute inset-x-0 top-28 bottom-[42%] flex items-center justify-center px-8">
+              <img
+                src={d.thumbnail}
+                alt={d.name}
+                className="max-w-full max-h-full object-contain drop-shadow-2xl"
+                loading={i < 2 ? "eager" : "lazy"}
+              />
+            </div>
             {/* Bottom gradient */}
-            <div className="absolute inset-x-0 bottom-0 h-3/5 bg-gradient-to-t from-background via-background/85 to-transparent" />
+            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background via-background/90 to-transparent" />
             {/* Top gradient for category chip */}
-            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background/60 to-transparent" />
+            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background/80 to-transparent" />
 
-            {/* Top — category */}
-            <div className="absolute top-20 left-4 right-4 flex items-center justify-between z-10">
+            {/* Top — category (descendu pour ne pas overlap les icônes) */}
+            <div className="absolute top-28 left-4 right-4 flex items-center justify-between z-10">
               <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-background/70 backdrop-blur-md">
                 <Leaf className="w-3 h-3 text-accent" />
                 <span className="text-[10px] tracking-[0.3em] uppercase text-foreground">
