@@ -15,6 +15,8 @@ import SplashScreen from "@/components/SplashScreen";
 import LanguageSelector from "@/components/LanguageSelector";
 import AllergensDialog from "@/components/AllergensDialog";
 import ARButton from "@/components/ARButton";
+import MenuListView from "@/components/MenuListView";
+import type { Dish } from "@/hooks/useDishes";
 import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS } from "@/lib/platform";
 import { Info, ChefHat, BookOpen } from "lucide-react";
