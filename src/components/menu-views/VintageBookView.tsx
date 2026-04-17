@@ -48,7 +48,7 @@ export default function VintageBookView({
   const items = grouped[cat] ?? [];
 
   return (
-    <div className="h-full flex flex-col px-3 pt-28 pb-20 relative overflow-hidden">
+    <div className="h-full flex flex-col px-2 pt-24 pb-16 relative overflow-hidden">
       {/* Page tabs */}
       <div className="flex items-center justify-center gap-5 mb-4">
         {categories.map((c, i) => (
@@ -85,7 +85,7 @@ export default function VintageBookView({
               backgroundImage:
                 "radial-gradient(ellipse at top, hsl(var(--accent) / 0.06), transparent 60%)",
             }}
-            className="absolute inset-0 overflow-y-auto rounded-lg border border-accent/20 shadow-inner px-5 py-6"
+            className="absolute inset-0 overflow-y-auto rounded-lg border border-accent/20 shadow-inner px-4 py-5"
           >
             <div className="text-center mb-5">
               <div className="text-accent/50 text-xs tracking-[0.4em]">✦ ✦ ✦</div>
