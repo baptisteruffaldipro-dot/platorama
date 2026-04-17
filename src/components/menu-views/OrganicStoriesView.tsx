@@ -151,14 +151,14 @@ export default function OrganicStoriesView({
               </div>
             </motion.div>
 
-            {/* Scroll hint on first card */}
-            {i === 0 && activeIdx === 0 && dishes.length > 1 && (
+            {/* Scroll hint — persistant sur chaque carte sauf la dernière */}
+            {i < dishes.length - 1 && (
               <motion.div
                 animate={{ y: [0, -6, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="absolute bottom-24 left-1/2 -translate-x-1/2 flex flex-col items-center text-foreground/60"
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center text-foreground/50 pointer-events-none"
               >
-                <ChevronUp className="w-5 h-5" />
+                <ChevronUp className="w-4 h-4" />
                 <span className="text-[9px] uppercase tracking-widest">
                   {t("Faites défiler")}
                 </span>
