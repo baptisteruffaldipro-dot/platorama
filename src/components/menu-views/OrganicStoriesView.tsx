@@ -63,8 +63,8 @@ export default function OrganicStoriesView({
             key={d.id}
             className="snap-start h-full w-full relative flex flex-col justify-end"
           >
-            {/* 3D viewer (or contained PNG fallback) — agrandi et descendu */}
-            <div className="absolute inset-x-0 top-40 bottom-[36%] flex items-center justify-center px-2">
+            {/* 3D viewer (or contained PNG fallback) — remonté pour aérer le titre */}
+            <div className="absolute inset-x-0 top-32 bottom-[48%] flex items-center justify-center px-2">
               {hasARModel(d) ? (
                 <ErrorBoundary key={d.id} fallback={
                   <img
