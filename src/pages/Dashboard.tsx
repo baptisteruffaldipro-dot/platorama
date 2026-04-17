@@ -37,6 +37,7 @@ import {
   Link,
 } from "lucide-react";
 import logoPlatorama from "@/assets/logo-platorama.png";
+import { MENU_TEMPLATES, getTemplateById } from "@/lib/menuTemplates";
 
 /* ─── Light palette (same as Landing) ─── */
 const c = {
@@ -308,7 +309,7 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [createOpen, setCreateOpen] = useState(false);
-  const [newRestaurant, setNewRestaurant] = useState({ name: "", slug: "", subscription_id: "", owner_email: "", owner_password: "" });
+  const [newRestaurant, setNewRestaurant] = useState({ name: "", slug: "", subscription_id: "", owner_email: "", owner_password: "", template_id: "dark-luxe" });
   const [saving, setSaving] = useState(false);
   const [expandedRestaurant, setExpandedRestaurant] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<"restaurants" | "subscriptions">("restaurants");
@@ -406,15 +407,17 @@ const Dashboard = () => {
       toast.success(`Restaurant "${newRestaurant.name}" créé avec succès`);
     }
 
+    const tpl = getTemplateById(newRestaurant.template_id);
     await supabase.from("site_settings").insert({
       restaurant_id: restaurant.id,
       restaurant_name: newRestaurant.name,
       is_draft: false,
+      ...(tpl?.settings ?? {}),
     });
 
     setSaving(false);
     setCreateOpen(false);
-    setNewRestaurant({ name: "", slug: "", subscription_id: "", owner_email: "", owner_password: "" });
+    setNewRestaurant({ name: "", slug: "", subscription_id: "", owner_email: "", owner_password: "", template_id: "dark-luxe" });
     fetchData();
   };
 
