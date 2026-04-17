@@ -16,6 +16,9 @@ import LanguageSelector from "@/components/LanguageSelector";
 import AllergensDialog from "@/components/AllergensDialog";
 import ARButton from "@/components/ARButton";
 import MenuListView from "@/components/MenuListView";
+import PopSwipeView from "@/components/menu-views/PopSwipeView";
+import OrganicStoriesView from "@/components/menu-views/OrganicStoriesView";
+import VintageBookView from "@/components/menu-views/VintageBookView";
 import type { Dish } from "@/hooks/useDishes";
 import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS } from "@/lib/platform";
@@ -153,8 +156,8 @@ const Index = () => {
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
       <LanguageSelector multilingual={features.hasMultilingual} />
 
-      {/* Top-left icon buttons */}
-      <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
+      {/* Top-left icon buttons (horizontal row) */}
+      <div className="absolute top-4 left-4 z-20 flex flex-row gap-2">
         {/* Formulas / Info — only show if formulas exist */}
         {formulas.length > 0 && (
           <Dialog>
@@ -254,15 +257,40 @@ const Index = () => {
       </div>
 
       {useListView ? (
-        // Vue liste verticale (editorial / vintage / pop / organic)
         <div className="flex-1 min-h-0">
-          <MenuListView
-            dishes={dishes}
-            layout={layout}
-            onLaunchAR={(d) => handleLaunchAR(d)}
-            isFavorite={isFavorite}
-            onToggleFavorite={toggle}
-          />
+          {layout === "editorial" && (
+            <MenuListView
+              dishes={dishes}
+              layout={layout}
+              onLaunchAR={(d) => handleLaunchAR(d)}
+              isFavorite={isFavorite}
+              onToggleFavorite={toggle}
+            />
+          )}
+          {layout === "vintage" && (
+            <VintageBookView
+              dishes={dishes}
+              onLaunchAR={(d) => handleLaunchAR(d)}
+              isFavorite={isFavorite}
+              onToggleFavorite={toggle}
+            />
+          )}
+          {layout === "pop" && (
+            <PopSwipeView
+              dishes={dishes}
+              onLaunchAR={(d) => handleLaunchAR(d)}
+              isFavorite={isFavorite}
+              onToggleFavorite={toggle}
+            />
+          )}
+          {layout === "organic" && (
+            <OrganicStoriesView
+              dishes={dishes}
+              onLaunchAR={(d) => handleLaunchAR(d)}
+              isFavorite={isFavorite}
+              onToggleFavorite={toggle}
+            />
+          )}
         </div>
       ) : (
         // Vue classique Dark Luxe : 3D + carrousel
