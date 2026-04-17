@@ -156,7 +156,7 @@ export default function OrganicStoriesView({
               <motion.div
                 animate={{ y: [0, -6, 0] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
-                className="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center text-foreground/50 pointer-events-none"
+                className="absolute bottom-6 inset-x-0 mx-auto w-fit flex flex-col items-center text-foreground/50 pointer-events-none"
               >
                 <ChevronUp className="w-4 h-4" />
                 <span className="text-[9px] uppercase tracking-widest">
