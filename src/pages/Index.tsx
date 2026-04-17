@@ -97,12 +97,14 @@ const Index = () => {
     };
   }, [currentDish?.id]);
 
-  // No restaurant parameter = invalid link
-  if (!restaurantId) {
+  // Invalid slug or restaurant inactive/unknown
+  if (!loadingRestaurant && (!slug || !restaurantInfo || restaurantErr)) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground gap-4">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background text-foreground gap-4 p-6 text-center">
         <h1 className="text-2xl font-bold">Menu introuvable</h1>
-        <p className="text-muted-foreground">Ce lien n'est pas valide. Veuillez utiliser le lien fourni par votre restaurant.</p>
+        <p className="text-muted-foreground max-w-md">
+          Ce lien n'est pas valide ou le restaurant est indisponible. Veuillez utiliser le lien fourni par votre restaurant.
+        </p>
       </div>
     );
   }
