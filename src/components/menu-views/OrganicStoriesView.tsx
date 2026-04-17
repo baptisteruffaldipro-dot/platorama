@@ -63,27 +63,30 @@ export default function OrganicStoriesView({
             key={d.id}
             className="snap-start h-full w-full relative flex flex-col justify-end"
           >
-            {/* Background blurred fill */}
-            <img
-              src={d.thumbnail}
-              alt=""
-              aria-hidden
-              className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl opacity-40"
-              loading={i < 2 ? "eager" : "lazy"}
-            />
-            {/* Centered contained dish image */}
-            <div className="absolute inset-x-0 top-28 bottom-[42%] flex items-center justify-center px-8">
-              <img
-                src={d.thumbnail}
-                alt={d.name}
-                className="max-w-full max-h-full object-contain drop-shadow-2xl"
-                loading={i < 2 ? "eager" : "lazy"}
-              />
+            {/* Centered 3D viewer (or contained PNG fallback) — fond uni, sans dégradé */}
+            <div className="absolute inset-x-0 top-28 bottom-[42%] flex items-center justify-center px-6">
+              {hasARModel(d) ? (
+                <ErrorBoundary key={d.id} fallback={
+                  <img
+                    src={d.thumbnail}
+                    alt={d.name}
+                    className="max-w-full max-h-full object-contain"
+                    loading={i < 2 ? "eager" : "lazy"}
+                  />
+                }>
+                  <div className="w-full h-full">
+                    <DishViewer dish={d} />
+                  </div>
+                </ErrorBoundary>
+              ) : (
+                <img
+                  src={d.thumbnail}
+                  alt={d.name}
+                  className="max-w-full max-h-full object-contain"
+                  loading={i < 2 ? "eager" : "lazy"}
+                />
+              )}
             </div>
-            {/* Bottom gradient */}
-            <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-background via-background/90 to-transparent" />
-            {/* Top gradient for category chip */}
-            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background/80 to-transparent" />
 
             {/* Top — category (descendu pour ne pas overlap les icônes) */}
             <div className="absolute top-28 left-4 right-4 flex items-center justify-between z-10">
