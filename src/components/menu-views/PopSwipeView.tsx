@@ -4,6 +4,8 @@ import { Rotate3d, Star, Flame, Heart } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
 import { hasARModel } from "@/lib/dishHasAR";
+import DishViewer from "@/components/DishViewer";
+import ErrorBoundary from "@/components/ErrorBoundary";
 
 interface Props {
   dishes: Dish[];
@@ -91,22 +93,37 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
               boxShadow: "0 30px 60px -20px hsl(var(--accent) / 0.4), 0 0 0 4px hsl(var(--accent) / 0.15)",
             }}
           >
-            <div className="relative h-1/2 overflow-hidden bg-muted/20 flex items-center justify-center p-4">
-              <img
-                src={dish.thumbnail}
-                alt={dish.name}
-                className="max-w-full max-h-full object-contain"
-                draggable={false}
-              />
+            <div className="relative h-1/2 overflow-hidden bg-muted/20 flex items-center justify-center">
+              {hasARModel(dish) ? (
+                <ErrorBoundary key={dish.id} fallback={
+                  <img
+                    src={dish.thumbnail}
+                    alt={dish.name}
+                    className="max-w-full max-h-full object-contain p-4"
+                    draggable={false}
+                  />
+                }>
+                  <div className="w-full h-full pointer-events-none">
+                    <DishViewer dish={dish} />
+                  </div>
+                </ErrorBoundary>
+              ) : (
+                <img
+                  src={dish.thumbnail}
+                  alt={dish.name}
+                  className="max-w-full max-h-full object-contain p-4"
+                  draggable={false}
+                />
+              )}
               <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-card to-transparent pointer-events-none" />
               {dish.badge && (
-                <div className="absolute top-4 left-4">
+                <div className="absolute top-4 left-4 z-10">
                   <Badge badge={dish.badge} />
                 </div>
               )}
               <button
                 onClick={() => onToggleFavorite(dish.id)}
-                className="absolute top-4 right-4 w-9 h-9 rounded-full bg-background/70 backdrop-blur-md flex items-center justify-center"
+                className="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-background/70 backdrop-blur-md flex items-center justify-center"
               >
                 <Star
                   className={`w-4 h-4 ${
