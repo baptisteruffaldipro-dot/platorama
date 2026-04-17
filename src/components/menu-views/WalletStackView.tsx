@@ -14,16 +14,16 @@ interface Props {
   onToggleFavorite: (id: string) => void;
 }
 
-// Palette par catégorie — tons soutenus (moins pastel)
+// Palette pastel par catégorie (3 couleurs douces)
 const CATEGORY_COLORS: Record<string, { bg: string; accent: string; text: string }> = {
-  entrée: { bg: "#A8C29A", accent: "#2F4A26", text: "#142010" }, // vert sauge profond
-  entree: { bg: "#A8C29A", accent: "#2F4A26", text: "#142010" },
-  plat: { bg: "#D9B98A", accent: "#5C3A1A", text: "#2A180A" }, // ocre chaud
-  plats: { bg: "#D9B98A", accent: "#5C3A1A", text: "#2A180A" },
-  dessert: { bg: "#E29DAA", accent: "#6E2230", text: "#36101A" }, // rose terracotta
-  desserts: { bg: "#E29DAA", accent: "#6E2230", text: "#36101A" },
+  entrée: { bg: "#D9E5D2", accent: "#4F6B43", text: "#243A1C" }, // vert tilleul
+  entree: { bg: "#D9E5D2", accent: "#4F6B43", text: "#243A1C" },
+  plat: { bg: "#F5E6D3", accent: "#8B6F47", text: "#3D2817" }, // beige sable
+  plats: { bg: "#F5E6D3", accent: "#8B6F47", text: "#3D2817" },
+  dessert: { bg: "#F3D9DC", accent: "#9B4A55", text: "#4A1F26" }, // rose poudré
+  desserts: { bg: "#F3D9DC", accent: "#9B4A55", text: "#4A1F26" },
 };
-const FALLBACK_COLOR = { bg: "#9DB1CC", accent: "#1F3554", text: "#0F1A2A" };
+const FALLBACK_COLOR = { bg: "#D4DEF0", accent: "#3F5577", text: "#1F2D45" };
 
 const colorForCategory = (cat: string) => {
   const key = cat
