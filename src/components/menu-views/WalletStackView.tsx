@@ -144,10 +144,10 @@ export default function WalletStackView({
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.25, delay: 0.1 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="flex flex-col h-[calc(100%-64px)]"
+                        className="flex flex-col h-[calc(100%-58px)]"
                       >
-                        {/* Visuel 3D / image */}
-                        <div className="flex-1 min-h-0 px-4 flex items-center justify-center">
+                        {/* Visuel 3D / image — padding réduit */}
+                        <div className="flex-1 min-h-0 px-2 -my-1 flex items-center justify-center">
                           {hasARModel(d) ? (
                             <ErrorBoundary
                               key={d.id}
