@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { Rotate3d, Star } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -43,29 +43,40 @@ export default function WalletStackView({
   const { t } = useTranslation();
   // Première carte ouverte par défaut
   const [openIdx, setOpenIdx] = useState<number>(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+
+  // Recentre la carte ouverte dans la zone scrollable
+  useEffect(() => {
+    if (openIdx < 0) return;
+    const card = cardRefs.current[openIdx];
+    const scroller = scrollRef.current;
+    if (!card || !scroller) return;
+    const id = window.setTimeout(() => {
+      const cardTop = card.offsetTop;
+      const cardH = card.offsetHeight;
+      const target = cardTop - (scroller.clientHeight - cardH) / 2;
+      scroller.scrollTo({ top: Math.max(0, target), behavior: "smooth" });
+    }, 320);
+    return () => window.clearTimeout(id);
+  }, [openIdx]);
 
   if (dishes.length === 0) return null;
 
   return (
-    <div className="h-full flex flex-col pt-24 pb-6 px-4 relative overflow-hidden">
-      {/* Header */}
-      <div className="text-center mb-5">
+    <div className="h-full flex flex-col pt-20 pb-4 px-4 relative overflow-hidden">
+      {/* Header discret */}
+      <div className="text-center mb-3">
         <p
-          className="text-[10px] uppercase tracking-[0.4em] text-foreground/50"
+          className="text-[9px] uppercase tracking-[0.4em] text-foreground/50"
           style={{ fontFamily: "var(--font-body)" }}
         >
           {t("Notre carte")}
         </p>
-        <h2
-          className="text-2xl mt-1 text-foreground"
-          style={{ fontFamily: "var(--font-serif)" }}
-        >
-          {t("Touchez une carte")}
-        </h2>
       </div>
 
       {/* Stack de cartes plats */}
-      <div className="flex-1 min-h-0 overflow-y-auto -mx-4 px-4 pb-12">
+      <div ref={scrollRef} className="flex-1 min-h-0 overflow-y-auto -mx-4 px-4 pb-12">
         <div className="relative">
           <LayoutGroup>
             {dishes.map((d, i) => {
@@ -81,6 +92,7 @@ export default function WalletStackView({
               return (
                 <motion.div
                   key={d.id}
+                  ref={(el) => (cardRefs.current[i] = el)}
                   layout
                   initial={false}
                   animate={{ top, height }}
@@ -132,10 +144,10 @@ export default function WalletStackView({
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.25, delay: 0.1 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="flex flex-col h-[calc(100%-64px)]"
+                        className="flex flex-col h-[calc(100%-58px)]"
                       >
-                        {/* Visuel 3D / image */}
-                        <div className="flex-1 min-h-0 px-4 flex items-center justify-center">
+                        {/* Visuel 3D / image — padding réduit */}
+                        <div className="flex-1 min-h-0 px-2 -my-1 flex items-center justify-center">
                           {hasARModel(d) ? (
                             <ErrorBoundary
                               key={d.id}
