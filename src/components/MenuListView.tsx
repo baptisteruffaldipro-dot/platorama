@@ -325,14 +325,16 @@ function OrganicFeed({ grouped, categories, t, onLaunchAR, isFavorite, onToggleF
                       <Clock className="w-2.5 h-2.5" /> {d.prep_time}min
                     </span>
                   )}
-                  {/* AR CTA on image */}
-                  <button
-                    onClick={() => onLaunchAR(d)}
-                    className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-foreground text-background text-xs font-semibold shadow-xl active:scale-95"
-                  >
-                    <Rotate3d className="w-3.5 h-3.5" />
-                    Voir en AR
-                  </button>
+                  {/* AR CTA on image — masqué si pas de modèle 3D */}
+                  {hasARModel(d) && (
+                    <button
+                      onClick={() => onLaunchAR(d)}
+                      className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-foreground text-background text-xs font-semibold shadow-xl active:scale-95"
+                    >
+                      <Rotate3d className="w-3.5 h-3.5" />
+                      Voir en AR
+                    </button>
+                  )}
                 </div>
                 <div className="px-4 py-3">
                   <div className="flex items-center justify-between gap-2 mb-1">
