@@ -93,7 +93,7 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                 <img
                   src={d.thumbnail}
                   alt={d.name}
-                  className="w-20 h-20 object-cover rounded-md shrink-0 bg-muted/30"
+                  className="w-14 h-14 object-cover rounded-md shrink-0 bg-muted/30"
                   loading="lazy"
                 />
                 <div className="flex-1 min-w-0">
