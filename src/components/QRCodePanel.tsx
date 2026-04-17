@@ -72,12 +72,18 @@ const QRCodePanel = ({ restaurantId, restaurantName, slug: slugProp }: QRCodePan
       </h3>
       <div className="flex flex-col sm:flex-row items-center gap-4">
         <div ref={svgRef} className="bg-white p-4 rounded-lg">
-          <QRCodeSVG
-            value={menuUrl}
-            size={180}
-            level="H"
-            includeMargin={false}
-          />
+          {menuUrl ? (
+            <QRCodeSVG
+              value={menuUrl}
+              size={180}
+              level="H"
+              includeMargin={false}
+            />
+          ) : (
+            <div className="w-[180px] h-[180px] flex items-center justify-center text-xs text-muted-foreground">
+              Chargement…
+            </div>
+          )}
         </div>
         <div className="flex-1 space-y-2 text-center sm:text-left">
           <p className="text-sm text-muted-foreground">
