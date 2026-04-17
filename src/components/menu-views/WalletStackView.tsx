@@ -14,15 +14,24 @@ interface Props {
   onToggleFavorite: (id: string) => void;
 }
 
-// Palette pastel cyclique inspirée d'Apple Wallet
-const PASTEL_PALETTE = [
-  { bg: "#F5E6D3", accent: "#8B6F47", text: "#3D2817" }, // beige sable
-  { bg: "#D4DEF0", accent: "#3F5577", text: "#1F2D45" }, // bleu nuage
-  { bg: "#D9E5D2", accent: "#4F6B43", text: "#243A1C" }, // vert tilleul
-  { bg: "#F3D9DC", accent: "#9B4A55", text: "#4A1F26" }, // rose poudré
-  { bg: "#EFE3CF", accent: "#7A6233", text: "#3A2D14" }, // crème miel
-  { bg: "#E0D6E8", accent: "#5E477A", text: "#2C1F40" }, // lavande
-];
+// Palette pastel par catégorie (3 couleurs fixes)
+const CATEGORY_COLORS: Record<string, { bg: string; accent: string; text: string }> = {
+  entrée: { bg: "#D9E5D2", accent: "#4F6B43", text: "#243A1C" }, // vert tilleul
+  entree: { bg: "#D9E5D2", accent: "#4F6B43", text: "#243A1C" },
+  plat: { bg: "#F5E6D3", accent: "#8B6F47", text: "#3D2817" }, // beige sable
+  plats: { bg: "#F5E6D3", accent: "#8B6F47", text: "#3D2817" },
+  dessert: { bg: "#F3D9DC", accent: "#9B4A55", text: "#4A1F26" }, // rose poudré
+  desserts: { bg: "#F3D9DC", accent: "#9B4A55", text: "#4A1F26" },
+};
+const FALLBACK_COLOR = { bg: "#D4DEF0", accent: "#3F5577", text: "#1F2D45" };
+
+const colorForCategory = (cat: string) => {
+  const key = cat
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+  return CATEGORY_COLORS[key] ?? CATEGORY_COLORS[key.replace(/s$/, "")] ?? FALLBACK_COLOR;
+};
 
 // Hauteur de la "tête" visible d'une carte fermée dans la pile
 const CARD_PEEK = 78;
@@ -81,7 +90,7 @@ export default function WalletStackView({
           <LayoutGroup>
             {dishes.map((d, i) => {
               const isOpen = i === openIdx;
-              const color = PASTEL_PALETTE[i % PASTEL_PALETTE.length];
+              const color = colorForCategory(d.category);
               // Position verticale : somme des hauteurs précédentes (ouverte ou peek)
               let top = 0;
               for (let k = 0; k < i; k++) {
