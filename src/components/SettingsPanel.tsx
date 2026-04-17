@@ -190,8 +190,8 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
 
       {/* Templates */}
       <TemplateGallery
-        currentSettings={form}
-        onApply={(tpl) => setForm((f) => ({ ...f, ...tpl }))}
+        currentTemplateId={form.template_id}
+        onApply={(tpl) => setForm((f) => ({ ...f, ...tpl.settings, template_id: tpl.id }))}
       />
 
       {/* Restaurant name */}
