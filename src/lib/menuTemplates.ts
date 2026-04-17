@@ -2,7 +2,7 @@
 // Chaque template définit une palette + typographie + LAYOUT.
 // Sert de point de départ : couleurs/polices restent éditables ensuite.
 
-export type LayoutVariant = "classic" | "editorial" | "vintage" | "pop" | "organic";
+export type LayoutVariant = "classic" | "editorial" | "vintage" | "pop" | "organic" | "wallet";
 
 export interface MenuTemplate {
   id: string;
@@ -124,6 +124,26 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
       button_text_color: "#ffffff",
       heading_font: "Merriweather",
       body_font: "Lora",
+    },
+  },
+  {
+    id: "pastel-wallet",
+    name: "Pastel Wallet",
+    description: "Cartes empilées colorées — moderne et ludique",
+    layout: "wallet",
+    preview: {
+      background: "#f5efe6",
+      text: "#2d2418",
+      accent: "#8b6f47",
+      accentText: "#ffffff",
+    },
+    settings: {
+      background_color: "#f5efe6",
+      text_color: "#2d2418",
+      button_bg_color: "#8b6f47",
+      button_text_color: "#ffffff",
+      heading_font: "Playfair Display",
+      body_font: "Inter",
     },
   },
 ];
