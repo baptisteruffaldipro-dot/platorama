@@ -153,8 +153,8 @@ const Index = () => {
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
       <LanguageSelector multilingual={features.hasMultilingual} />
 
-      {/* Top-left icon buttons */}
-      <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
+      {/* Top-left icon buttons (horizontal row) */}
+      <div className="absolute top-4 left-4 z-20 flex flex-row gap-2">
         {/* Formulas / Info — only show if formulas exist */}
         {formulas.length > 0 && (
           <Dialog>
