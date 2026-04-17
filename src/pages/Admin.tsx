@@ -565,10 +565,11 @@ const Admin = () => {
                 <span className="hidden sm:inline">Ajouter</span>
               </Button>
             )}
-            <Button size="sm" variant="outline" className="h-9 px-2 sm:px-3" onClick={() => {
-              const params = new URLSearchParams(window.location.search);
-              const rid = params.get("restaurant");
-              window.open(rid ? `/menu?restaurant=${rid}` : "/menu", "_blank");
+            <Button size="sm" variant="outline" className="h-9 px-2 sm:px-3" onClick={async () => {
+              if (!restaurantId) return;
+              const { data } = await supabase.from("restaurants").select("slug").eq("id", restaurantId).maybeSingle();
+              if (data?.slug) window.open(`/m/${data.slug}`, "_blank");
+              else toast.error("Slug introuvable pour ce restaurant.");
             }}>
               <Eye className="w-4 h-4 sm:mr-1" />
               <span className="hidden sm:inline">Voir le menu</span>
