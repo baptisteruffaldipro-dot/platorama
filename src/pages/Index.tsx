@@ -15,6 +15,8 @@ import SplashScreen from "@/components/SplashScreen";
 import LanguageSelector from "@/components/LanguageSelector";
 import AllergensDialog from "@/components/AllergensDialog";
 import ARButton from "@/components/ARButton";
+import MenuListView from "@/components/MenuListView";
+import type { Dish } from "@/hooks/useDishes";
 import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS } from "@/lib/platform";
 import { Info, ChefHat, BookOpen } from "lucide-react";
@@ -109,17 +111,17 @@ const Index = () => {
 
   const dish = currentDish;
 
-  const handleLaunchAR = () => {
+  const handleLaunchAR = (target: Dish = dish) => {
     const hostname = window.location.hostname;
     const publishedOrigin = "https://virtual-plate-show.lovable.app";
     const shouldUsePublicOrigin =
       hostname.includes("lovableproject.com") || hostname.includes("id-preview");
     const assetOrigin = shouldUsePublicOrigin ? publishedOrigin : window.location.origin;
 
-    if (isIOS() && dish.model_ios) {
-      const modelUrl = dish.model_ios.startsWith("http")
-        ? dish.model_ios
-        : `${assetOrigin}${dish.model_ios}`;
+    if (isIOS() && target.model_ios) {
+      const modelUrl = target.model_ios.startsWith("http")
+        ? target.model_ios
+        : `${assetOrigin}${target.model_ios}`;
       const a = document.createElement("a");
       a.rel = "ar";
       a.href = modelUrl;
@@ -129,19 +131,22 @@ const Index = () => {
       document.body.appendChild(a);
       a.click();
       setTimeout(() => a.remove(), 2000);
-    } else if (dish.model_android) {
-      const modelUrl = dish.model_android.startsWith("http")
-        ? dish.model_android
-        : `${assetOrigin}${dish.model_android}`;
+    } else if (target.model_android) {
+      const modelUrl = target.model_android.startsWith("http")
+        ? target.model_android
+        : `${assetOrigin}${target.model_android}`;
       const url = `intent://arvr.google.com/scene-viewer/1.0?file=${modelUrl}&mode=ar_preferred#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;end;`;
       window.location.href = url;
     }
 
     supabase
       .from("dish_events")
-      .insert({ dish_id: dish.id, event_type: "ar_click" })
+      .insert({ dish_id: target.id, event_type: "ar_click" })
       .then();
   };
+
+  const layout = getLayoutVariant(siteSettings?.template_id);
+  const useListView = layout !== "classic";
 
   return (
     <div className="h-full flex flex-col relative overflow-hidden bg-background">
@@ -248,35 +253,51 @@ const Index = () => {
         )}
       </div>
 
-      <div className="flex-1 flex items-center justify-center relative">
-        <ErrorBoundary key={dish.id} fallback={<DishViewerErrorFallback dish={dish} />}>
-          <DishViewer key={dish.id} dish={dish} />
-        </ErrorBoundary>
-      </div>
-
-      <div className="pb-safe relative">
-        <DishInfo
-          dish={dish}
-          isFavorite={isFavorite(dish.id)}
-          onToggleFavorite={() => toggle(dish.id)}
-          layout={getLayoutVariant(siteSettings?.template_id)}
-        />
-
-        {/* CTA AR — animé + tooltip 1ère visite */}
-        <ARButton
-          onClick={handleLaunchAR}
-          layout={getLayoutVariant(siteSettings?.template_id)}
-          restaurantId={restaurantId}
-        />
-
-        <div className="mt-2 pb-4">
-          <DishCarousel
+      {useListView ? (
+        // Vue liste verticale (editorial / vintage / pop / organic)
+        <div className="flex-1 min-h-0">
+          <MenuListView
             dishes={dishes}
-            activeIndex={safeIndex}
-            onSelect={setActiveIndex}
+            layout={layout}
+            onLaunchAR={(d) => handleLaunchAR(d)}
+            isFavorite={isFavorite}
+            onToggleFavorite={toggle}
           />
         </div>
-      </div>
+      ) : (
+        // Vue classique Dark Luxe : 3D + carrousel
+        <>
+          <div className="flex-1 flex items-center justify-center relative">
+            <ErrorBoundary key={dish.id} fallback={<DishViewerErrorFallback dish={dish} />}>
+              <DishViewer key={dish.id} dish={dish} />
+            </ErrorBoundary>
+          </div>
+
+          <div className="pb-safe relative">
+            <DishInfo
+              dish={dish}
+              isFavorite={isFavorite(dish.id)}
+              onToggleFavorite={() => toggle(dish.id)}
+              layout={layout}
+            />
+
+            {/* CTA AR — animé + tooltip 1ère visite */}
+            <ARButton
+              onClick={() => handleLaunchAR()}
+              layout={layout}
+              restaurantId={restaurantId}
+            />
+
+            <div className="mt-2 pb-4">
+              <DishCarousel
+                dishes={dishes}
+                activeIndex={safeIndex}
+                onSelect={setActiveIndex}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
