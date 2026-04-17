@@ -83,11 +83,7 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
             animate={{ x: 0, opacity: 1, rotate: 0 }}
             exit={{ x: direction * -300, opacity: 0, rotate: direction * -8 }}
             transition={{ type: "spring", stiffness: 260, damping: 30 }}
-            drag="x"
-            dragConstraints={{ left: 0, right: 0 }}
-            dragElastic={0.5}
-            onDragEnd={onDragEnd}
-            className="absolute inset-0 rounded-3xl overflow-hidden cursor-grab active:cursor-grabbing select-none"
+            className="absolute inset-0 rounded-3xl overflow-hidden select-none"
             style={{
               background: "hsl(var(--card))",
               boxShadow: "0 30px 60px -20px hsl(var(--accent) / 0.4), 0 0 0 4px hsl(var(--accent) / 0.15)",
@@ -103,7 +99,7 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
                     draggable={false}
                   />
                 }>
-                  <div className="w-full h-full pointer-events-none">
+                  <div className="w-full h-full">
                     <DishViewer dish={dish} />
                   </div>
                 </ErrorBoundary>
@@ -132,7 +128,13 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
                 />
               </button>
             </div>
-            <div className="px-5 pt-4 pb-5 h-1/2 flex flex-col">
+            <motion.div
+              drag="x"
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.5}
+              onDragEnd={onDragEnd}
+              className="px-5 pt-4 pb-5 h-1/2 flex flex-col cursor-grab active:cursor-grabbing"
+            >
               <p className="text-[10px] font-black tracking-widest uppercase text-accent">
                 {t(dish.category)}
               </p>
@@ -165,14 +167,34 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
                   </button>
                 )}
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         </AnimatePresence>
       </div>
 
+      {/* Navigation arrows (alternative au swipe quand on tourne le 3D) */}
+      <div className="flex items-center gap-4 mt-4">
+        <button
+          onClick={prev}
+          disabled={index === 0}
+          className="w-10 h-10 rounded-full bg-foreground/10 text-foreground flex items-center justify-center disabled:opacity-30 active:scale-95 text-xl"
+          aria-label="Précédent"
+        >
+          ‹
+        </button>
+        <button
+          onClick={next}
+          disabled={index === dishes.length - 1}
+          className="w-10 h-10 rounded-full bg-foreground/10 text-foreground flex items-center justify-center disabled:opacity-30 active:scale-95 text-xl"
+          aria-label="Suivant"
+        >
+          ›
+        </button>
+      </div>
+
       {/* Hint */}
-      <p className="mt-6 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
-        ← {t("Glissez pour explorer")} →
+      <p className="mt-3 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
+        {t("Touchez le plat pour le faire pivoter")}
       </p>
     </div>
   );
