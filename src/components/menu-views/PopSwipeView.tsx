@@ -138,13 +138,15 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
                 >
                   {dish.price.toFixed(0)}€
                 </span>
-                <button
-                  onClick={() => onLaunchAR(dish)}
-                  className="flex-1 inline-flex items-center justify-center gap-2 h-12 px-5 rounded-full bg-foreground text-background text-sm font-bold uppercase tracking-wider active:scale-95 shadow-lg"
-                >
-                  <Rotate3d className="w-4 h-4" />
-                  Voir en AR
-                </button>
+                {hasARModel(dish) && (
+                  <button
+                    onClick={() => onLaunchAR(dish)}
+                    className="flex-1 inline-flex items-center justify-center gap-2 h-12 px-5 rounded-full bg-foreground text-background text-sm font-bold uppercase tracking-wider active:scale-95 shadow-lg"
+                  >
+                    <Rotate3d className="w-4 h-4" />
+                    Voir en AR
+                  </button>
+                )}
               </div>
             </div>
           </motion.div>
