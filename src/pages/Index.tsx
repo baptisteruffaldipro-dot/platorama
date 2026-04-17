@@ -253,35 +253,51 @@ const Index = () => {
         )}
       </div>
 
-      <div className="flex-1 flex items-center justify-center relative">
-        <ErrorBoundary key={dish.id} fallback={<DishViewerErrorFallback dish={dish} />}>
-          <DishViewer key={dish.id} dish={dish} />
-        </ErrorBoundary>
-      </div>
-
-      <div className="pb-safe relative">
-        <DishInfo
-          dish={dish}
-          isFavorite={isFavorite(dish.id)}
-          onToggleFavorite={() => toggle(dish.id)}
-          layout={getLayoutVariant(siteSettings?.template_id)}
-        />
-
-        {/* CTA AR — animé + tooltip 1ère visite */}
-        <ARButton
-          onClick={handleLaunchAR}
-          layout={getLayoutVariant(siteSettings?.template_id)}
-          restaurantId={restaurantId}
-        />
-
-        <div className="mt-2 pb-4">
-          <DishCarousel
+      {useListView ? (
+        // Vue liste verticale (editorial / vintage / pop / organic)
+        <div className="flex-1 min-h-0">
+          <MenuListView
             dishes={dishes}
-            activeIndex={safeIndex}
-            onSelect={setActiveIndex}
+            layout={layout}
+            onLaunchAR={(d) => handleLaunchAR(d)}
+            isFavorite={isFavorite}
+            onToggleFavorite={toggle}
           />
         </div>
-      </div>
+      ) : (
+        // Vue classique Dark Luxe : 3D + carrousel
+        <>
+          <div className="flex-1 flex items-center justify-center relative">
+            <ErrorBoundary key={dish.id} fallback={<DishViewerErrorFallback dish={dish} />}>
+              <DishViewer key={dish.id} dish={dish} />
+            </ErrorBoundary>
+          </div>
+
+          <div className="pb-safe relative">
+            <DishInfo
+              dish={dish}
+              isFavorite={isFavorite(dish.id)}
+              onToggleFavorite={() => toggle(dish.id)}
+              layout={layout}
+            />
+
+            {/* CTA AR — animé + tooltip 1ère visite */}
+            <ARButton
+              onClick={() => handleLaunchAR()}
+              layout={layout}
+              restaurantId={restaurantId}
+            />
+
+            <div className="mt-2 pb-4">
+              <DishCarousel
+                dishes={dishes}
+                activeIndex={safeIndex}
+                onSelect={setActiveIndex}
+              />
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
