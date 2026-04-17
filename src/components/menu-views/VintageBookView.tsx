@@ -48,7 +48,7 @@ export default function VintageBookView({
   const items = grouped[cat] ?? [];
 
   return (
-    <div className="h-full flex flex-col px-2 pt-24 pb-16 relative overflow-hidden">
+    <div className="h-full flex flex-col px-2 pt-20 pb-8 relative overflow-hidden">
       {/* Page tabs */}
       <div className="flex items-center justify-center gap-5 mb-4">
         {categories.map((c, i) => (
