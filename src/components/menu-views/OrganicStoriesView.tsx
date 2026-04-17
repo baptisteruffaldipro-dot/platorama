@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Rotate3d, Star, Leaf, ChevronUp } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
+import { hasARModel } from "@/lib/dishHasAR";
 
 interface Props {
   dishes: Dish[];
@@ -133,13 +134,15 @@ export default function OrganicStoriesView({
                 >
                   {d.price.toFixed(2)} €
                 </span>
-                <button
-                  onClick={() => onLaunchAR(d)}
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground text-background text-sm font-semibold active:scale-95 shadow-xl"
-                >
-                  <Rotate3d className="w-4 h-4" />
-                  {t("Voir en AR")}
-                </button>
+                {hasARModel(d) && (
+                  <button
+                    onClick={() => onLaunchAR(d)}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground text-background text-sm font-semibold active:scale-95 shadow-xl"
+                  >
+                    <Rotate3d className="w-4 h-4" />
+                    {t("Voir en AR")}
+                  </button>
+                )}
               </div>
             </motion.div>
 

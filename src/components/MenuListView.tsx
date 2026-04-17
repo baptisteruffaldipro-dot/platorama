@@ -3,6 +3,7 @@ import { Rotate3d, Clock, Leaf, Star, Flame, Heart } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
 import type { LayoutVariant } from "@/lib/menuTemplates";
+import { hasARModel } from "@/lib/dishHasAR";
 
 interface Props {
   dishes: Dish[];
@@ -121,13 +122,15 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                         <Star className={`w-3.5 h-3.5 ${isFavorite(d.id) ? "fill-accent text-accent" : "text-muted-foreground"}`} />
                       </button>
                     </div>
-                    <button
-                      onClick={() => onLaunchAR(d)}
-                      className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-accent text-accent-foreground hover:opacity-90 active:scale-95 transition-all shadow-md"
-                    >
-                      <Rotate3d className="w-3.5 h-3.5" />
-                      Voir en AR
-                    </button>
+                    {hasARModel(d) && (
+                      <button
+                        onClick={() => onLaunchAR(d)}
+                        className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-accent text-accent-foreground hover:opacity-90 active:scale-95 transition-all shadow-md"
+                      >
+                        <Rotate3d className="w-3.5 h-3.5" />
+                        Voir en AR
+                      </button>
+                    )}
                   </div>
                 </div>
               </motion.li>
@@ -184,16 +187,18 @@ function VintageList({ grouped, categories, t, onLaunchAR, isFavorite, onToggleF
                   </span>
                   {d.badge && <BadgeChip badge={d.badge} />}
                 </div>
-                <div>
-                  <button
-                    onClick={() => onLaunchAR(d)}
-                    className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] px-4 py-1.5 border-2 border-accent/30 text-accent hover:bg-accent hover:text-accent-foreground transition-colors"
-                    style={{ fontFamily: "var(--font-serif)" }}
-                  >
-                    <Rotate3d className="w-3 h-3" />
-                    Voir sur ma table
-                  </button>
-                </div>
+                {hasARModel(d) && (
+                  <div>
+                    <button
+                      onClick={() => onLaunchAR(d)}
+                      className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] px-4 py-1.5 border-2 border-accent/30 text-accent hover:bg-accent hover:text-accent-foreground transition-colors"
+                      style={{ fontFamily: "var(--font-serif)" }}
+                    >
+                      <Rotate3d className="w-3 h-3" />
+                      Voir sur ma table
+                    </button>
+                  </div>
+                )}
                 {i < grouped[cat].length - 1 && (
                   <div className="mt-6 text-accent/40 text-sm tracking-widest">✦ ✦ ✦</div>
                 )}
@@ -227,8 +232,9 @@ function PopGrid({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavor
             transition={{ delay: i * 0.04 }}
           >
             <button
-              onClick={() => onLaunchAR(d)}
-              className="w-full text-left rounded-2xl border-2 border-accent/40 hover:border-accent transition-all px-3 py-3 flex items-center gap-3 active:scale-[0.98]"
+              onClick={hasARModel(d) ? () => onLaunchAR(d) : undefined}
+              disabled={!hasARModel(d)}
+              className="w-full text-left rounded-2xl border-2 border-accent/40 hover:border-accent transition-all px-3 py-3 flex items-center gap-3 active:scale-[0.98] disabled:cursor-default disabled:active:scale-100 disabled:hover:border-accent/40"
               style={{ background: "hsl(var(--background))" }}
             >
               <img
@@ -259,7 +265,7 @@ function PopGrid({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavor
                 >
                   {d.price.toFixed(0)}€
                 </span>
-                <Rotate3d className="w-4 h-4 text-accent" />
+                {hasARModel(d) && <Rotate3d className="w-4 h-4 text-accent" />}
               </div>
               <button
                 onClick={(e) => {
@@ -319,14 +325,16 @@ function OrganicFeed({ grouped, categories, t, onLaunchAR, isFavorite, onToggleF
                       <Clock className="w-2.5 h-2.5" /> {d.prep_time}min
                     </span>
                   )}
-                  {/* AR CTA on image */}
-                  <button
-                    onClick={() => onLaunchAR(d)}
-                    className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-foreground text-background text-xs font-semibold shadow-xl active:scale-95"
-                  >
-                    <Rotate3d className="w-3.5 h-3.5" />
-                    Voir en AR
-                  </button>
+                  {/* AR CTA on image — masqué si pas de modèle 3D */}
+                  {hasARModel(d) && (
+                    <button
+                      onClick={() => onLaunchAR(d)}
+                      className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-foreground text-background text-xs font-semibold shadow-xl active:scale-95"
+                    >
+                      <Rotate3d className="w-3.5 h-3.5" />
+                      Voir en AR
+                    </button>
+                  )}
                 </div>
                 <div className="px-4 py-3">
                   <div className="flex items-center justify-between gap-2 mb-1">

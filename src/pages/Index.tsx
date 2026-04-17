@@ -23,6 +23,7 @@ import VintageBookView from "@/components/menu-views/VintageBookView";
 import type { Dish } from "@/hooks/useDishes";
 import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS } from "@/lib/platform";
+import { hasARModel } from "@/lib/dishHasAR";
 import { Info, ChefHat, BookOpen } from "lucide-react";
 import {
   Dialog,
@@ -314,12 +315,14 @@ const Index = () => {
               layout={layout}
             />
 
-            {/* CTA AR — animé + tooltip 1ère visite */}
-            <ARButton
-              onClick={() => handleLaunchAR()}
-              layout={layout}
-              restaurantId={restaurantId}
-            />
+            {/* CTA AR — animé + tooltip 1ère visite — masqué si pas de modèle 3D */}
+            {hasARModel(dish) && (
+              <ARButton
+                onClick={() => handleLaunchAR()}
+                layout={layout}
+                restaurantId={restaurantId}
+              />
+            )}
 
             <div className="mt-2 pb-4">
               <DishCarousel
