@@ -232,8 +232,9 @@ function PopGrid({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavor
             transition={{ delay: i * 0.04 }}
           >
             <button
-              onClick={() => onLaunchAR(d)}
-              className="w-full text-left rounded-2xl border-2 border-accent/40 hover:border-accent transition-all px-3 py-3 flex items-center gap-3 active:scale-[0.98]"
+              onClick={hasARModel(d) ? () => onLaunchAR(d) : undefined}
+              disabled={!hasARModel(d)}
+              className="w-full text-left rounded-2xl border-2 border-accent/40 hover:border-accent transition-all px-3 py-3 flex items-center gap-3 active:scale-[0.98] disabled:cursor-default disabled:active:scale-100 disabled:hover:border-accent/40"
               style={{ background: "hsl(var(--background))" }}
             >
               <img
@@ -264,7 +265,7 @@ function PopGrid({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavor
                 >
                   {d.price.toFixed(0)}€
                 </span>
-                <Rotate3d className="w-4 h-4 text-accent" />
+                {hasARModel(d) && <Rotate3d className="w-4 h-4 text-accent" />}
               </div>
               <button
                 onClick={(e) => {
