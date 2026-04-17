@@ -58,9 +58,9 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
   if (!dish) return null;
 
   return (
-    <div className="h-full flex flex-col items-center justify-center px-4 pt-20 pb-32 relative">
+    <div className="h-full flex flex-col items-center justify-start px-4 pt-32 pb-24 relative">
       {/* Counter */}
-      <div className="absolute top-20 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
+      <div className="flex gap-1.5 z-10 mb-3">
         {dishes.map((_, i) => (
           <span
             key={i}
@@ -71,7 +71,7 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
         ))}
       </div>
 
-      <div className="relative w-full max-w-sm aspect-[3/4]">
+      <div className="relative w-full max-w-sm flex-1 max-h-[560px] min-h-[480px]">
         <AnimatePresence mode="popLayout" custom={direction}>
           <motion.div
             key={dish.id}
@@ -90,14 +90,14 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
               boxShadow: "0 30px 60px -20px hsl(var(--accent) / 0.4), 0 0 0 4px hsl(var(--accent) / 0.15)",
             }}
           >
-            <div className="relative h-3/5 overflow-hidden">
+            <div className="relative h-1/2 overflow-hidden bg-muted/20 flex items-center justify-center p-4">
               <img
                 src={dish.thumbnail}
                 alt={dish.name}
-                className="w-full h-full object-cover"
+                className="max-w-full max-h-full object-contain"
                 draggable={false}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent" />
+              <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-card to-transparent pointer-events-none" />
               {dish.badge && (
                 <div className="absolute top-4 left-4">
                   <Badge badge={dish.badge} />
@@ -114,7 +114,7 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
                 />
               </button>
             </div>
-            <div className="px-5 pt-3 pb-5 h-2/5 flex flex-col">
+            <div className="px-5 pt-4 pb-5 h-1/2 flex flex-col">
               <p className="text-[10px] font-black tracking-widest uppercase text-accent">
                 {t(dish.category)}
               </p>
@@ -124,12 +124,12 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
               >
                 {t(dish.name)}
               </h2>
-              <p className="text-xs text-foreground/70 mt-1 line-clamp-2 flex-1">
+              <p className="text-xs text-foreground/70 mt-1.5 line-clamp-3 flex-1">
                 {t(dish.ingredients)}
               </p>
-              <div className="flex items-center justify-between mt-2">
+              <div className="flex items-center justify-between mt-3 gap-3">
                 <span
-                  className="text-2xl font-black px-3 py-1 rounded-xl"
+                  className="text-xl font-black h-12 min-w-[64px] px-4 rounded-xl inline-flex items-center justify-center tabular-nums"
                   style={{
                     background: "hsl(var(--accent))",
                     color: "hsl(var(--accent-foreground))",
@@ -139,10 +139,10 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
                 </span>
                 <button
                   onClick={() => onLaunchAR(dish)}
-                  className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full bg-foreground text-background text-xs font-bold uppercase tracking-wider active:scale-95"
+                  className="flex-1 inline-flex items-center justify-center gap-2 h-12 px-5 rounded-full bg-foreground text-background text-sm font-bold uppercase tracking-wider active:scale-95 shadow-lg"
                 >
                   <Rotate3d className="w-4 h-4" />
-                  AR
+                  Voir en AR
                 </button>
               </div>
             </div>

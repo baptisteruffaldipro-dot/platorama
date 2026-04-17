@@ -47,9 +47,9 @@ export default function VintageBookView({
   const items = grouped[cat] ?? [];
 
   return (
-    <div className="h-full flex flex-col px-4 pt-20 pb-24 relative overflow-hidden">
+    <div className="h-full flex flex-col px-3 pt-28 pb-20 relative overflow-hidden">
       {/* Page tabs */}
-      <div className="flex items-center justify-center gap-2 mb-3">
+      <div className="flex items-center justify-center gap-5 mb-4">
         {categories.map((c, i) => (
           <button
             key={c}
@@ -57,9 +57,9 @@ export default function VintageBookView({
               setDir(i > page ? 1 : -1);
               setPage(i);
             }}
-            className={`text-[10px] tracking-[0.3em] uppercase px-2 py-1 transition-colors ${
+            className={`text-sm tracking-[0.25em] uppercase px-3 py-2 transition-colors ${
               i === page
-                ? "text-accent border-b border-accent"
+                ? "text-accent border-b-2 border-accent font-semibold"
                 : "text-muted-foreground"
             }`}
             style={{ fontFamily: "var(--font-serif)" }}

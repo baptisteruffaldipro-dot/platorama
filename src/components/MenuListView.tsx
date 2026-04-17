@@ -90,12 +90,14 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                 transition={{ delay: i * 0.04 }}
                 className="py-4 flex gap-4 items-start"
               >
-                <img
-                  src={d.thumbnail}
-                  alt={d.name}
-                  className="w-14 h-14 object-cover rounded-md shrink-0 bg-muted/30"
-                  loading="lazy"
-                />
+                <div className="w-16 h-16 rounded-md shrink-0 bg-muted/30 overflow-hidden flex items-center justify-center p-1">
+                  <img
+                    src={d.thumbnail}
+                    alt={d.name}
+                    className="w-full h-full object-contain"
+                    loading="lazy"
+                  />
+                </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-baseline gap-2">
                     <h3 className="text-base font-bold text-foreground truncate" style={{ fontFamily: "var(--font-serif)" }}>
@@ -121,10 +123,10 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                     </div>
                     <button
                       onClick={() => onLaunchAR(d)}
-                      className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider px-3 py-1.5 border border-accent text-accent hover:bg-accent hover:text-accent-foreground transition-colors"
+                      className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-accent text-accent-foreground hover:opacity-90 active:scale-95 transition-all shadow-md"
                     >
-                      <Rotate3d className="w-3 h-3" />
-                      AR
+                      <Rotate3d className="w-3.5 h-3.5" />
+                      Voir en AR
                     </button>
                   </div>
                 </div>
