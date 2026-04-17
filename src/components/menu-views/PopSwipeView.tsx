@@ -3,6 +3,7 @@ import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { Rotate3d, Star, Flame, Heart } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
+import { hasARModel } from "@/lib/dishHasAR";
 
 interface Props {
   dishes: Dish[];

@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Rotate3d, Star, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
+import { hasARModel } from "@/lib/dishHasAR";
 
 interface Props {
   dishes: Dish[];
@@ -137,14 +138,16 @@ export default function VintageBookView({
                         }`}
                       />
                     </button>
-                    <button
-                      onClick={() => onLaunchAR(d)}
-                      className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] px-3 py-1.5 border border-accent/40 text-accent hover:bg-accent hover:text-accent-foreground transition-colors rounded-sm"
-                      style={{ fontFamily: "var(--font-serif)" }}
-                    >
-                      <Rotate3d className="w-3 h-3" />
-                      {t("Voir sur ma table")}
-                    </button>
+                    {hasARModel(d) && (
+                      <button
+                        onClick={() => onLaunchAR(d)}
+                        className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] px-3 py-1.5 border border-accent/40 text-accent hover:bg-accent hover:text-accent-foreground transition-colors rounded-sm"
+                        style={{ fontFamily: "var(--font-serif)" }}
+                      >
+                        <Rotate3d className="w-3 h-3" />
+                        {t("Voir sur ma table")}
+                      </button>
+                    )}
                   </div>
                 </motion.li>
               ))}
