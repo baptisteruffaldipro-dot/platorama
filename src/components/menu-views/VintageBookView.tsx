@@ -139,14 +139,20 @@ export default function VintageBookView({
                       />
                     </button>
                     {hasARModel(d) && (
-                      <button
+                      <motion.button
                         onClick={() => onLaunchAR(d)}
-                        className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] px-3 py-1.5 border border-accent/40 text-accent hover:bg-accent hover:text-accent-foreground transition-colors rounded-sm"
-                        style={{ fontFamily: "var(--font-serif)" }}
+                        animate={{ scale: [1, 1.04, 1] }}
+                        transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+                        className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.25em] px-4 py-2 rounded-full font-bold shadow-lg shadow-accent/30"
+                        style={{
+                          fontFamily: "var(--font-serif)",
+                          background: "hsl(var(--accent))",
+                          color: "hsl(var(--accent-foreground))",
+                        }}
                       >
                         <Rotate3d className="w-3 h-3" />
                         {t("Voir sur ma table")}
-                      </button>
+                      </motion.button>
                     )}
                   </div>
                 </motion.li>
