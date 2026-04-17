@@ -37,6 +37,7 @@ import {
   Link,
 } from "lucide-react";
 import logoPlatorama from "@/assets/logo-platorama.png";
+import { MENU_TEMPLATES, getTemplateById } from "@/lib/menuTemplates";
 
 /* ─── Light palette (same as Landing) ─── */
 const c = {
@@ -308,7 +309,7 @@ const Dashboard = () => {
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
   const [createOpen, setCreateOpen] = useState(false);
-  const [newRestaurant, setNewRestaurant] = useState({ name: "", slug: "", subscription_id: "", owner_email: "", owner_password: "" });
+  const [newRestaurant, setNewRestaurant] = useState({ name: "", slug: "", subscription_id: "", owner_email: "", owner_password: "", template_id: "dark-luxe" });
   const [saving, setSaving] = useState(false);
   const [expandedRestaurant, setExpandedRestaurant] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState<"restaurants" | "subscriptions">("restaurants");
@@ -406,15 +407,17 @@ const Dashboard = () => {
       toast.success(`Restaurant "${newRestaurant.name}" créé avec succès`);
     }
 
+    const tpl = getTemplateById(newRestaurant.template_id);
     await supabase.from("site_settings").insert({
       restaurant_id: restaurant.id,
       restaurant_name: newRestaurant.name,
       is_draft: false,
+      ...(tpl?.settings ?? {}),
     });
 
     setSaving(false);
     setCreateOpen(false);
-    setNewRestaurant({ name: "", slug: "", subscription_id: "", owner_email: "", owner_password: "" });
+    setNewRestaurant({ name: "", slug: "", subscription_id: "", owner_email: "", owner_password: "", template_id: "dark-luxe" });
     fetchData();
   };
 
@@ -788,6 +791,32 @@ const Dashboard = () => {
                   </option>
                 ))}
               </select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Template du menu</Label>
+              <p className="text-xs" style={{ color: c.muted }}>Style visuel de départ — entièrement personnalisable ensuite</p>
+              <div className="grid grid-cols-3 gap-2">
+                {MENU_TEMPLATES.map((tpl) => {
+                  const isActive = newRestaurant.template_id === tpl.id;
+                  return (
+                    <button
+                      key={tpl.id}
+                      type="button"
+                      onClick={() => setNewRestaurant((f) => ({ ...f, template_id: tpl.id }))}
+                      className="rounded-lg overflow-hidden border-2 transition-all hover:scale-[1.03] active:scale-95"
+                      style={{ borderColor: isActive ? c.pink : "transparent" }}
+                    >
+                      <div className="p-2 space-y-1" style={{ background: tpl.preview.background, minHeight: 70 }}>
+                        <div className="text-[10px] font-bold truncate" style={{ color: tpl.preview.text, fontFamily: `'${tpl.settings.heading_font}', serif` }}>La Maison</div>
+                        <div className="h-1 rounded-full" style={{ background: tpl.preview.text, opacity: 0.2, width: "70%" }} />
+                        <div className="text-[7px] px-1.5 py-0.5 rounded-full font-bold inline-block" style={{ background: tpl.preview.accent, color: tpl.preview.accentText }}>AR</div>
+                      </div>
+                      <p className="text-[10px] font-semibold py-1 truncate px-1" style={{ background: tpl.preview.background, color: tpl.preview.text }}>{tpl.name}</p>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div className="pt-4 space-y-3" style={{ borderTop: `1px solid ${c.border}` }}>

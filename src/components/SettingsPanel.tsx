@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Upload, Save, Send, Eye, CreditCard, Plus, Trash2 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import QRCodePanel from "@/components/QRCodePanel";
+import TemplateGallery from "@/components/TemplateGallery";
 import {
   useDraftSettings,
   usePublishedSettings,
@@ -184,6 +185,12 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
           Voir en réalité augmentée
         </button>
       </div>
+
+      {/* Templates */}
+      <TemplateGallery
+        currentSettings={form}
+        onApply={(tpl) => setForm((f) => ({ ...f, ...tpl }))}
+      />
 
       {/* Restaurant name */}
       <div>
