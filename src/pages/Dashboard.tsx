@@ -766,7 +766,7 @@ const Dashboard = () => {
                     slug: slugify(e.target.value),
                   }))
                 }
-                placeholder="La Maison"
+                placeholder="Votre restaurant"
               />
             </div>
             <div className="space-y-1">
