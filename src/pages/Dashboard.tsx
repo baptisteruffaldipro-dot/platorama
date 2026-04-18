@@ -809,7 +809,7 @@ const Dashboard = () => {
                       style={{ borderColor: isActive ? c.pink : "transparent" }}
                     >
                       <div className="p-2 space-y-1" style={{ background: tpl.preview.background, minHeight: 70 }}>
-                        <div className="text-[10px] font-bold truncate" style={{ color: tpl.preview.text, fontFamily: `'${tpl.settings.heading_font}', serif` }}>La Maison</div>
+                        <div className="text-[10px] font-bold truncate" style={{ color: tpl.preview.text, fontFamily: `'${tpl.settings.heading_font}', serif` }}>Votre restaurant</div>
                         <div className="h-1 rounded-full" style={{ background: tpl.preview.text, opacity: 0.2, width: "70%" }} />
                         <div className="text-[7px] px-1.5 py-0.5 rounded-full font-bold inline-block" style={{ background: tpl.preview.accent, color: tpl.preview.accentText }}>AR</div>
                       </div>

@@ -36,7 +36,7 @@ export default function TemplateGallery({ currentTemplateId, onApply }: Props) {
                   className="text-xs font-bold truncate"
                   style={{ color: tpl.preview.text, fontFamily: `'${tpl.settings.heading_font}', serif` }}
                 >
-                  La Maison
+                  Votre restaurant
                 </div>
                 <div className="text-[9px] tracking-[0.2em] uppercase opacity-60" style={{ color: tpl.preview.text }}>
                   Menu
