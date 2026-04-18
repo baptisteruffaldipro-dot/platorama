@@ -171,9 +171,9 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
           <img src={form.logo_url} alt="Logo" className="h-12 object-contain" />
         )}
         <h2 className="text-2xl" style={{ fontFamily: `'${form.heading_font}', serif` }}>
-          {form.restaurant_name || "La Maison"}
+          {form.restaurant_name || "Votre restaurant"}
         </h2>
-        <p className="text-xs tracking-[0.3em] uppercase opacity-60">{form.subtitle || "Menu Virtuel"}</p>
+        <p className="text-xs tracking-[0.3em] uppercase opacity-60">{form.subtitle || "Votre signature"}</p>
         <p className="text-sm mt-2" style={{ fontFamily: `'${form.body_font}', serif` }}>
           Filet de bœuf, jus au thym, purée truffée
         </p>
@@ -203,7 +203,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
             <Input
               value={form.restaurant_name}
               onChange={(e) => setForm((f) => ({ ...f, restaurant_name: e.target.value }))}
-              placeholder="La Maison"
+              placeholder="Votre restaurant"
             />
           </div>
           <div className="space-y-1">
@@ -211,7 +211,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
             <Input
               value={form.subtitle}
               onChange={(e) => setForm((f) => ({ ...f, subtitle: e.target.value }))}
-              placeholder="Menu Virtuel"
+              placeholder="Votre signature"
             />
           </div>
         </div>

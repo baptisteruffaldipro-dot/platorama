@@ -11,7 +11,7 @@ const SplashScreen = ({
   const { data: settings, isLoading } = usePublishedSettings(restaurantId);
 
   // Tant que les settings ne sont pas chargés, on affiche un fond neutre
-  // pour éviter le flash "La Maison / Menu Virtuel".
+  // pour éviter tout flash de contenu obsolète.
   const ready = !isLoading && !!settings;
 
   return (
