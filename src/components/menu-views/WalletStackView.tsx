@@ -231,7 +231,7 @@ export default function WalletStackView({
                                 >
                                   <Rotate3d className="w-4 h-4" />
                                 </motion.span>
-                                {t("Voir en AR")}
+                                {t("Voir le plat")}
                               </motion.button>
                             )}
                           </div>

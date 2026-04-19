@@ -95,7 +95,7 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
         style={{ boxShadow: "0 10px 30px -5px hsl(var(--accent) / 0.5)" }}
       >
         <Rotate3d className="w-5 h-5 animate-spin-slow" />
-        <span>{t("Voir sur ma table")}</span>
+        <span>{t("Voir le plat")}</span>
         {/* Tap hand indicator on first visit */}
         {showTooltip && (
           <Hand className="w-5 h-5 absolute -right-2 -bottom-2 text-foreground bg-background rounded-full p-0.5 animate-bounce shadow-lg" />

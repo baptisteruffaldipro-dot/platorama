@@ -128,7 +128,7 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                         className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider px-4 py-2 rounded-full bg-accent text-accent-foreground hover:opacity-90 active:scale-95 transition-all shadow-md"
                       >
                         <Rotate3d className="w-3.5 h-3.5" />
-                        Voir en AR
+                        Voir le plat
                       </button>
                     )}
                   </div>
@@ -202,7 +202,7 @@ function VintageList({ grouped, categories, t, onLaunchAR, isFavorite, onToggleF
                       }}
                     >
                       <Rotate3d className="w-3.5 h-3.5" />
-                      Voir sur ma table
+                      Voir le plat
                     </motion.button>
                   </div>
                 )}
@@ -339,7 +339,7 @@ function OrganicFeed({ grouped, categories, t, onLaunchAR, isFavorite, onToggleF
                       className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-foreground text-background text-xs font-semibold shadow-xl active:scale-95"
                     >
                       <Rotate3d className="w-3.5 h-3.5" />
-                      Voir en AR
+                      Voir le plat
                     </button>
                   )}
                 </div>

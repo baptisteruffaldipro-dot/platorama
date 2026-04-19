@@ -151,7 +151,7 @@ export default function VintageBookView({
                         }}
                       >
                         <Rotate3d className="w-3 h-3" />
-                        {t("Voir sur ma table")}
+                        {t("Voir le plat")}
                       </motion.button>
                     )}
                   </div>
