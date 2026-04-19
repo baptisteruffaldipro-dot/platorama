@@ -61,7 +61,7 @@ const Index = () => {
     });
     // Add static UI texts
     allTexts.push(
-      "Voir sur ma table",
+      "Voir le plat",
       "Allergènes",
       "Note du Chef",
       "Nos Formules",

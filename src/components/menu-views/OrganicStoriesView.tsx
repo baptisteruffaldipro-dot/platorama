@@ -152,7 +152,7 @@ export default function OrganicStoriesView({
                     }}
                   >
                     <Rotate3d className="w-4 h-4" />
-                    {t("Voir en AR")}
+                    {t("Voir le plat")}
                   </motion.button>
                 )}
               </div>

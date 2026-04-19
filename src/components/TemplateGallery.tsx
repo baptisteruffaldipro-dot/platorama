@@ -49,7 +49,7 @@ export default function TemplateGallery({ currentTemplateId, onApply }: Props) {
                   className="text-[8px] px-2 py-1 rounded-full font-semibold text-center mt-2"
                   style={{ background: tpl.preview.accent, color: tpl.preview.accentText }}
                 >
-                  Voir en AR
+                  Voir le plat
                 </div>
               </div>
               <div className="px-2 py-2 text-center" style={{ background: tpl.preview.background }}>
