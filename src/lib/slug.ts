@@ -10,10 +10,11 @@ export function slugify(input: string): string {
 
 /** Build the public URL for a restaurant menu given its slug. */
 export function buildMenuUrl(slug: string, origin?: string): string {
-  // Priorité : origin explicite > variable d'env (URL de prod fixe) > origin courant.
-  // Définir VITE_PUBLIC_MENU_ORIGIN (ex. "https://menu.platorama.fr") pour forcer
-  // les QR codes à pointer vers le domaine de production, même depuis la preview.
+  // Priorité : origin explicite > URL de prod fixe (hardcodée) > variable d'env > origin courant.
+  // PRODUCTION_ORIGIN garantit que les QR codes pointent toujours vers le domaine
+  // de prod, même quand l'admin est ouvert depuis la preview Lovable.
+  const PRODUCTION_ORIGIN = "https://app.platorama.fr";
   const envOrigin = (import.meta.env?.VITE_PUBLIC_MENU_ORIGIN as string | undefined)?.replace(/\/+$/, "");
-  const resolved = origin ?? envOrigin ?? window.location.origin;
+  const resolved = origin ?? PRODUCTION_ORIGIN ?? envOrigin ?? window.location.origin;
   return `${resolved}/m/${slug}`;
 }
