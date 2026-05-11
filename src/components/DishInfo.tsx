@@ -43,7 +43,44 @@ const FavBtn = ({ active, onClick }: { active: boolean; onClick: () => void }) =
   </button>
 );
 
-const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: DishInfoProps) => {
+const CollapsibleDescription = ({ text, layout = "classic" }: { text: string; layout?: LayoutVariant }) => {
+  const [expanded, setExpanded] = useState(false);
+  const isEditorial = layout === "editorial";
+  const maxChars = isEditorial ? 80 : 55;
+  const needsTruncation = text.length > maxChars;
+  const displayed = expanded || !needsTruncation ? text : text.slice(0, maxChars).trimEnd() + "…";
+
+  return (
+    <div className={isEditorial ? "" : "flex flex-col items-center"}>
+      <p
+        className={
+          isEditorial
+            ? "text-sm text-muted-foreground leading-snug"
+            : "text-base italic text-muted-foreground leading-relaxed max-w-[340px] mb-1"
+        }
+        style={{ fontFamily: "var(--font-serif)" }}
+      >
+        {displayed}
+      </p>
+      {needsTruncation && (
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          className="flex items-center gap-0.5 text-xs text-muted-foreground/70 hover:text-muted-foreground transition-colors"
+        >
+          {expanded ? (
+            <>
+              Voir moins <ChevronUp className="w-3 h-3" />
+            </>
+          ) : (
+            <>
+              Voir plus <ChevronDown className="w-3 h-3" />
+            </>
+          )}
+        </button>
+      )}
+    </div>
+  );
+};
   const { t } = useTranslation();
 
   /* ─── EDITORIAL : nom + prix sur la même ligne, séparés par pointillés ─── */
