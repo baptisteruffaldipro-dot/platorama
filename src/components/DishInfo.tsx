@@ -80,8 +80,7 @@ const CollapsibleDescription = ({ text, layout = "classic" }: { text: string; la
       )}
     </div>
   );
-};
-  const { t } = useTranslation();
+const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: DishInfoProps) => {
 
   /* ─── EDITORIAL : nom + prix sur la même ligne, séparés par pointillés ─── */
   if (layout === "editorial") {
