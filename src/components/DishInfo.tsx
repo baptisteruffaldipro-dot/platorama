@@ -284,9 +284,7 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
           </h1>
           <FavBtn active={isFavorite} onClick={onToggleFavorite} />
         </div>
-        <p className="text-base italic text-muted-foreground leading-relaxed max-w-[340px] mb-1" style={{ fontFamily: "var(--font-serif)" }}>
-          {t(dish.ingredients)}
-        </p>
+        <CollapsibleDescription text={t(dish.ingredients)} layout={layout} />
         <div className="flex items-center gap-3">
           <p className="text-xl sm:text-2xl font-semibold text-accent" style={{ fontFamily: "var(--font-serif)" }}>
             {dish.price.toFixed(2)} €
