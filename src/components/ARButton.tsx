@@ -47,7 +47,7 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
           : "rounded-full";
 
   return (
-    <div className="relative flex justify-center mt-3 px-4 w-full">
+    <div className="relative flex justify-center mt-3 mb-6 px-4 w-full">
       {/* Onboarding tooltip */}
       {showTooltip && (
         <div className="absolute -top-20 left-1/2 -translate-x-1/2 z-30 animate-fade-in pointer-events-auto">

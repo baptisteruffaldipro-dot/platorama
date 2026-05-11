@@ -44,7 +44,9 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
               <button
                 ref={(el) => { itemRefs.current[i] = el; }}
                 onClick={() => onSelect(i)}
-                className="flex flex-col items-center gap-2 shrink-0 transition-all duration-300"
+                className={`flex flex-col items-center gap-2 shrink-0 transition-all duration-300 ${
+                  i === activeIndex ? "-translate-y-3" : "translate-y-0"
+                }`}
               >
                 <div
                   className={`rounded-full overflow-hidden transition-all duration-300 flex items-center justify-center bg-muted/20 ${
