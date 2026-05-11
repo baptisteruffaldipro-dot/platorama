@@ -75,25 +75,14 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
         </div>
       )}
 
-      {/* Halo pulse ring */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-        <div
-          className="rounded-full animate-ping-slow"
-          style={{
-            width: "92%",
-            height: 78,
-            background: "hsl(var(--accent) / 0.25)",
-          }}
-        />
-      </div>
-
       {/* The CTA button */}
       <button
         onClick={handleClick}
-        className={`relative flex items-center gap-3 w-full max-w-md bg-accent text-white transition-transform active:scale-95 hover:scale-[1.02] animate-ar-pulse pl-3 pr-5 py-2.5 ${radiusClass}`}
+        className={`relative flex items-center gap-3 w-full max-w-md text-white transition-transform active:scale-95 hover:scale-[1.02] pl-3 pr-5 py-2.5 ${radiusClass}`}
         style={{
+          background: "linear-gradient(180deg, hsl(40 55% 60%), hsl(38 50% 48%))",
           boxShadow:
-            "0 0 0 6px hsl(var(--accent) / 0.18), 0 0 0 12px hsl(var(--accent) / 0.08), 0 12px 30px -6px hsl(var(--accent) / 0.55)",
+            "0 0 0 6px hsl(38 40% 18% / 0.85), 0 0 0 10px hsl(38 35% 12% / 0.7), 0 14px 28px -6px hsl(38 50% 30% / 0.6)",
         }}
       >
         {/* Icon (white, no disc) */}
