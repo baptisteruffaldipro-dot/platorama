@@ -46,7 +46,7 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
           ? "rounded-full px-9 py-4 text-base"
           : layout === "editorial"
             ? "rounded-none px-10 py-4 text-sm uppercase tracking-[0.2em] border-y-2 border-accent"
-            : "rounded-full px-9 py-4 text-base tracking-wide"; // classic
+            : "rounded-full px-12 py-5 text-lg sm:text-xl tracking-wide"; // classic / vision
 
   return (
     <div className="relative flex justify-center mt-3">
@@ -81,8 +81,8 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
         <div
           className="rounded-full animate-ping-slow"
           style={{
-            width: 180,
-            height: 60,
+            width: 240,
+            height: 72,
             background: "hsl(var(--accent) / 0.25)",
           }}
         />
@@ -94,8 +94,8 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
         className={`relative flex items-center gap-2.5 bg-accent text-accent-foreground font-bold backdrop-blur-md transition-transform active:scale-95 hover:scale-105 shadow-2xl animate-ar-pulse ${shapeClass}`}
         style={{ boxShadow: "0 10px 30px -5px hsl(var(--accent) / 0.5)" }}
       >
-        <Rotate3d className="w-5 h-5 animate-spin-slow" />
-        <span>{t("Voir le plat")}</span>
+        <Rotate3d className="w-6 h-6 animate-spin-slow" />
+        <span>{t("Voir le plat sur ma table")}</span>
         {/* Tap hand indicator on first visit */}
         {showTooltip && (
           <Hand className="w-5 h-5 absolute -right-2 -bottom-2 text-foreground bg-background rounded-full p-0.5 animate-bounce shadow-lg" />
