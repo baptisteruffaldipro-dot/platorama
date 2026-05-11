@@ -37,7 +37,7 @@ const CameraBackground = () => {
         playsInline
         muted
         className={`absolute inset-0 w-full h-full object-cover ${hasCamera ? "opacity-100" : "opacity-0"}`}
-        style={{ zIndex: 0, filter: "blur(12px)" }}
+        style={{ zIndex: 0, filter: "blur(4px)" }}
       />
       <div
         className="absolute inset-0"
