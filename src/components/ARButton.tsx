@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Rotate3d, Hand, X } from "lucide-react";
+import { Hand, X } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { LayoutVariant } from "@/lib/menuTemplates";
+import arIcon from "@/assets/ar-icon.png";
 
 interface Props {
   onClick: () => void;
@@ -99,7 +100,7 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
           }`}
           style={{ width: 56, height: 56 }}
         >
-          <Rotate3d className="w-7 h-7 animate-spin-slow" />
+          <img src={arIcon} alt="" className="w-9 h-9 object-contain" />
         </span>
 
         {/* Texts */}
