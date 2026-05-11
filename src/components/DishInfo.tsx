@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Clock, Flame, Heart, Leaf } from "lucide-react";
+import { Star, Clock, Flame, Heart, Leaf, ChevronDown, ChevronUp } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { LayoutVariant } from "@/lib/menuTemplates";
 
@@ -41,6 +42,45 @@ const FavBtn = ({ active, onClick }: { active: boolean; onClick: () => void }) =
     <Star className={`w-5 h-5 transition-colors ${active ? "fill-accent text-accent" : "text-muted-foreground"}`} />
   </button>
 );
+
+const CollapsibleDescription = ({ text, layout = "classic" }: { text: string; layout?: LayoutVariant }) => {
+  const [expanded, setExpanded] = useState(false);
+  const isEditorial = layout === "editorial";
+  const maxChars = isEditorial ? 80 : 55;
+  const needsTruncation = text.length > maxChars;
+  const displayed = expanded || !needsTruncation ? text : text.slice(0, maxChars).trimEnd() + "…";
+
+  return (
+    <div className={isEditorial ? "" : "flex flex-col items-center"}>
+      <p
+        className={
+          isEditorial
+            ? "text-sm text-muted-foreground leading-snug"
+            : "text-base italic text-muted-foreground leading-relaxed max-w-[340px] mb-1"
+        }
+        style={{ fontFamily: "var(--font-serif)" }}
+      >
+        {displayed}
+      </p>
+      {needsTruncation && (
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          className="flex items-center gap-0.5 text-xs text-muted-foreground/70 hover:text-muted-foreground transition-colors"
+        >
+          {expanded ? (
+            <>
+              Voir moins <ChevronUp className="w-3 h-3" />
+            </>
+          ) : (
+            <>
+              Voir plus <ChevronDown className="w-3 h-3" />
+            </>
+          )}
+        </button>
+      )}
+    </div>
+  );
+};
 
 const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: DishInfoProps) => {
   const { t } = useTranslation();
@@ -244,9 +284,7 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
           </h1>
           <FavBtn active={isFavorite} onClick={onToggleFavorite} />
         </div>
-        <p className="text-base italic text-muted-foreground leading-relaxed max-w-[340px] mb-1" style={{ fontFamily: "var(--font-serif)" }}>
-          {t(dish.ingredients)}
-        </p>
+        <CollapsibleDescription text={t(dish.ingredients)} layout={layout} />
         <div className="flex items-center gap-3">
           <p className="text-xl sm:text-2xl font-semibold text-accent" style={{ fontFamily: "var(--font-serif)" }}>
             {dish.price.toFixed(2)} €
