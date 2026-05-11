@@ -78,37 +78,45 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
       {/* The CTA button */}
       <button
         onClick={handleClick}
-        className={`relative flex items-center gap-3 w-full max-w-md text-white transition-transform active:scale-95 hover:scale-[1.02] pl-3 pr-5 py-2.5 ${radiusClass}`}
-        style={{
-          background: "linear-gradient(180deg, hsl(40 55% 60%), hsl(38 50% 48%))",
-          boxShadow:
-            "0 0 0 6px hsl(38 40% 18% / 0.85), 0 0 0 10px hsl(38 35% 12% / 0.7), 0 14px 28px -6px hsl(38 50% 30% / 0.6)",
-        }}
+        className="relative flex items-center w-full max-w-md text-white transition-transform active:scale-95 hover:scale-[1.02]"
+        style={{ paddingLeft: 30 }}
       >
-        {/* Icon (white, no disc) */}
+        {/* Pill bar */}
         <span
-          className="shrink-0 flex items-center justify-center"
-          style={{ width: 52, height: 52 }}
+          className={`relative flex items-center gap-3 flex-1 pl-16 pr-5 py-3 ${radiusClass}`}
+          style={{
+            background: "hsl(40 45% 55%)",
+            boxShadow: "0 8px 18px -6px rgba(0,0,0,0.55)",
+          }}
+        >
+          <span className="flex-1 text-left leading-tight">
+            <span className="block font-extrabold uppercase tracking-wider text-sm sm:text-base text-white">
+              {t("Voir le plat sur la table")}
+            </span>
+            <span className="block text-[10px] sm:text-[11px] font-medium text-white/90 mt-0.5">
+              {t("Visualisez ce plat en taille réelle grâce à la réalité augmentée.")}
+            </span>
+          </span>
+        </span>
+
+        {/* Disc on left, overlapping & larger than the bar */}
+        <span
+          className="absolute left-0 top-1/2 -translate-y-1/2 rounded-full flex items-center justify-center"
+          style={{
+            width: 78,
+            height: 78,
+            background: "hsl(40 45% 55%)",
+            boxShadow: "0 6px 14px -4px rgba(0,0,0,0.6)",
+          }}
         >
           <img
             src={arIcon}
             alt=""
-            className="w-12 h-12 object-contain"
+            className="w-14 h-14 object-contain"
             style={{ filter: "brightness(0) invert(1)" }}
           />
         </span>
 
-        {/* Texts */}
-        <span className="flex-1 text-left leading-tight">
-          <span className="block font-extrabold uppercase tracking-wider text-sm sm:text-base text-white">
-            {t("Voir le plat sur la table")}
-          </span>
-          <span className="block text-[10px] sm:text-[11px] font-medium text-white/90 mt-0.5">
-            {t("Visualisez ce plat en taille réelle grâce à la réalité augmentée.")}
-          </span>
-        </span>
-
-        {/* Tap hand indicator on first visit */}
         {showTooltip && (
           <Hand className="w-5 h-5 absolute -right-2 -bottom-2 text-foreground bg-background rounded-full p-0.5 animate-bounce shadow-lg" />
         )}
