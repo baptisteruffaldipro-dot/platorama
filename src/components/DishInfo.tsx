@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Clock, Flame, Heart, Leaf } from "lucide-react";
+import { Star, Clock, Flame, Heart, Leaf, ChevronDown, ChevronUp } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { LayoutVariant } from "@/lib/menuTemplates";
 
