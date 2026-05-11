@@ -173,8 +173,6 @@ const Index = () => {
       {isVision && (
         <>
           <CameraBackground />
-          {/* subtle dark vignette so foreground UI stays readable */}
-          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, transparent 40%, hsl(0 0% 0% / 0.45) 100%)", zIndex: 1 }} />
         </>
       )}
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}

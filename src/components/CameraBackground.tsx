@@ -30,14 +30,20 @@ const CameraBackground = () => {
   }, []);
 
   return (
-    <video
-      ref={videoRef}
-      autoPlay
-      playsInline
-      muted
-      className={`absolute inset-0 w-full h-full object-cover ${hasCamera ? "opacity-100" : "opacity-0"}`}
-      style={{ zIndex: 0 }}
-    />
+    <>
+      <video
+        ref={videoRef}
+        autoPlay
+        playsInline
+        muted
+        className={`absolute inset-0 w-full h-full object-cover ${hasCamera ? "opacity-100" : "opacity-0"}`}
+        style={{ zIndex: 0, filter: "blur(12px)" }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{ zIndex: 1, backgroundColor: "rgba(0, 0, 0, 0.6)" }}
+      />
+    </>
   );
 };
 
