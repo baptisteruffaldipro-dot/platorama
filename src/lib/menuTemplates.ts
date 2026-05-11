@@ -2,7 +2,7 @@
 // Chaque template définit une palette + typographie + LAYOUT.
 // Sert de point de départ : couleurs/polices restent éditables ensuite.
 
-export type LayoutVariant = "classic" | "editorial" | "vintage" | "pop" | "organic" | "wallet";
+export type LayoutVariant = "classic" | "editorial" | "vintage" | "pop" | "organic" | "wallet" | "vision";
 
 export interface MenuTemplate {
   id: string;
@@ -143,6 +143,26 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
       button_bg_color: "#8b6f47",
       button_text_color: "#ffffff",
       heading_font: "Playfair Display",
+      body_font: "Inter",
+    },
+  },
+  {
+    id: "vision-ar",
+    name: "Vision AR",
+    description: "Caméra live en arrière-plan — façon Apple Vision, immersif et premium",
+    layout: "vision",
+    preview: {
+      background: "#0a0a0a",
+      text: "#f5f5f7",
+      accent: "#ffffff",
+      accentText: "#0a0a0a",
+    },
+    settings: {
+      background_color: "#0a0a0a",
+      text_color: "#f5f5f7",
+      button_bg_color: "#ffffff",
+      button_text_color: "#0a0a0a",
+      heading_font: "Cormorant Garamond",
       body_font: "Inter",
     },
   },

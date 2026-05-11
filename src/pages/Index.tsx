@@ -17,6 +17,7 @@ import LanguageSelector from "@/components/LanguageSelector";
 import AllergensDialog from "@/components/AllergensDialog";
 import ARButton from "@/components/ARButton";
 import MenuListView from "@/components/MenuListView";
+import CameraBackground from "@/components/CameraBackground";
 import PopSwipeView from "@/components/menu-views/PopSwipeView";
 import OrganicStoriesView from "@/components/menu-views/OrganicStoriesView";
 import VintageBookView from "@/components/menu-views/VintageBookView";
@@ -164,10 +165,18 @@ const Index = () => {
   };
 
   const layout = getLayoutVariant(siteSettings?.template_id);
-  const useListView = layout !== "classic";
+  const useListView = layout !== "classic" && layout !== "vision";
+  const isVision = layout === "vision";
 
   return (
-    <div className="h-full flex flex-col relative overflow-hidden bg-background">
+    <div className={`h-full flex flex-col relative overflow-hidden ${isVision ? "bg-black" : "bg-background"}`}>
+      {isVision && (
+        <>
+          <CameraBackground />
+          {/* subtle dark vignette so foreground UI stays readable */}
+          <div className="absolute inset-0 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, transparent 40%, hsl(0 0% 0% / 0.45) 100%)", zIndex: 1 }} />
+        </>
+      )}
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
       <LanguageSelector multilingual={features.hasMultilingual} />
 
@@ -318,13 +327,13 @@ const Index = () => {
       ) : (
         // Vue classique Dark Luxe : 3D + carrousel
         <>
-          <div className="flex-1 flex items-center justify-center relative">
+          <div className="flex-1 flex items-center justify-center relative z-10">
             <ErrorBoundary key={dish.id} fallback={<DishViewerErrorFallback dish={dish} />}>
               <DishViewer key={dish.id} dish={dish} />
             </ErrorBoundary>
           </div>
 
-          <div className="pb-safe relative">
+          <div className="pb-safe relative z-10">
             <DishInfo
               dish={dish}
               isFavorite={isFavorite(dish.id)}
