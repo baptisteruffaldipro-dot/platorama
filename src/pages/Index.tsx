@@ -340,13 +340,6 @@ const Index = () => {
           </div>
 
           <div className="pb-safe relative z-10">
-            <DishInfo
-              dish={dish}
-              isFavorite={isFavorite(dish.id)}
-              onToggleFavorite={() => toggle(dish.id)}
-              layout={layout}
-            />
-
             {/* CTA AR — animé + tooltip 1ère visite — masqué si pas de modèle 3D */}
             {hasARModel(dish) && (
               <ARButton
@@ -355,6 +348,13 @@ const Index = () => {
                 restaurantId={restaurantId}
               />
             )}
+
+            <DishInfo
+              dish={dish}
+              isFavorite={isFavorite(dish.id)}
+              onToggleFavorite={() => toggle(dish.id)}
+              layout={layout}
+            />
 
             <div className="mt-2 pb-4">
               <DishCarousel
