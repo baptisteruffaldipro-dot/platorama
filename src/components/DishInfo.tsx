@@ -68,16 +68,72 @@ const CollapsibleDescription = ({ text, layout = "classic" }: { text: string; la
           className="flex items-center gap-0.5 text-xs text-muted-foreground/70 hover:text-muted-foreground transition-colors"
         >
           {expanded ? (
-            <>
-              Voir moins <ChevronUp className="w-3 h-3" />
-            </>
+            <>Voir moins <ChevronUp className="w-3 h-3" /></>
           ) : (
-            <>
-              Voir plus <ChevronDown className="w-3 h-3" />
-            </>
+            <>Voir plus <ChevronDown className="w-3 h-3" /></>
           )}
         </button>
       )}
+    </div>
+  );
+};
+
+const CollapsibleDetails = ({
+  description,
+  price,
+  prepTime,
+}: {
+  description: string;
+  price: number;
+  prepTime?: number | null;
+}) => {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="flex flex-col items-center w-full">
+      <button
+        onClick={() => setExpanded((v) => !v)}
+        className="flex items-center gap-1 text-xs text-muted-foreground/80 hover:text-muted-foreground transition-colors mb-1"
+        aria-expanded={expanded}
+      >
+        {expanded ? (
+          <>Masquer les détails <ChevronUp className="w-3.5 h-3.5" /></>
+        ) : (
+          <>Voir les détails et le prix <ChevronDown className="w-3.5 h-3.5" /></>
+        )}
+      </button>
+      <AnimatePresence initial={false}>
+        {expanded && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="overflow-hidden flex flex-col items-center"
+          >
+            <p
+              className="text-base italic text-muted-foreground leading-relaxed max-w-[340px] mb-2 mt-1"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
+              {description}
+            </p>
+            <div className="flex items-center gap-3">
+              <p
+                className="text-xl sm:text-2xl font-semibold text-accent"
+                style={{ fontFamily: "var(--font-serif)" }}
+              >
+                {price.toFixed(2)} €
+              </p>
+              {prepTime && (
+                <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                  <Clock className="w-3.5 h-3.5" />
+                  ~{prepTime} min
+                </span>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
@@ -284,18 +340,11 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
           </h1>
           <FavBtn active={isFavorite} onClick={onToggleFavorite} />
         </div>
-        <CollapsibleDescription text={t(dish.ingredients)} layout={layout} />
-        <div className="flex items-center gap-3">
-          <p className="text-xl sm:text-2xl font-semibold text-accent" style={{ fontFamily: "var(--font-serif)" }}>
-            {dish.price.toFixed(2)} €
-          </p>
-          {dish.prep_time && (
-            <span className="flex items-center gap-1 text-xs text-muted-foreground">
-              <Clock className="w-3.5 h-3.5" />
-              ~{dish.prep_time} min
-            </span>
-          )}
-        </div>
+        <CollapsibleDetails
+          description={t(dish.ingredients)}
+          price={dish.price}
+          prepTime={dish.prep_time}
+        />
       </motion.div>
     </AnimatePresence>
   );
