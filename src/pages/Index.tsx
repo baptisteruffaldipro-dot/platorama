@@ -131,6 +131,14 @@ const Index = () => {
   const dish = currentDish;
 
   const handleLaunchAR = (target: Dish = dish) => {
+    // Release any active camera streams (e.g. Vision AR background)
+    // so iOS Quick Look / Scene Viewer can grab the camera for AR mode.
+    document.querySelectorAll("video").forEach((v) => {
+      const stream = v.srcObject as MediaStream | null;
+      stream?.getTracks().forEach((t) => t.stop());
+      v.srcObject = null;
+    });
+
     const hostname = window.location.hostname;
     const publishedOrigin = "https://virtual-plate-show.lovable.app";
     const shouldUsePublicOrigin =
