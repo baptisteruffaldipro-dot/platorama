@@ -327,13 +327,13 @@ const Index = () => {
       ) : (
         // Vue classique Dark Luxe : 3D + carrousel
         <>
-          <div className="flex-1 flex items-center justify-center relative">
+          <div className="flex-1 flex items-center justify-center relative z-10">
             <ErrorBoundary key={dish.id} fallback={<DishViewerErrorFallback dish={dish} />}>
               <DishViewer key={dish.id} dish={dish} />
             </ErrorBoundary>
           </div>
 
-          <div className="pb-safe relative">
+          <div className="pb-safe relative z-10">
             <DishInfo
               dish={dish}
               isFavorite={isFavorite(dish.id)}
