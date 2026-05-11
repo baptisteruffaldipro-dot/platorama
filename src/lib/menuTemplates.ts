@@ -146,6 +146,26 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
       body_font: "Inter",
     },
   },
+  {
+    id: "vision-ar",
+    name: "Vision AR",
+    description: "Caméra live en arrière-plan — façon Apple Vision, immersif et premium",
+    layout: "vision",
+    preview: {
+      background: "#0a0a0a",
+      text: "#f5f5f7",
+      accent: "#ffffff",
+      accentText: "#0a0a0a",
+    },
+    settings: {
+      background_color: "#0a0a0a",
+      text_color: "#f5f5f7",
+      button_bg_color: "#ffffff",
+      button_text_color: "#0a0a0a",
+      heading_font: "Cormorant Garamond",
+      body_font: "Inter",
+    },
+  },
 ];
 
 export function getTemplateById(id: string): MenuTemplate | undefined {
