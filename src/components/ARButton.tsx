@@ -90,25 +90,31 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
       {/* The CTA button */}
       <button
         onClick={handleClick}
-        className={`relative flex items-center gap-3 w-full max-w-md bg-accent text-accent-foreground transition-transform active:scale-95 hover:scale-[1.02] shadow-2xl animate-ar-pulse pl-2 pr-5 py-2 ${radiusClass}`}
-        style={{ boxShadow: "0 10px 30px -5px hsl(var(--accent) / 0.5)" }}
+        className={`relative flex items-center gap-3 w-full max-w-md bg-accent text-white transition-transform active:scale-95 hover:scale-[1.02] animate-ar-pulse pl-3 pr-5 py-2.5 ${radiusClass}`}
+        style={{
+          boxShadow:
+            "0 0 0 6px hsl(var(--accent) / 0.18), 0 0 0 12px hsl(var(--accent) / 0.08), 0 12px 30px -6px hsl(var(--accent) / 0.55)",
+        }}
       >
-        {/* Icon disc on the left */}
+        {/* Icon (white, no disc) */}
         <span
-          className={`shrink-0 flex items-center justify-center bg-accent-foreground/10 ring-1 ring-accent-foreground/20 ${
-            layout === "editorial" || layout === "vintage" ? "rounded-md" : "rounded-full"
-          }`}
-          style={{ width: 56, height: 56 }}
+          className="shrink-0 flex items-center justify-center"
+          style={{ width: 52, height: 52 }}
         >
-          <img src={arIcon} alt="" className="w-9 h-9 object-contain" />
+          <img
+            src={arIcon}
+            alt=""
+            className="w-12 h-12 object-contain"
+            style={{ filter: "brightness(0) invert(1)" }}
+          />
         </span>
 
         {/* Texts */}
         <span className="flex-1 text-left leading-tight">
-          <span className="block font-extrabold uppercase tracking-wider text-base sm:text-lg">
+          <span className="block font-extrabold uppercase tracking-wider text-sm sm:text-base text-white">
             {t("Voir le plat sur la table")}
           </span>
-          <span className="block text-[11px] sm:text-xs font-medium opacity-90 mt-0.5">
+          <span className="block text-[10px] sm:text-[11px] font-medium text-white/90 mt-0.5">
             {t("Visualisez ce plat en taille réelle grâce à la réalité augmentée.")}
           </span>
         </span>
