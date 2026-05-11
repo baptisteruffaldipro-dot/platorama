@@ -36,20 +36,18 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
     onClick();
   };
 
-  // Per-template button shape
-  const shapeClass =
-    layout === "pop"
-      ? "rounded-2xl px-9 py-4 text-lg uppercase tracking-wider"
-      : layout === "vintage"
-        ? "rounded-sm px-8 py-3.5 text-sm uppercase tracking-[0.25em] border-2 border-accent/30"
-        : layout === "organic"
-          ? "rounded-full px-9 py-4 text-base"
-          : layout === "editorial"
-            ? "rounded-none px-10 py-4 text-sm uppercase tracking-[0.2em] border-y-2 border-accent"
-            : "rounded-full px-8 py-3.5 text-base sm:text-lg tracking-wide"; // classic / vision
+  // Per-template outer shape (rounded-full for most, squarer for editorial/vintage)
+  const radiusClass =
+    layout === "vintage"
+      ? "rounded-sm border-2 border-accent/30"
+      : layout === "editorial"
+        ? "rounded-none border-y-2 border-accent"
+        : layout === "pop"
+          ? "rounded-3xl"
+          : "rounded-full";
 
   return (
-    <div className="relative flex justify-center mt-3">
+    <div className="relative flex justify-center mt-3 px-4 w-full">
       {/* Onboarding tooltip */}
       {showTooltip && (
         <div className="absolute -top-20 left-1/2 -translate-x-1/2 z-30 animate-fade-in pointer-events-auto">
@@ -81,8 +79,8 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
         <div
           className="rounded-full animate-ping-slow"
           style={{
-            width: 170,
-            height: 50,
+            width: "92%",
+            height: 78,
             background: "hsl(var(--accent) / 0.25)",
           }}
         />
@@ -91,11 +89,29 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
       {/* The CTA button */}
       <button
         onClick={handleClick}
-        className={`relative flex items-center gap-2.5 bg-accent text-accent-foreground font-bold backdrop-blur-md transition-transform active:scale-95 hover:scale-105 shadow-2xl animate-ar-pulse ${shapeClass}`}
+        className={`relative flex items-center gap-3 w-full max-w-md bg-accent text-accent-foreground transition-transform active:scale-95 hover:scale-[1.02] shadow-2xl animate-ar-pulse pl-2 pr-5 py-2 ${radiusClass}`}
         style={{ boxShadow: "0 10px 30px -5px hsl(var(--accent) / 0.5)" }}
       >
-        <Rotate3d className="w-5 h-5 animate-spin-slow" />
-        <span>{t("Voir le plat sur ma table")}</span>
+        {/* Icon disc on the left */}
+        <span
+          className={`shrink-0 flex items-center justify-center bg-accent-foreground/10 ring-1 ring-accent-foreground/20 ${
+            layout === "editorial" || layout === "vintage" ? "rounded-md" : "rounded-full"
+          }`}
+          style={{ width: 56, height: 56 }}
+        >
+          <Rotate3d className="w-7 h-7 animate-spin-slow" />
+        </span>
+
+        {/* Texts */}
+        <span className="flex-1 text-left leading-tight">
+          <span className="block font-extrabold uppercase tracking-wider text-base sm:text-lg">
+            {t("Voir le plat sur la table")}
+          </span>
+          <span className="block text-[11px] sm:text-xs font-medium opacity-90 mt-0.5">
+            {t("Visualisez ce plat en taille réelle grâce à la réalité augmentée.")}
+          </span>
+        </span>
+
         {/* Tap hand indicator on first visit */}
         {showTooltip && (
           <Hand className="w-5 h-5 absolute -right-2 -bottom-2 text-foreground bg-background rounded-full p-0.5 animate-bounce shadow-lg" />
