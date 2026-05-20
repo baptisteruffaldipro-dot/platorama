@@ -142,3 +142,10 @@
   50%      { transform: rotate(3deg) scale(1.06); }
 }
 .animate-ar-icon-float { animation: ar-icon-float 3s ease-in-out infinite; }
+
+/* Zoom in/out breathing for the AR CTA */
+@keyframes ar-breathe {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.04); }
+}
+.animate-ar-breathe { animation: ar-breathe 1.8s ease-in-out infinite; }
