@@ -139,6 +139,20 @@ const Index = () => {
       v.srcObject = null;
     });
 
+    // Notify CameraBackground to restart once the user comes back from AR.
+    const notifyReturn = () => {
+      if (document.visibilityState === "visible") {
+        window.dispatchEvent(new Event("ar-returned"));
+      }
+    };
+    document.addEventListener("visibilitychange", notifyReturn, { once: false });
+    window.addEventListener("pageshow", notifyReturn, { once: true });
+    // Safety net: stop listening after 5 minutes
+    setTimeout(() => {
+      document.removeEventListener("visibilitychange", notifyReturn);
+      window.removeEventListener("pageshow", notifyReturn);
+    }, 5 * 60 * 1000);
+
     const hostname = window.location.hostname;
     const publishedOrigin = "https://virtual-plate-show.lovable.app";
     const shouldUsePublicOrigin =
