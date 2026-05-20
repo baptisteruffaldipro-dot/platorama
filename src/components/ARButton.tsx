@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Hand, X, ArrowRight } from "lucide-react";
+import { Hand, X, ScanEye, ArrowUp } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { LayoutVariant } from "@/lib/menuTemplates";
-import arIcon from "@/assets/ar-icon.png";
 
 interface Props {
   onClick: () => void;
@@ -37,16 +36,6 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
     onClick();
   };
 
-  // Per-template outer shape (rounded-full for most, squarer for editorial/vintage)
-  const radiusClass =
-    layout === "vintage"
-      ? "rounded-sm border-2 border-accent/30"
-      : layout === "editorial"
-        ? "rounded-none border-y-2 border-accent"
-        : layout === "pop"
-          ? "rounded-3xl"
-          : "rounded-full";
-
   return (
     <div className="relative flex justify-center mt-3 mb-6 px-4 w-full">
       {/* Onboarding tooltip */}
@@ -75,74 +64,65 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
         </div>
       )}
 
-      {/* The CTA button */}
+      {/* The CTA button — Glass sombre épuré */}
       <button
         onClick={handleClick}
-        className="relative flex items-center w-full max-w-md text-white transition-transform active:scale-95 hover:scale-[1.02] group"
-        style={{ paddingLeft: 30 }}
+        className="group relative w-full max-w-md overflow-hidden rounded-2xl border border-white/10 bg-black/40 p-5 text-center backdrop-blur-xl transition-all duration-500 hover:border-accent/50 hover:bg-black/60 active:scale-[0.98]"
       >
-        {/* Pill bar */}
+        {/* Shimmer doré au hover */}
         <span
-          className={`relative flex items-center gap-3 flex-1 pl-16 pr-5 py-3 overflow-hidden ${radiusClass}`}
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -translate-x-full transition-transform duration-1000 group-hover:translate-x-full"
           style={{
             background:
-              "linear-gradient(135deg, hsl(var(--ar-cta-from)) 0%, hsl(var(--ar-cta-to)) 100%)",
-            boxShadow:
-              "0 12px 28px -8px hsl(var(--ar-cta-to) / 0.6), inset 0 1px 0 hsl(0 0% 100% / 0.25)",
+              "linear-gradient(90deg, transparent 0%, hsl(var(--accent) / 0.08) 50%, transparent 100%)",
           }}
-        >
-          {/* Shimmer overlay */}
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 animate-ar-shimmer"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.35) 50%, transparent 100%)",
-            }}
-          />
-          <span className="relative flex-1 text-left leading-tight">
-            <span className="block font-extrabold uppercase tracking-wider text-sm sm:text-base text-white">
-              {t("Voir le plat sur la table")}
-            </span>
-            <span className="block text-[10px] sm:text-[11px] font-medium text-white/90 mt-0.5">
-              {t("Visualisez ce plat en taille réelle grâce à la réalité augmentée.")}
-            </span>
-          </span>
-          <ArrowRight
-            aria-hidden
-            className="relative w-5 h-5 text-white shrink-0 animate-ar-arrow"
-          />
-        </span>
+        />
 
-        {/* Disc on left, overlapping & larger than the bar */}
-        <span
-          className="absolute left-0 top-1/2 -translate-y-1/2 rounded-full flex items-center justify-center animate-ar-halo"
-          style={{
-            width: 78,
-            height: 78,
-            background:
-              "radial-gradient(circle at 30% 30%, hsl(var(--ar-cta-from)) 0%, hsl(var(--ar-cta-to)) 75%)",
-          }}
-        >
-          {/* Inner spinning halo ring */}
-          <span
-            aria-hidden
-            className="absolute inset-1 rounded-full opacity-60 animate-spin-slow"
+        <div className="relative flex flex-col items-center gap-3.5">
+          {/* Icône AR */}
+          <div
+            className="flex h-12 w-12 items-center justify-center rounded-full border text-accent"
             style={{
-              background:
-                "conic-gradient(from 0deg, transparent 0deg, hsl(0 0% 100% / 0.35) 90deg, transparent 180deg)",
+              background: "hsl(var(--accent) / 0.1)",
+              borderColor: "hsl(var(--accent) / 0.25)",
             }}
-          />
-          <img
-            src={arIcon}
-            alt=""
-            className="relative w-14 h-14 object-contain animate-ar-icon-float"
-            style={{ filter: "brightness(0) invert(1)" }}
-          />
-        </span>
+          >
+            <ScanEye className="h-6 w-6" strokeWidth={1.5} />
+          </div>
+
+          <div className="space-y-1.5">
+            <h2 className="text-[13px] font-medium uppercase tracking-[0.25em] text-accent">
+              {t("Voir le plat sur la table")}
+            </h2>
+            <p
+              className="text-[13px] font-light leading-relaxed text-neutral-300"
+              style={{ fontFamily: "var(--font-serif)" }}
+            >
+              {t("Visualisez ce plat en taille réelle grâce à la réalité augmentée.")}
+            </p>
+          </div>
+
+          {/* Indicateur bas */}
+          <div className="mt-0.5 flex items-center gap-1.5">
+            <span className="h-px w-8" style={{ background: "hsl(var(--accent) / 0.3)" }} />
+            <ArrowUp className="h-3 w-3 text-accent animate-pulse" strokeWidth={2} />
+            <span className="h-px w-8" style={{ background: "hsl(var(--accent) / 0.3)" }} />
+          </div>
+        </div>
+
+        {/* Coins décoratifs */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-0 h-4 w-4 border-l border-t border-transparent transition-colors duration-500 group-hover:border-accent/40"
+        />
+        <span
+          aria-hidden
+          className="pointer-events-none absolute bottom-0 right-0 h-4 w-4 border-b border-r border-transparent transition-colors duration-500 group-hover:border-accent/40"
+        />
 
         {showTooltip && (
-          <Hand className="w-5 h-5 absolute -right-2 -bottom-2 text-foreground bg-background rounded-full p-0.5 animate-bounce shadow-lg" />
+          <Hand className="w-5 h-5 absolute right-2 bottom-2 text-foreground bg-background rounded-full p-0.5 animate-bounce shadow-lg" />
         )}
       </button>
     </div>
