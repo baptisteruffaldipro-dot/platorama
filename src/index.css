@@ -111,3 +111,34 @@
 .animate-spin-slow {
   animation: spin-slow 4s linear infinite;
 }
+
+/* ===== AR CTA button ===== */
+:root {
+  --ar-cta-from: 38 90% 58%;
+  --ar-cta-to: 22 88% 52%;
+  --ar-cta-glow: 35 95% 60%;
+}
+
+@keyframes ar-halo {
+  0%, 100% { box-shadow: 0 12px 32px -10px hsl(var(--ar-cta-glow) / 0.7), 0 0 0 0 hsl(var(--ar-cta-glow) / 0.55); }
+  50%      { box-shadow: 0 14px 36px -10px hsl(var(--ar-cta-glow) / 0.85), 0 0 0 18px hsl(var(--ar-cta-glow) / 0); }
+}
+.animate-ar-halo { animation: ar-halo 2.2s ease-in-out infinite; }
+
+@keyframes ar-shimmer {
+  0%   { transform: translateX(-120%) skewX(-20deg); }
+  60%, 100% { transform: translateX(220%) skewX(-20deg); }
+}
+.animate-ar-shimmer { animation: ar-shimmer 3.2s ease-in-out infinite; }
+
+@keyframes ar-arrow {
+  0%, 100% { transform: translateX(0); opacity: 0.85; }
+  50%      { transform: translateX(4px); opacity: 1; }
+}
+.animate-ar-arrow { animation: ar-arrow 1.4s ease-in-out infinite; }
+
+@keyframes ar-icon-float {
+  0%, 100% { transform: rotate(-3deg) scale(1); }
+  50%      { transform: rotate(3deg) scale(1.06); }
+}
+.animate-ar-icon-float { animation: ar-icon-float 3s ease-in-out infinite; }

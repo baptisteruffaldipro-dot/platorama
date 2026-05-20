@@ -54,7 +54,6 @@ const DishCarousel = ({ dishes, activeIndex, onSelect }: DishCarouselProps) => {
                       ? "w-[96px] h-[96px] border-2 border-foreground"
                       : "w-[72px] h-[72px] opacity-60"
                   }`}
-                  style={i === activeIndex ? { boxShadow: "0 0 14px 3px rgba(255,255,255,0.25)" } : undefined}
                 >
                   <img
                     src={dish.thumbnail}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Hand, X } from "lucide-react";
+import { Hand, X, ArrowRight } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { LayoutVariant } from "@/lib/menuTemplates";
 import arIcon from "@/assets/ar-icon.png";
@@ -78,18 +78,29 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
       {/* The CTA button */}
       <button
         onClick={handleClick}
-        className="relative flex items-center w-full max-w-md text-white transition-transform active:scale-95 hover:scale-[1.02]"
+        className="relative flex items-center w-full max-w-md text-white transition-transform active:scale-95 hover:scale-[1.02] group"
         style={{ paddingLeft: 30 }}
       >
         {/* Pill bar */}
         <span
-          className={`relative flex items-center gap-3 flex-1 pl-16 pr-5 py-3 ${radiusClass}`}
+          className={`relative flex items-center gap-3 flex-1 pl-16 pr-5 py-3 overflow-hidden ${radiusClass}`}
           style={{
-            background: "hsl(40 45% 55%)",
-            boxShadow: "0 8px 18px -6px rgba(0,0,0,0.55)",
+            background:
+              "linear-gradient(135deg, hsl(var(--ar-cta-from)) 0%, hsl(var(--ar-cta-to)) 100%)",
+            boxShadow:
+              "0 12px 28px -8px hsl(var(--ar-cta-to) / 0.6), inset 0 1px 0 hsl(0 0% 100% / 0.25)",
           }}
         >
-          <span className="flex-1 text-left leading-tight">
+          {/* Shimmer overlay */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 animate-ar-shimmer"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.35) 50%, transparent 100%)",
+            }}
+          />
+          <span className="relative flex-1 text-left leading-tight">
             <span className="block font-extrabold uppercase tracking-wider text-sm sm:text-base text-white">
               {t("Voir le plat sur la table")}
             </span>
@@ -97,22 +108,35 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
               {t("Visualisez ce plat en taille réelle grâce à la réalité augmentée.")}
             </span>
           </span>
+          <ArrowRight
+            aria-hidden
+            className="relative w-5 h-5 text-white shrink-0 animate-ar-arrow"
+          />
         </span>
 
         {/* Disc on left, overlapping & larger than the bar */}
         <span
-          className="absolute left-0 top-1/2 -translate-y-1/2 rounded-full flex items-center justify-center"
+          className="absolute left-0 top-1/2 -translate-y-1/2 rounded-full flex items-center justify-center animate-ar-halo"
           style={{
             width: 78,
             height: 78,
-            background: "hsl(40 45% 55%)",
-            boxShadow: "0 6px 14px -4px rgba(0,0,0,0.6)",
+            background:
+              "radial-gradient(circle at 30% 30%, hsl(var(--ar-cta-from)) 0%, hsl(var(--ar-cta-to)) 75%)",
           }}
         >
+          {/* Inner spinning halo ring */}
+          <span
+            aria-hidden
+            className="absolute inset-1 rounded-full opacity-60 animate-spin-slow"
+            style={{
+              background:
+                "conic-gradient(from 0deg, transparent 0deg, hsl(0 0% 100% / 0.35) 90deg, transparent 180deg)",
+            }}
+          />
           <img
             src={arIcon}
             alt=""
-            className="w-14 h-14 object-contain"
+            className="relative w-14 h-14 object-contain animate-ar-icon-float"
             style={{ filter: "brightness(0) invert(1)" }}
           />
         </span>
