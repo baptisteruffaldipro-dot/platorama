@@ -354,15 +354,6 @@ const Index = () => {
           </div>
 
           <div className="pb-safe relative z-10">
-            {/* CTA AR — animé + tooltip 1ère visite — masqué si pas de modèle 3D */}
-            {hasARModel(dish) && (
-              <ARButton
-                onClick={() => handleLaunchAR()}
-                layout={layout}
-                restaurantId={restaurantId}
-              />
-            )}
-
             <DishInfo
               dish={dish}
               isFavorite={isFavorite(dish.id)}
@@ -370,13 +361,22 @@ const Index = () => {
               layout={layout}
             />
 
-            <div className="mt-2 pb-4">
+            <div className="mt-2">
               <DishCarousel
                 dishes={dishes}
                 activeIndex={safeIndex}
                 onSelect={setActiveIndex}
               />
             </div>
+
+            {/* CTA AR — sous le carrousel, style bouton "commander" */}
+            {hasARModel(dish) && (
+              <ARButton
+                onClick={() => handleLaunchAR()}
+                layout={layout}
+                restaurantId={restaurantId}
+              />
+            )}
           </div>
         </>
       )}
