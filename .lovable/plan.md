@@ -1,53 +1,38 @@
+# Améliorations interface AR (template Vision)
 
+## 1. Bouton AR plus désirable (`src/components/ARButton.tsx`)
 
-## Connecter platorama.fr aux menus virtuels
+Objectif : créer un CTA qu'on a vraiment envie de toucher.
 
-Ton domaine `platorama.fr` héberge déjà ta landing page chez un autre service. Plutôt que de tout casser, on va utiliser un **sous-domaine dédié** pour les menus Lovable. Résultat final :
+- **Couleur vivante** : passer du beige sable actuel à un dégradé doré chaud (amber → orange) avec léger reflet métallique pour rappeler l'idée d'un plat appétissant.
+- **Animation continue** : halo pulsant doux derrière le disque + très léger shimmer qui balaie la pill toutes les ~3s (transparence en mouvement).
+- **Micro-interactions** : à l'appui, ondulation (ripple) qui part du disque ; au hover/focus, le disque tourne légèrement et l'icône AR s'agrandit.
+- **Icône** : conserver l'icône AR existante mais l'animer (rotation lente continue très subtile) pour signaler que c'est "vivant".
+- **Typo CTA** : conserver le titre, mais ajouter une petite flèche animée (→) qui pousse à droite à la fin du titre pour suggérer l'action.
+- **Lisibilité** : ombre portée plus douce et plus profonde pour mieux le détacher du fond vidéo flouté.
+- **Onboarding tooltip** : conservé, mais aligné sur la nouvelle palette dorée.
 
-- Ta landing reste sur `https://platorama.fr` (inchangée)
-- Tes menus deviennent accessibles via `https://menu.platorama.fr/m/arrosoir` (ou `https://app.platorama.fr/m/arrosoir`)
-- Les QR codes générés utiliseront automatiquement cette URL courte
+## 2. Carrousel épuré (`src/components/DishCarousel.tsx`)
 
-### Étapes côté Lovable (toi, ~2 min)
+- Retirer toute ombre ou halo derrière les vignettes des plats non sélectionnés (actuellement opacity + ring inexistant, mais vérifier qu'aucun `shadow-*` / `drop-shadow` n'est appliqué sur le wrapper rond).
+- Retirer la **lueur externe** du plat sélectionné : supprimer le `boxShadow: "0 0 14px 3px rgba(255,255,255,0.25)"` sur la vignette active. Garder uniquement le `border-2 border-foreground` + l'effet `-translate-y-3` pour marquer la sélection.
 
-1. **Publier le projet** s'il ne l'est pas déjà (bouton `Publish` en haut à droite)
-2. Aller dans **Project Settings → Domains**
-3. Cliquer **Connect Domain**
-4. Saisir le sous-domaine choisi, par exemple : `menu.platorama.fr`
-5. Lovable affiche les enregistrements DNS à ajouter (A record + TXT record)
+## 3. Caméra qui se relance au retour de l'AR (`src/components/CameraBackground.tsx` + `src/pages/Index.tsx`)
 
-### Étapes côté registrar (là où tu as acheté platorama.fr)
+Problème : `handleLaunchAR` dans `Index.tsx` stoppe tous les `<video>` (`stream.getTracks().stop()`) pour libérer la caméra pour ARKit/Scene Viewer. Au retour de l'AR, `CameraBackground` ne se relance pas car son `useEffect` n'est exécuté qu'au montage.
 
-Dans le panneau DNS de ton registrar, ajouter :
+Correctif :
+- Dans `CameraBackground`, extraire `startCamera` et le rappeler quand l'onglet redevient visible (`document.visibilitychange` → `document.visibilityState === "visible"`) et au `pageshow` (retour iOS depuis Quick Look). Aussi écouter `focus` de window en filet de sécurité.
+- Vérifier que le `videoRef.current.srcObject` est null ou que les tracks sont stoppées avant de relancer (sinon, no-op).
+- Nettoyer correctement les listeners au démontage.
+- En complément, dans `handleLaunchAR`, après le `a.click()` iOS, planifier un événement custom (`window.dispatchEvent(new Event("ar-returned"))`) au prochain `visibilitychange`, écouté par `CameraBackground` comme déclencheur supplémentaire.
 
-```text
-Type: A      Name: menu          Value: 185.158.133.1
-Type: TXT    Name: _lovable      Value: lovable_verify=XXX  (fourni par Lovable)
-```
+## Hors-scope
 
-Important : **ne touche pas** aux enregistrements existants pour `@` (root) et `www` — ils continuent de pointer vers ta landing page.
+- Pas de changement de logique métier, pas de modification des templates autres que Vision, pas de touche aux fichiers Supabase ou auth.
 
-Propagation DNS : généralement 5-30 min, jusqu'à 72 h max. Lovable provisionne automatiquement le SSL (HTTPS).
+## Détails techniques
 
-### Côté code (moi, après que le domaine soit Active)
-
-Aucun changement obligatoire — le composant `QRCodePanel` utilise déjà `window.location.origin`, donc dès que les utilisateurs ouvrent l'admin depuis `https://menu.platorama.fr`, les QR codes pointeront automatiquement vers la bonne URL.
-
-**Optionnel mais recommandé** : forcer une URL de production fixe pour que les QR codes soient toujours générés avec `menu.platorama.fr`, même si l'admin est ouvert depuis la preview Lovable. Cela évite qu'un QR généré depuis la preview pointe vers `id-preview--...lovable.app`.
-
-### Détails techniques
-
-- Modification de `src/lib/slug.ts` : introduire une constante `PRODUCTION_ORIGIN` (ex. `https://menu.platorama.fr`) lue depuis une variable d'env `VITE_PUBLIC_MENU_ORIGIN`, avec fallback sur `window.location.origin` si non définie.
-- `buildMenuUrl()` utilise `PRODUCTION_ORIGIN` en priorité.
-- Aucune migration DB, aucun changement de routes (`/m/:slug` reste identique).
-
-### Alternatives si tu préfères
-
-- **Utiliser le domaine racine `platorama.fr` pour les menus** et déplacer ta landing ailleurs → plus radical, casse ta landing actuelle.
-- **Garder uniquement `platorama.lovable.app`** → URLs déjà courtes et propres, pas besoin de DNS.
-
-### Questions ouvertes
-
-- Quel sous-domaine veux-tu utiliser : `menu.platorama.fr`, `app.platorama.fr`, `carte.platorama.fr`, autre ?
-- Veux-tu aussi que je hardcode l'URL de prod dans le code (étape optionnelle) ?
-
+- Toutes les couleurs passent par des tokens HSL ; si la nouvelle teinte dorée n'existe pas déjà comme token, ajouter `--ar-cta` et `--ar-cta-glow` dans `src/index.css` et l'utiliser dans `ARButton`.
+- Animations en CSS pur (`@keyframes` dans `index.css`) — pas de nouvelle dépendance.
+- Sur iOS, `getUserMedia` peut être refusé si rappelé trop vite après la libération : ajouter un petit délai (300ms) avant le redémarrage.
