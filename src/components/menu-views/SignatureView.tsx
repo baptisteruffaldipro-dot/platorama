@@ -56,22 +56,22 @@ export default function SignatureView({
 
   return (
     <div className="h-full flex flex-col relative z-10">
-      {/* ─── Photo circulaire + flèches ─── */}
-      <div className="flex-1 min-h-0 flex items-center justify-center px-4">
+      {/* ─── Photo circulaire + flèches aux bords de l'écran ─── */}
+      <div className="relative flex justify-center pt-16">
         <button
           onClick={prev}
           aria-label="Plat précédent"
-          className="shrink-0 p-3 text-muted-foreground/70 hover:text-foreground transition-colors active:scale-90"
+          className="absolute left-1 top-1/2 -translate-y-1/2 p-4 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
         >
-          <ChevronLeft className="w-9 h-9" strokeWidth={1.5} />
+          <ChevronLeft className="w-11 h-11" strokeWidth={1} />
         </button>
 
         <div className="relative">
           {/* Ombre portée sous l'assiette */}
           <div
             aria-hidden
-            className="absolute inset-x-4 -bottom-4 h-10 rounded-[100%] blur-xl"
-            style={{ background: "hsl(0 0% 0% / 0.7)" }}
+            className="absolute inset-x-2 -bottom-5 h-12 rounded-[100%] blur-2xl"
+            style={{ background: "hsl(0 0% 0% / 0.85)" }}
           />
           <AnimatePresence mode="wait">
             <motion.div
@@ -80,17 +80,17 @@ export default function SignatureView({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="relative w-60 h-60 sm:w-72 sm:h-72 rounded-full overflow-hidden"
+              className="relative w-[68vw] h-[68vw] max-w-[340px] max-h-[340px] rounded-full overflow-hidden"
               style={{
-                border: "3px solid hsl(43 20% 88% / 0.9)",
-                boxShadow: "0 18px 40px -12px hsl(0 0% 0% / 0.8)",
+                border: "2px solid hsl(43 20% 88% / 0.85)",
+                boxShadow: "0 24px 50px -14px hsl(0 0% 0% / 0.85)",
               }}
             >
               {dish.thumbnail ? (
                 <img
                   src={dish.thumbnail}
                   alt={t(dish.name)}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover scale-110"
                   draggable={false}
                 />
               ) : (
@@ -105,9 +105,9 @@ export default function SignatureView({
         <button
           onClick={next}
           aria-label="Plat suivant"
-          className="shrink-0 p-3 text-muted-foreground/70 hover:text-foreground transition-colors active:scale-90"
+          className="absolute right-1 top-1/2 -translate-y-1/2 p-4 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
         >
-          <ChevronRight className="w-9 h-9" strokeWidth={1.5} />
+          <ChevronRight className="w-11 h-11" strokeWidth={1} />
         </button>
       </div>
 
