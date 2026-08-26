@@ -25,8 +25,9 @@ import WalletStackView from "@/components/menu-views/WalletStackView";
 import SignatureView from "@/components/menu-views/SignatureView";
 import type { Dish } from "@/hooks/useDishes";
 import { getLayoutVariant } from "@/lib/menuTemplates";
-import { isIOS } from "@/lib/platform";
+import { isIOS, isInAppBrowser } from "@/lib/platform";
 import { hasARModel } from "@/lib/dishHasAR";
+import OpenInBrowserDialog from "@/components/OpenInBrowserDialog";
 import { Info, ChefHat, BookOpen } from "lucide-react";
 import {
   Dialog,
@@ -132,6 +133,17 @@ const Index = () => {
   const dish = currentDish;
 
   const handleLaunchAR = (target: Dish = dish) => {
+    // Les webviews intégrées (Instagram, Facebook…) ne peuvent pas lancer
+    // AR Quick Look / Scene Viewer : on invite à ouvrir dans Safari/Chrome.
+    if (isInAppBrowser()) {
+      setShowBrowserHint(true);
+      supabase
+        .from("dish_events")
+        .insert({ dish_id: target.id, event_type: "ar_blocked_inapp" })
+        .then();
+      return;
+    }
+
     // Release any active camera streams (e.g. Vision AR background)
     // so iOS Quick Look / Scene Viewer can grab the camera for AR mode.
     document.querySelectorAll("video").forEach((v) => {
