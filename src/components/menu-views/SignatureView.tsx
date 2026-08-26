@@ -57,13 +57,13 @@ export default function SignatureView({
   return (
     <div className="h-full flex flex-col relative z-10">
       {/* ─── Photo circulaire + flèches aux bords de l'écran ─── */}
-      <div className="relative flex justify-center pt-16">
+      <div className="relative flex justify-center pt-8">
         <button
           onClick={prev}
           aria-label="Plat précédent"
-          className="absolute left-0 top-[62%] -translate-y-1/2 p-4 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
+          className="absolute left-0 top-[58%] -translate-y-1/2 p-3 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
         >
-          <ChevronLeft className="w-16 h-16" strokeWidth={1} />
+          <ChevronLeft className="w-14 h-14" strokeWidth={1} />
         </button>
 
         <div className="relative">
@@ -74,14 +74,14 @@ export default function SignatureView({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="relative w-[84vw] h-[84vw] max-w-[420px] max-h-[420px]"
+              className="relative w-[64vw] h-[64vw] max-w-[300px] max-h-[300px]"
             >
               {dish.thumbnail ? (
                 <img
                   src={dish.thumbnail}
                   alt={t(dish.name)}
                   className="w-full h-full object-contain"
-                  style={{ filter: "drop-shadow(0 24px 40px hsl(0 0% 0% / 0.7))" }}
+                  style={{ filter: "drop-shadow(0 18px 30px hsl(0 0% 0% / 0.65))" }}
                   draggable={false}
                 />
               ) : (
@@ -96,9 +96,9 @@ export default function SignatureView({
         <button
           onClick={next}
           aria-label="Plat suivant"
-          className="absolute right-0 top-[62%] -translate-y-1/2 p-4 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
+          className="absolute right-0 top-[58%] -translate-y-1/2 p-3 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
         >
-          <ChevronRight className="w-16 h-16" strokeWidth={1} />
+          <ChevronRight className="w-14 h-14" strokeWidth={1} />
         </button>
       </div>
 
