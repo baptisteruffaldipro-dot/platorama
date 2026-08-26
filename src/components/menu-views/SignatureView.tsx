@@ -57,13 +57,13 @@ export default function SignatureView({
   return (
     <div className="h-full flex flex-col relative z-10">
       {/* ─── Photo circulaire + flèches aux bords de l'écran ─── */}
-      <div className="relative flex justify-center pt-16">
+      <div className="relative flex justify-center pt-8">
         <button
           onClick={prev}
           aria-label="Plat précédent"
-          className="absolute left-0 top-[62%] -translate-y-1/2 p-4 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
+          className="absolute left-0 top-[58%] -translate-y-1/2 p-3 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
         >
-          <ChevronLeft className="w-16 h-16" strokeWidth={1} />
+          <ChevronLeft className="w-14 h-14" strokeWidth={1} />
         </button>
 
         <div className="relative">
@@ -74,14 +74,14 @@ export default function SignatureView({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="relative w-[84vw] h-[84vw] max-w-[420px] max-h-[420px]"
+              className="relative w-[64vw] h-[64vw] max-w-[300px] max-h-[300px]"
             >
               {dish.thumbnail ? (
                 <img
                   src={dish.thumbnail}
                   alt={t(dish.name)}
                   className="w-full h-full object-contain"
-                  style={{ filter: "drop-shadow(0 24px 40px hsl(0 0% 0% / 0.7))" }}
+                  style={{ filter: "drop-shadow(0 18px 30px hsl(0 0% 0% / 0.65))" }}
                   draggable={false}
                 />
               ) : (
@@ -96,9 +96,9 @@ export default function SignatureView({
         <button
           onClick={next}
           aria-label="Plat suivant"
-          className="absolute right-0 top-[62%] -translate-y-1/2 p-4 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
+          className="absolute right-0 top-[58%] -translate-y-1/2 p-3 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
         >
-          <ChevronRight className="w-16 h-16" strokeWidth={1} />
+          <ChevronRight className="w-14 h-14" strokeWidth={1} />
         </button>
       </div>
 
@@ -111,26 +111,26 @@ export default function SignatureView({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="flex flex-col items-center text-center px-8 -mt-4"
+          className="flex flex-col items-center text-center px-6 -mt-2"
         >
-          <span className="text-[13px] tracking-[0.45em] uppercase text-foreground/70 mb-3">
+          <span className="text-[12px] tracking-[0.4em] uppercase text-foreground/70 mb-2">
             {t(dish.category)}
           </span>
 
-          <div className="flex items-start justify-center gap-2 mb-4">
+          <div className="flex items-start justify-center gap-2 mb-2">
             <h1
-              className="text-3xl sm:text-4xl font-medium text-foreground uppercase tracking-wide leading-snug"
+              className="text-2xl sm:text-3xl font-medium text-foreground uppercase tracking-wide leading-snug"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               {t(dish.name)}
             </h1>
             <button
               onClick={() => onToggleFavorite(dish.id)}
-              className="transition-transform active:scale-90 shrink-0 mt-2"
+              className="transition-transform active:scale-90 shrink-0 mt-1.5"
               aria-label={isFavorite(dish.id) ? "Retirer des favoris" : "Ajouter aux favoris"}
             >
               <Star
-                className={`w-6 h-6 transition-colors ${
+                className={`w-5 h-5 transition-colors ${
                   isFavorite(dish.id) ? "fill-accent text-accent" : "text-foreground/70"
                 }`}
                 strokeWidth={1.25}
@@ -139,14 +139,14 @@ export default function SignatureView({
           </div>
 
           <p
-            className="text-lg italic text-foreground/75 leading-relaxed max-w-[380px] mb-3"
+            className="text-base italic text-foreground/75 leading-relaxed max-w-[360px] mb-2"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             {t(dish.ingredients)}
           </p>
 
           <p
-            className="text-2xl font-medium text-accent tabular-nums"
+            className="text-xl font-medium text-accent tabular-nums"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             {dish.price.toFixed(2)} €
@@ -155,11 +155,11 @@ export default function SignatureView({
       </AnimatePresence>
 
       {/* Spacer : pousse le bouton en bas */}
-      <div className="flex-1 min-h-4" />
+      <div className="flex-1 min-h-2" />
 
       {/* ─── Bouton AR pilule or ─── */}
       {hasARModel(dish) && (
-        <div className="relative px-5 pb-safe mb-24 w-full max-w-md mx-auto">
+        <div className="relative px-5 pb-safe mb-6 w-full max-w-md mx-auto">
 
           {showTooltip && (
             <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-30 animate-fade-in">
@@ -188,14 +188,14 @@ export default function SignatureView({
 
           <button
             onClick={handleAR}
-            className="relative w-full rounded-full py-3.5 animate-ar-breathe transition-transform duration-300 active:scale-[0.97]"
+            className="relative w-full rounded-full py-3 animate-ar-breathe transition-transform duration-300 active:scale-[0.97]"
             style={{
               background: "linear-gradient(180deg, hsl(43 52% 60%) 0%, hsl(41 48% 50%) 100%)",
               boxShadow: "0 10px 32px -8px hsl(41 60% 45% / 0.5)",
             }}
           >
             <span
-              className="block text-center text-base font-medium uppercase tracking-[0.28em]"
+              className="block text-center text-sm font-medium uppercase tracking-[0.28em]"
               style={{ fontFamily: "var(--font-serif)", color: "hsl(40 30% 97%)" }}
             >
               {t("Voir sur ma table")}
