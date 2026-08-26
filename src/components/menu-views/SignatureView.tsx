@@ -146,7 +146,7 @@ export default function SignatureView({
           </p>
 
           <p
-            className="text-2xl font-medium text-accent tabular-nums"
+            className="text-2xl font-medium text-accent tabular-nums mb-6"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             {dish.price.toFixed(2)} €
