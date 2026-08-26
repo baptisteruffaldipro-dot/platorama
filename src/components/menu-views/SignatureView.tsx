@@ -159,7 +159,7 @@ export default function SignatureView({
 
       {/* ─── Bouton AR pilule or ─── */}
       {hasARModel(dish) && (
-        <div className="relative px-5 pb-safe mb-24 w-full max-w-md mx-auto">
+        <div className="relative px-5 pb-safe mb-6 w-full max-w-md mx-auto">
 
           {showTooltip && (
             <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-30 animate-fade-in">
@@ -188,14 +188,14 @@ export default function SignatureView({
 
           <button
             onClick={handleAR}
-            className="relative w-full rounded-full py-3.5 animate-ar-breathe transition-transform duration-300 active:scale-[0.97]"
+            className="relative w-full rounded-full py-3 animate-ar-breathe transition-transform duration-300 active:scale-[0.97]"
             style={{
               background: "linear-gradient(180deg, hsl(43 52% 60%) 0%, hsl(41 48% 50%) 100%)",
               boxShadow: "0 10px 32px -8px hsl(41 60% 45% / 0.5)",
             }}
           >
             <span
-              className="block text-center text-base font-medium uppercase tracking-[0.28em]"
+              className="block text-center text-sm font-medium uppercase tracking-[0.28em]"
               style={{ fontFamily: "var(--font-serif)", color: "hsl(40 30% 97%)" }}
             >
               {t("Voir sur ma table")}
