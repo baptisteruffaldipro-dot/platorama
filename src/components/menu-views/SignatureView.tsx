@@ -57,7 +57,7 @@ export default function SignatureView({
   return (
     <div className="h-full flex flex-col relative z-10">
       {/* ─── Photo circulaire + flèches aux bords de l'écran ─── */}
-      <div className="relative flex justify-center pt-8">
+      <div className="relative flex justify-center pt-14">
         <button
           onClick={prev}
           aria-label="Plat précédent"
@@ -111,7 +111,7 @@ export default function SignatureView({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="flex flex-col items-center text-center px-6 -mt-1"
+          className="flex flex-col items-center text-center px-6 mt-6"
         >
           <span className="text-[13px] tracking-[0.45em] uppercase text-foreground/70 mb-2">
             {t(dish.category)}
