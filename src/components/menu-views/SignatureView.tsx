@@ -185,12 +185,6 @@ export default function SignatureView({
             </div>
           )}
 
-          {/* Contour fin extérieur */}
-          <span
-            aria-hidden
-            className="pointer-events-none absolute -inset-1.5 rounded-full border"
-            style={{ borderColor: "hsl(43 55% 50% / 0.55)" }}
-          />
 
           <button
             onClick={handleAR}
