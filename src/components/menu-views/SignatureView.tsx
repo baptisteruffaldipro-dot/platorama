@@ -139,7 +139,7 @@ export default function SignatureView({
           </div>
 
           <p
-            className="text-lg italic text-foreground/75 leading-relaxed max-w-[380px] mb-6"
+            className="text-lg italic text-foreground/75 leading-relaxed max-w-[380px] mb-3"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             {t(dish.ingredients)}
@@ -155,11 +155,12 @@ export default function SignatureView({
       </AnimatePresence>
 
       {/* Spacer : pousse le bouton en bas */}
-      <div className="flex-1 min-h-6" />
+      <div className="flex-1 min-h-4" />
 
       {/* ─── Bouton AR pilule or ─── */}
       {hasARModel(dish) && (
-        <div className="relative px-5 pb-safe mb-6 w-full max-w-md mx-auto">
+        <div className="relative px-5 pb-safe mb-16 w-full max-w-md mx-auto">
+
           {showTooltip && (
             <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-30 animate-fade-in">
               <div className="relative bg-foreground text-background px-4 py-2.5 rounded-xl shadow-2xl max-w-[260px]">
