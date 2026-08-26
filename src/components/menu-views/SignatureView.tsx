@@ -34,16 +34,19 @@ export default function SignatureView({
   const [showTooltip, setShowTooltip] = useState(false);
 
   useEffect(() => {
-    const key = `ar_hint_seen_${restaurantId}`;
+    const key = `ar_hint_v2_${restaurantId}`;
     if (!localStorage.getItem(key)) {
-      const timer = setTimeout(() => setShowTooltip(true), 1200);
+      const timer = setTimeout(() => {
+        setShowTooltip(true);
+        // Marqué dès l'affichage : l'astuce n'apparaît qu'à la 1ère visite
+        localStorage.setItem(key, "1");
+      }, 1200);
       return () => clearTimeout(timer);
     }
   }, [restaurantId]);
 
   const dismissTooltip = () => {
     setShowTooltip(false);
-    localStorage.setItem(`ar_hint_seen_${restaurantId}`, "1");
   };
 
   const prev = () => onSelect((activeIndex - 1 + dishes.length) % dishes.length);
