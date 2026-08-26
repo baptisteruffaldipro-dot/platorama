@@ -63,7 +63,7 @@ export default function SignatureView({
           aria-label="Plat précédent"
           className="absolute left-0 top-[62%] -translate-y-1/2 p-4 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
         >
-          <ChevronLeft className="w-14 h-14" strokeWidth={1} />
+          <ChevronLeft className="w-16 h-16" strokeWidth={1} />
         </button>
 
         <div className="relative">
@@ -74,7 +74,7 @@ export default function SignatureView({
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.3, ease: "easeOut" }}
-              className="relative w-[72vw] h-[72vw] max-w-[360px] max-h-[360px]"
+              className="relative w-[84vw] h-[84vw] max-w-[420px] max-h-[420px]"
             >
               {dish.thumbnail ? (
                 <img
@@ -98,7 +98,7 @@ export default function SignatureView({
           aria-label="Plat suivant"
           className="absolute right-0 top-[62%] -translate-y-1/2 p-4 text-foreground/50 hover:text-foreground transition-colors active:scale-90 z-10"
         >
-          <ChevronRight className="w-14 h-14" strokeWidth={1} />
+          <ChevronRight className="w-16 h-16" strokeWidth={1} />
         </button>
       </div>
 
@@ -111,7 +111,7 @@ export default function SignatureView({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="flex flex-col items-center text-center px-8 mt-12"
+          className="flex flex-col items-center text-center px-8 -mt-4"
         >
           <span className="text-[13px] tracking-[0.45em] uppercase text-foreground/70 mb-3">
             {t(dish.category)}
@@ -159,7 +159,7 @@ export default function SignatureView({
 
       {/* ─── Bouton AR pilule or ─── */}
       {hasARModel(dish) && (
-        <div className="relative px-5 pb-safe mb-16 w-full max-w-md mx-auto">
+        <div className="relative px-5 pb-safe mb-24 w-full max-w-md mx-auto">
 
           {showTooltip && (
             <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-30 animate-fade-in">
@@ -188,14 +188,14 @@ export default function SignatureView({
 
           <button
             onClick={handleAR}
-            className="relative w-full rounded-full py-5 animate-ar-breathe transition-transform duration-300 active:scale-[0.97]"
+            className="relative w-full rounded-full py-3.5 animate-ar-breathe transition-transform duration-300 active:scale-[0.97]"
             style={{
               background: "linear-gradient(180deg, hsl(43 52% 60%) 0%, hsl(41 48% 50%) 100%)",
               boxShadow: "0 10px 32px -8px hsl(41 60% 45% / 0.5)",
             }}
           >
             <span
-              className="block text-center text-lg font-medium uppercase tracking-[0.3em]"
+              className="block text-center text-base font-medium uppercase tracking-[0.28em]"
               style={{ fontFamily: "var(--font-serif)", color: "hsl(40 30% 97%)" }}
             >
               {t("Voir sur ma table")}
