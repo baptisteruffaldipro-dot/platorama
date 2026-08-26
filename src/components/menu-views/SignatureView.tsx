@@ -201,14 +201,14 @@ export default function SignatureView({
 
           <button
             onClick={handleAR}
-            className="relative w-full rounded-full py-4 transition-transform duration-300 active:scale-[0.97] animate-ar-breathe"
+            className="relative w-full rounded-full py-5 transition-transform duration-300 active:scale-[0.97]"
             style={{
-              background: "linear-gradient(180deg, hsl(43 55% 62%) 0%, hsl(41 50% 52%) 100%)",
-              boxShadow: "0 8px 28px -6px hsl(41 60% 45% / 0.55)",
+              background: "linear-gradient(180deg, hsl(43 52% 60%) 0%, hsl(41 48% 50%) 100%)",
+              boxShadow: "0 10px 32px -8px hsl(41 60% 45% / 0.5)",
             }}
           >
             <span
-              className="block text-center text-[15px] font-medium uppercase tracking-[0.28em]"
+              className="block text-center text-lg font-medium uppercase tracking-[0.3em]"
               style={{ fontFamily: "var(--font-serif)", color: "hsl(40 30% 97%)" }}
             >
               {t("Voir sur ma table")}
