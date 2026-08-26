@@ -22,6 +22,7 @@ import PopSwipeView from "@/components/menu-views/PopSwipeView";
 import OrganicStoriesView from "@/components/menu-views/OrganicStoriesView";
 import VintageBookView from "@/components/menu-views/VintageBookView";
 import WalletStackView from "@/components/menu-views/WalletStackView";
+import SignatureView from "@/components/menu-views/SignatureView";
 import type { Dish } from "@/hooks/useDishes";
 import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS } from "@/lib/platform";
@@ -187,8 +188,9 @@ const Index = () => {
   };
 
   const layout = getLayoutVariant(siteSettings?.template_id);
-  const useListView = layout !== "classic" && layout !== "vision";
+  const useListView = layout !== "classic" && layout !== "vision" && layout !== "signature";
   const isVision = layout === "vision";
+  const isSignature = layout === "signature";
 
   return (
     <div className={`h-full flex flex-col relative overflow-hidden ${isVision ? "bg-black" : "bg-background"}`}>
