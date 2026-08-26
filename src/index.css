@@ -149,3 +149,11 @@
   50%      { transform: scale(1.04); }
 }
 .animate-ar-breathe { animation: ar-breathe 1.8s ease-in-out infinite; }
+
+/* Soft golden glow pulse for the AR CTA */
+@keyframes ar-glow {
+  0%, 100% { box-shadow: 0 0 0 1px hsl(43 60% 55% / 0.5), 0 8px 26px -6px hsl(43 70% 50% / 0.45); }
+  50%      { box-shadow: 0 0 0 1px hsl(43 70% 62% / 0.8), 0 12px 40px -6px hsl(43 80% 55% / 0.75); }
+}
+.animate-ar-glow { animation: ar-glow 2.4s ease-in-out infinite; }
+

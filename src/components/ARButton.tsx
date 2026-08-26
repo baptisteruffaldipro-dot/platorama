@@ -63,32 +63,54 @@ export default function ARButton({ onClick, layout = "classic", restaurantId }: 
         </div>
       )}
 
-      {/* The CTA button — bouton plein "commander" avec effet zoom */}
-      <button
-        onClick={handleClick}
-        className="group relative w-full max-w-md overflow-hidden rounded-full bg-accent px-6 py-4 text-accent-foreground shadow-[0_10px_30px_-8px_hsl(var(--accent)/0.6)] transition-all duration-300 hover:brightness-110 active:scale-[0.97] animate-ar-breathe"
-      >
-        {/* Shimmer au hover */}
+      {/* The CTA — pilule dorée avec disque d'icône débordant en haut */}
+      <div className="relative w-full max-w-md pt-6">
+        {/* Contour fin extérieur */}
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-0 -translate-x-full transition-transform duration-1000 group-hover:translate-x-full"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.25) 50%, transparent 100%)",
-          }}
+          className="pointer-events-none absolute inset-x-[-6px] top-[18px] bottom-[-6px] rounded-full border"
+          style={{ borderColor: "hsl(43 55% 50% / 0.5)" }}
         />
 
-        <div className="relative flex items-center justify-center gap-2.5">
-          <ScanEye className="h-5 w-5" strokeWidth={2} />
-          <span className="text-sm font-semibold uppercase tracking-[0.2em]">
+        <button
+          onClick={handleClick}
+          className="group relative w-full rounded-full px-6 py-4 transition-transform duration-300 active:scale-[0.97] animate-ar-breathe"
+          style={{
+            background: "linear-gradient(180deg, hsl(43 55% 62%) 0%, hsl(41 50% 52%) 100%)",
+          }}
+        >
+          {/* Halo pulsant */}
+          <span aria-hidden className="pointer-events-none absolute inset-0 rounded-full animate-ar-glow" />
+
+          {/* Shimmer au hover */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 overflow-hidden rounded-full"
+          >
+            <span
+              className="absolute inset-y-0 -left-full w-full transition-transform duration-1000 group-hover:translate-x-[200%]"
+              style={{
+                background:
+                  "linear-gradient(90deg, transparent 0%, hsl(0 0% 100% / 0.35) 50%, transparent 100%)",
+              }}
+            />
+          </span>
+
+          <span className="relative block text-center text-[15px] font-medium uppercase tracking-[0.28em] text-background" style={{ fontFamily: "var(--font-serif)" }}>
             {t("Voir sur ma table")}
           </span>
-        </div>
+        </button>
 
-        {showTooltip && (
-          <Hand className="w-5 h-5 absolute right-3 top-1/2 -translate-y-1/2 text-accent bg-background rounded-full p-0.5 animate-bounce shadow-lg" />
-        )}
-      </button>
+        {/* Disque d'icône centré au-dessus */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-0 z-10 -translate-x-1/2 flex h-12 w-12 items-center justify-center rounded-full"
+          style={{ background: "linear-gradient(180deg, hsl(43 55% 62%) 0%, hsl(41 50% 54%) 100%)" }}
+        >
+          <ScanEye className="h-6 w-6 text-background animate-ar-icon-float" strokeWidth={1.75} />
+        </span>
+      </div>
+
     </div>
   );
 }
