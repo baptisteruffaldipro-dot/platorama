@@ -166,6 +166,26 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
       body_font: "Inter",
     },
   },
+  {
+    id: "signature-or",
+    name: "Signature Or",
+    description: "Photo circulaire, flèches de navigation, bouton doré — épuré et haut de gamme",
+    layout: "signature",
+    preview: {
+      background: "#0d0d0d",
+      text: "#ece5d5",
+      accent: "#b8943e",
+      accentText: "#ece5d5",
+    },
+    settings: {
+      background_color: "#0d0d0d",
+      text_color: "#ece5d5",
+      button_bg_color: "#b8943e",
+      button_text_color: "#ece5d5",
+      heading_font: "Cormorant Garamond",
+      body_font: "Cormorant Garamond",
+    },
+  },
 ];
 
 export function getTemplateById(id: string): MenuTemplate | undefined {
