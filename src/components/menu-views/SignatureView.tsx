@@ -119,47 +119,51 @@ export default function SignatureView({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="flex flex-col items-center text-center px-8"
+          className="flex flex-col items-center text-center px-8 mt-12"
         >
-          <span className="text-xs tracking-[0.4em] uppercase text-muted-foreground mb-2">
+          <span className="text-[13px] tracking-[0.45em] uppercase text-foreground/70 mb-3">
             {t(dish.category)}
           </span>
 
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-start justify-center gap-2 mb-4">
             <h1
-              className="text-2xl sm:text-3xl text-foreground uppercase tracking-wide leading-snug"
+              className="text-3xl sm:text-4xl font-medium text-foreground uppercase tracking-wide leading-snug"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               {t(dish.name)}
             </h1>
             <button
               onClick={() => onToggleFavorite(dish.id)}
-              className="transition-transform active:scale-90 shrink-0"
+              className="transition-transform active:scale-90 shrink-0 mt-2"
               aria-label={isFavorite(dish.id) ? "Retirer des favoris" : "Ajouter aux favoris"}
             >
               <Star
-                className={`w-5 h-5 transition-colors ${
-                  isFavorite(dish.id) ? "fill-accent text-accent" : "text-muted-foreground"
+                className={`w-6 h-6 transition-colors ${
+                  isFavorite(dish.id) ? "fill-accent text-accent" : "text-foreground/70"
                 }`}
+                strokeWidth={1.25}
               />
             </button>
           </div>
 
           <p
-            className="text-base italic text-foreground/80 leading-relaxed max-w-[360px] mb-4"
+            className="text-lg italic text-foreground/75 leading-relaxed max-w-[380px] mb-6"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             {t(dish.ingredients)}
           </p>
 
           <p
-            className="text-xl text-accent tabular-nums mb-6"
+            className="text-2xl font-medium text-accent tabular-nums"
             style={{ fontFamily: "var(--font-serif)" }}
           >
             {dish.price.toFixed(2)} €
           </p>
         </motion.div>
       </AnimatePresence>
+
+      {/* Spacer : pousse le bouton en bas */}
+      <div className="flex-1 min-h-6" />
 
       {/* ─── Bouton AR pilule or ─── */}
       {hasARModel(dish) && (
