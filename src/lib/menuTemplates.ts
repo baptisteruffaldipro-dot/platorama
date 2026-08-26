@@ -2,7 +2,7 @@
 // Chaque template définit une palette + typographie + LAYOUT.
 // Sert de point de départ : couleurs/polices restent éditables ensuite.
 
-export type LayoutVariant = "classic" | "editorial" | "vintage" | "pop" | "organic" | "wallet" | "vision";
+export type LayoutVariant = "classic" | "editorial" | "vintage" | "pop" | "organic" | "wallet" | "vision" | "signature";
 
 export interface MenuTemplate {
   id: string;
