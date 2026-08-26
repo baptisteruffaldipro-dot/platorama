@@ -57,7 +57,7 @@ export default function SignatureView({
   return (
     <div className="h-full flex flex-col relative z-10">
       {/* ─── Photo circulaire + flèches aux bords de l'écran ─── */}
-      <div className="relative flex justify-center pt-8">
+      <div className="relative flex justify-center pt-14">
         <button
           onClick={prev}
           aria-label="Plat précédent"
