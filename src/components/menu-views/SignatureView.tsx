@@ -188,7 +188,7 @@ export default function SignatureView({
 
           <button
             onClick={handleAR}
-            className="relative w-full rounded-full py-5 transition-transform duration-300 active:scale-[0.97]"
+            className="relative w-full rounded-full py-5 animate-ar-breathe transition-transform duration-300 active:scale-[0.97]"
             style={{
               background: "linear-gradient(180deg, hsl(43 52% 60%) 0%, hsl(41 48% 50%) 100%)",
               boxShadow: "0 10px 32px -8px hsl(41 60% 45% / 0.5)",
