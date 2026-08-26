@@ -156,7 +156,7 @@ export default function SignatureView({
 
       {/* ─── Bouton AR pilule or ─── */}
       {hasARModel(dish) && (
-        <div className="relative mt-auto mt-6 px-5 pb-safe -mb-12 w-full max-w-md mx-auto">
+        <div className="relative mt-auto pt-6 px-5 pb-16 w-full max-w-md mx-auto">
 
           {showTooltip && (
             <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-30 animate-fade-in">
