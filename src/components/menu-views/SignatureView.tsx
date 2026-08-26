@@ -86,9 +86,9 @@ export default function SignatureView({
                 boxShadow: "0 18px 40px -12px hsl(0 0% 0% / 0.8)",
               }}
             >
-              {dish.image ? (
+              {dish.thumbnail ? (
                 <img
-                  src={dish.image}
+                  src={dish.thumbnail}
                   alt={t(dish.name)}
                   className="w-full h-full object-cover"
                   draggable={false}
