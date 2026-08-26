@@ -44,6 +44,7 @@ const Index = () => {
   const restaurantId = restaurantInfo?.id ?? null;
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
+  const [showBrowserHint, setShowBrowserHint] = useState(false);
   const { data: allDishes, isLoading } = useDishes(restaurantId);
   // Filter out unavailable dishes for the public menu
   const dishes = allDishes?.filter(d => d.is_available);
@@ -213,6 +214,7 @@ const Index = () => {
       )}
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
       <LanguageSelector multilingual={features.hasMultilingual} />
+      <OpenInBrowserDialog open={showBrowserHint} onOpenChange={setShowBrowserHint} />
 
       {/* Top-left icon buttons (horizontal row) */}
       <div className="absolute top-4 left-4 z-20 flex flex-row gap-2">
