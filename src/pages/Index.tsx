@@ -302,7 +302,19 @@ const Index = () => {
         )}
       </div>
 
-      {useListView ? (
+      {isSignature ? (
+        <div className="flex-1 min-h-0">
+          <SignatureView
+            dishes={dishes}
+            activeIndex={safeIndex}
+            onSelect={setActiveIndex}
+            onLaunchAR={(d) => handleLaunchAR(d)}
+            isFavorite={isFavorite}
+            onToggleFavorite={toggle}
+            restaurantId={restaurantId!}
+          />
+        </div>
+      ) : useListView ? (
         <div className="flex-1 min-h-0">
           {layout === "editorial" && (
             <MenuListView
