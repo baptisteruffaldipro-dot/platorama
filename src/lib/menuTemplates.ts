@@ -188,7 +188,7 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
   },
   {
     id: "carte-amr",
-    name: "Carte AMR",
+    name: "Carte Test",
     description: "Photo ronde, typo affirmée, bouton doré lumineux et barre de catégories — moderne et immersif",
     layout: "amr",
     preview: {
