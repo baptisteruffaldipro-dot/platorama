@@ -88,7 +88,10 @@ export default function AmrCardView({
     "absolute top-1/2 -translate-y-1/2 w-14 h-14 rounded-full border border-foreground/25 flex items-center justify-center text-foreground/70 hover:text-foreground hover:border-foreground/50 transition-colors active:scale-90 z-20 bg-background/20 backdrop-blur-sm";
 
   return (
-    <div className="h-full flex flex-col relative z-10 overflow-hidden">
+    <div
+      className="h-full flex flex-col relative z-10 overflow-hidden"
+      style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
+    >
       {/* ─── Photo ronde + flèches ─── */}
       <div className="relative flex justify-center pt-6 shrink-0">
         <button onClick={prev} aria-label="Plat précédent" className={`${arrowCls} left-2`}>

@@ -219,7 +219,7 @@ const Index = () => {
       <OpenInBrowserDialog open={showBrowserHint} onOpenChange={setShowBrowserHint} />
 
       {/* Top-left icon buttons (horizontal row) */}
-      <div className="absolute top-4 left-4 z-20 flex flex-row gap-2">
+      <div className={`absolute top-4 left-4 z-20 flex flex-row gap-2 ${isAmr ? "hidden" : ""}`}>
         {/* Formulas / Info — only show if formulas exist */}
         {formulas.length > 0 && (
           <Dialog>
