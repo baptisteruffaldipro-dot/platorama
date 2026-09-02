@@ -111,6 +111,8 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
     subtitle: initial.subtitle,
     formulas: initial.formulas ?? [],
     template_id: initial.template_id ?? "dark-luxe",
+    custom_font_name: initial.custom_font_name ?? "",
+    custom_font_url: initial.custom_font_url ?? "",
   });
 
   // Sync when draft/published loads
@@ -128,8 +130,12 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
       subtitle: src.subtitle,
       formulas: src.formulas ?? [],
       template_id: src.template_id ?? "dark-luxe",
+      custom_font_name: src.custom_font_name ?? "",
+      custom_font_url: src.custom_font_url ?? "",
     });
   }, [draft, published]);
+
+  const [uploadingFont, setUploadingFont] = useState(false);
 
   const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -144,6 +150,34 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
     const { data } = supabase.storage.from("dish-assets").getPublicUrl(path);
     setForm((f) => ({ ...f, logo_url: data.publicUrl }));
     toast.success("Logo uploadé");
+  };
+
+  const handleFontUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const ext = (file.name.split(".").pop() || "").toLowerCase();
+    if (!["woff2", "woff", "ttf", "otf"].includes(ext)) {
+      toast.error("Format non supporté (woff2, woff, ttf ou otf)");
+      return;
+    }
+    setUploadingFont(true);
+    const path = `fonts/${Date.now()}.${ext}`;
+    const { error } = await supabase.storage.from("dish-assets").upload(path, file);
+    setUploadingFont(false);
+    if (error) {
+      toast.error("Erreur upload police");
+      return;
+    }
+    const { data } = supabase.storage.from("dish-assets").getPublicUrl(path);
+    const name = file.name.replace(/\.[^.]+$/, "").replace(/[^a-zA-Z0-9 _-]/g, " ").trim() || "Police personnalisée";
+    setForm((f) => ({
+      ...f,
+      custom_font_url: data.publicUrl,
+      custom_font_name: name,
+      heading_font: name,
+      body_font: name,
+    }));
+    toast.success("Police importée");
   };
 
   const handleSaveDraft = async () => {
@@ -166,6 +200,9 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
 
   return (
     <div className="p-4 max-w-2xl mx-auto space-y-6">
+      {form.custom_font_url && form.custom_font_name && (
+        <style>{`@font-face { font-family: '${form.custom_font_name}'; src: url('${form.custom_font_url}'); font-display: swap; }`}</style>
+      )}
       {/* Preview */}
       <div
         className="rounded-lg border border-border p-6 space-y-3"
@@ -243,8 +280,70 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
       <div>
         <h3 className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">Typographie</h3>
         <div className="grid grid-cols-2 gap-4">
-          <FontSelect label="Titres" value={form.heading_font} onChange={(v) => setForm((f) => ({ ...f, heading_font: v }))} />
-          <FontSelect label="Corps de texte" value={form.body_font} onChange={(v) => setForm((f) => ({ ...f, body_font: v }))} />
+          <FontSelect label="Titres" value={form.heading_font} onChange={(v) => setForm((f) => ({ ...f, heading_font: v }))} customFont={form.custom_font_name || undefined} />
+          <FontSelect label="Corps de texte" value={form.body_font} onChange={(v) => setForm((f) => ({ ...f, body_font: v }))} customFont={form.custom_font_name || undefined} />
+        </div>
+
+        {/* Police personnalisée */}
+        <div className="mt-4 rounded-lg border border-border p-3 space-y-2">
+          <Label className="text-xs">Police du client (import)</Label>
+          <p className="text-xs text-muted-foreground">
+            Importez un fichier .woff2, .woff, .ttf ou .otf. Elle sera ensuite disponible dans les menus déroulants ci-dessus.
+          </p>
+          <div className="flex items-center gap-3 flex-wrap">
+            <label className="cursor-pointer">
+              <Button variant="outline" size="sm" asChild disabled={uploadingFont}>
+                <span>
+                  <Upload className="w-4 h-4 mr-1" />
+                  {uploadingFont ? "Import..." : "Importer une police"}
+                </span>
+              </Button>
+              <input
+                type="file"
+                accept=".woff2,.woff,.ttf,.otf,font/woff2,font/woff,font/ttf,font/otf"
+                className="hidden"
+                onChange={handleFontUpload}
+              />
+            </label>
+            {form.custom_font_url && (
+              <>
+                <span className="text-sm" style={{ fontFamily: `'${form.custom_font_name}'` }}>
+                  {form.custom_font_name} — Aa Bb Cc 123
+                </span>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() =>
+                    setForm((f) => ({
+                      ...f,
+                      custom_font_url: "",
+                      custom_font_name: "",
+                      heading_font: f.heading_font === f.custom_font_name ? DEFAULT_SETTINGS.heading_font : f.heading_font,
+                      body_font: f.body_font === f.custom_font_name ? DEFAULT_SETTINGS.body_font : f.body_font,
+                    }))
+                  }
+                >
+                  Supprimer
+                </Button>
+              </>
+            )}
+          </div>
+          {form.custom_font_name && (
+            <Input
+              value={form.custom_font_name}
+              onChange={(e) => {
+                const next = e.target.value;
+                setForm((f) => ({
+                  ...f,
+                  custom_font_name: next,
+                  heading_font: f.heading_font === f.custom_font_name ? next : f.heading_font,
+                  body_font: f.body_font === f.custom_font_name ? next : f.body_font,
+                }));
+              }}
+              placeholder="Nom de la police"
+              className="text-xs"
+            />
+          )}
         </div>
       </div>
 
