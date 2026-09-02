@@ -63,7 +63,27 @@ function resetToDashboardTheme() {
   document.body.style.fontFamily = "'DM Sans', 'Inter', sans-serif";
 }
 
-function applyRestaurantTheme(settings: { background_color: string; text_color: string; button_bg_color: string; button_text_color: string; heading_font: string; body_font: string }) {
+function injectCustomFont(name: string, url: string) {
+  const id = "custom-font-face";
+  const existing = document.getElementById(id);
+  if (existing) existing.remove();
+  if (!name || !url) return;
+  const style = document.createElement("style");
+  style.id = id;
+  const format = url.endsWith(".woff2")
+    ? "woff2"
+    : url.endsWith(".woff")
+      ? "woff"
+      : url.endsWith(".otf")
+        ? "opentype"
+        : "truetype";
+  style.textContent = `@font-face { font-family: '${name}'; src: url('${url}') format('${format}'); font-display: swap; }`;
+  document.head.appendChild(style);
+}
+
+function applyRestaurantTheme(settings: { background_color: string; text_color: string; button_bg_color: string; button_text_color: string; heading_font: string; body_font: string; custom_font_name?: string; custom_font_url?: string }) {
+  const customName = settings.custom_font_name || "";
+  injectCustomFont(customName, settings.custom_font_url || "");
   const root = document.documentElement;
   root.style.setProperty("--background", hexToHSL(settings.background_color));
   root.style.setProperty("--card", hexToHSL(settings.background_color));
@@ -79,7 +99,7 @@ function applyRestaurantTheme(settings: { background_color: string; text_color: 
   root.style.setProperty("--font-body", `'${settings.body_font}', Georgia, serif`);
   document.body.style.fontFamily = `'${settings.body_font}', Georgia, serif`;
 
-  const fonts = [...new Set([settings.heading_font, settings.body_font])];
+  const fonts = [...new Set([settings.heading_font, settings.body_font])].filter((f) => f && f !== customName);
   fonts.forEach((font) => {
     const id = `gfont-${font.replace(/\s+/g, "-")}`;
     if (!document.getElementById(id)) {

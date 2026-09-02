@@ -22,6 +22,8 @@ export interface SiteSettings {
   restaurant_id?: string | null;
   formulas: FormulaItem[];
   template_id: string;
+  custom_font_name: string;
+  custom_font_url: string;
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -37,6 +39,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   is_draft: false,
   formulas: [],
   template_id: "dark-luxe",
+  custom_font_name: "",
+  custom_font_url: "",
 };
 
 export const FONT_OPTIONS = [
@@ -59,6 +63,8 @@ function parseRow(row: any): SiteSettings {
     ...row,
     formulas: Array.isArray(row.formulas) ? row.formulas : [],
     template_id: row.template_id || "dark-luxe",
+    custom_font_name: row.custom_font_name || "",
+    custom_font_url: row.custom_font_url || "",
   } as SiteSettings;
 }
 
