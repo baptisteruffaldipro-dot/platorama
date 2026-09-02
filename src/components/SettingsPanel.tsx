@@ -40,7 +40,18 @@ function ColorInput({ label, value, onChange }: { label: string; value: string; 
   );
 }
 
-function FontSelect({ label, value, onChange }: { label: string; value: string; onChange: (v: string) => void }) {
+function FontSelect({
+  label,
+  value,
+  onChange,
+  customFont,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  customFont?: string;
+}) {
+  const options = customFont ? [customFont, ...FONT_OPTIONS] : FONT_OPTIONS;
   return (
     <div className="space-y-1">
       <Label className="text-xs">{label}</Label>
@@ -50,9 +61,9 @@ function FontSelect({ label, value, onChange }: { label: string; value: string; 
         className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
         style={{ fontFamily: value }}
       >
-        {FONT_OPTIONS.map((f) => (
+        {options.map((f) => (
           <option key={f} value={f} style={{ fontFamily: f }}>
-            {f}
+            {f === customFont ? `${f} (personnalisée)` : f}
           </option>
         ))}
       </select>
