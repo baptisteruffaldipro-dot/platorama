@@ -2,7 +2,7 @@
 // Chaque template définit une palette + typographie + LAYOUT.
 // Sert de point de départ : couleurs/polices restent éditables ensuite.
 
-export type LayoutVariant = "classic" | "editorial" | "vintage" | "pop" | "organic" | "wallet" | "vision" | "signature";
+export type LayoutVariant = "classic" | "editorial" | "vintage" | "pop" | "organic" | "wallet" | "vision" | "signature" | "amr";
 
 export interface MenuTemplate {
   id: string;
@@ -186,7 +186,29 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
       body_font: "Cormorant Garamond",
     },
   },
+  {
+    id: "carte-amr",
+    name: "Carte AMR",
+    description: "Photo ronde, typo affirmée, bouton doré lumineux et barre de catégories — moderne et immersif",
+    layout: "amr",
+    preview: {
+      background: "#141210",
+      text: "#f2efe9",
+      accent: "#f2b73c",
+      accentText: "#241a08",
+    },
+    settings: {
+      background_color: "#141210",
+      text_color: "#f2efe9",
+      button_bg_color: "#f2b73c",
+      button_text_color: "#241a08",
+      heading_font: "DM Sans",
+      body_font: "DM Sans",
+    },
+  },
 ];
+
+export const AMR_TEMPLATE_ID = "carte-amr";
 
 export function getTemplateById(id: string): MenuTemplate | undefined {
   return MENU_TEMPLATES.find((t) => t.id === id);
