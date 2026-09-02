@@ -63,13 +63,7 @@ function resetToDashboardTheme() {
   document.body.style.fontFamily = "'DM Sans', 'Inter', sans-serif";
 }
 
-function injectCustomFont(name: string, url: string) {
-  const id = "custom-font-face";
-  const existing = document.getElementById(id);
-  if (existing) existing.remove();
-  if (!name || !url) return;
-  const style = document.createElement("style");
-  style.id = id;
+function fontFaceRule(name: string, url: string) {
   const format = url.endsWith(".woff2")
     ? "woff2"
     : url.endsWith(".woff")
@@ -77,13 +71,26 @@ function injectCustomFont(name: string, url: string) {
       : url.endsWith(".otf")
         ? "opentype"
         : "truetype";
-  style.textContent = `@font-face { font-family: '${name}'; src: url('${url}') format('${format}'); font-display: swap; }`;
+  return `@font-face { font-family: '${name}'; src: url('${url}') format('${format}'); font-display: swap; }`;
+}
+
+function injectCustomFonts(fonts: { name: string; url: string }[]) {
+  const id = "custom-font-face";
+  document.getElementById(id)?.remove();
+  const rules = fonts.filter((f) => f.name && f.url).map((f) => fontFaceRule(f.name, f.url));
+  if (!rules.length) return;
+  const style = document.createElement("style");
+  style.id = id;
+  style.textContent = rules.join("\n");
   document.head.appendChild(style);
 }
 
-function applyRestaurantTheme(settings: { background_color: string; text_color: string; button_bg_color: string; button_text_color: string; heading_font: string; body_font: string; custom_font_name?: string; custom_font_url?: string }) {
-  const customName = settings.custom_font_name || "";
-  injectCustomFont(customName, settings.custom_font_url || "");
+function applyRestaurantTheme(settings: { background_color: string; text_color: string; button_bg_color: string; button_text_color: string; heading_font: string; body_font: string; custom_font_name?: string; custom_font_url?: string; custom_font_name_2?: string; custom_font_url_2?: string }) {
+  const customNames = [settings.custom_font_name || "", settings.custom_font_name_2 || ""].filter(Boolean);
+  injectCustomFonts([
+    { name: settings.custom_font_name || "", url: settings.custom_font_url || "" },
+    { name: settings.custom_font_name_2 || "", url: settings.custom_font_url_2 || "" },
+  ]);
   const root = document.documentElement;
   root.style.setProperty("--background", hexToHSL(settings.background_color));
   root.style.setProperty("--card", hexToHSL(settings.background_color));
@@ -99,7 +106,7 @@ function applyRestaurantTheme(settings: { background_color: string; text_color: 
   root.style.setProperty("--font-body", `'${settings.body_font}', Georgia, serif`);
   document.body.style.fontFamily = `'${settings.body_font}', Georgia, serif`;
 
-  const fonts = [...new Set([settings.heading_font, settings.body_font])].filter((f) => f && f !== customName);
+  const fonts = [...new Set([settings.heading_font, settings.body_font])].filter((f) => f && !customNames.includes(f));
   fonts.forEach((font) => {
     const id = `gfont-${font.replace(/\s+/g, "-")}`;
     if (!document.getElementById(id)) {
