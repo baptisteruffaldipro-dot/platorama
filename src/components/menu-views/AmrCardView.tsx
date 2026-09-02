@@ -25,7 +25,7 @@ const normalize = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
 /**
- * Layout "Carte AMR" — inspiré de la maquette Figma :
+ * Layout "Carte Test" — inspiré de la maquette Figma :
  * photo ronde plein cadre avec repère RA, flèches circulaires,
  * typo sans-serif affirmée, prix doré, bouton pilule doré lumineux,
  * actions Infos / Allergènes, pastilles de progression et barre
