@@ -1,6 +1,19 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, Star, Info, TriangleAlert, Box, Hand, X } from "lucide-react";
+import {
+  ChevronLeft,
+  ChevronRight,
+  Star,
+  Info,
+  TriangleAlert,
+  Box,
+  Hand,
+  X,
+  Utensils,
+  UtensilsCrossed,
+  Soup,
+  IceCreamCone,
+} from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import { hasARModel } from "@/lib/dishHasAR";
 import type { Dish } from "@/hooks/useDishes";
@@ -23,6 +36,16 @@ interface Props {
 
 const normalize = (s: string) =>
   s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+/** Icône de la barre de catégories, façon maquette (couverts / plat / glace). */
+function categoryIcon(cat: string) {
+  const key = normalize(cat);
+  if (key.startsWith("entree")) return UtensilsCrossed;
+  if (key.startsWith("dessert")) return IceCreamCone;
+  if (key.startsWith("plat")) return Soup;
+  return Utensils;
+}
+
 
 /**
  * Layout "Carte Test" — inspiré de la maquette Figma :
