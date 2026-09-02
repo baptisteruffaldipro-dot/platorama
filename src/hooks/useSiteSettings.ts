@@ -63,6 +63,8 @@ function parseRow(row: any): SiteSettings {
     ...row,
     formulas: Array.isArray(row.formulas) ? row.formulas : [],
     template_id: row.template_id || "dark-luxe",
+    custom_font_name: row.custom_font_name || "",
+    custom_font_url: row.custom_font_url || "",
   } as SiteSettings;
 }
 
