@@ -85,7 +85,7 @@ export default function AmrCardView({
   };
 
   const arrowCls =
-    "absolute top-1/2 -translate-y-1/2 w-14 h-14 rounded-full border border-foreground/25 flex items-center justify-center text-foreground/70 hover:text-foreground hover:border-foreground/50 transition-colors active:scale-90 z-20 bg-background/20 backdrop-blur-sm";
+    "absolute top-1/2 -translate-y-1/2 w-11 h-11 rounded-full border border-foreground/20 flex items-center justify-center text-foreground/60 hover:text-foreground hover:border-foreground/40 transition-colors active:scale-90 z-20";
 
   return (
     <div
@@ -93,12 +93,12 @@ export default function AmrCardView({
       style={{ fontFamily: "'DM Sans', system-ui, sans-serif" }}
     >
       {/* ─── Photo ronde + flèches ─── */}
-      <div className="relative flex justify-center pt-6 shrink-0">
-        <button onClick={prev} aria-label="Plat précédent" className={`${arrowCls} left-2`}>
-          <ChevronLeft className="w-7 h-7" strokeWidth={1.5} />
+      <div className="relative flex justify-center pt-7 shrink-0">
+        <button onClick={prev} aria-label="Plat précédent" className={`${arrowCls} left-3`}>
+          <ChevronLeft className="w-6 h-6" strokeWidth={1.5} />
         </button>
 
-        <div className="relative w-[62vw] h-[62vw] max-w-[290px] max-h-[290px]">
+        <div className="relative w-[66vw] h-[66vw] max-w-[300px] max-h-[300px]">
           <AnimatePresence mode="wait">
             <motion.div
               key={dish.id}
@@ -135,13 +135,13 @@ export default function AmrCardView({
           )}
         </div>
 
-        <button onClick={next} aria-label="Plat suivant" className={`${arrowCls} right-2`}>
-          <ChevronRight className="w-7 h-7" strokeWidth={1.5} />
+        <button onClick={next} aria-label="Plat suivant" className={`${arrowCls} right-3`}>
+          <ChevronRight className="w-6 h-6" strokeWidth={1.5} />
         </button>
       </div>
 
       {/* ─── Infos plat ─── */}
-      <div className="flex-1 min-h-0 flex flex-col px-6 pt-6">
+      <div className="flex-1 min-h-0 flex flex-col px-6 pt-7">
         <AnimatePresence mode="wait">
           <motion.div
             key={dish.id}
@@ -151,48 +151,48 @@ export default function AmrCardView({
             transition={{ duration: 0.3, ease: "easeOut" }}
             className="flex flex-col items-center text-center overflow-y-auto no-scrollbar"
           >
-            <div className="flex items-center gap-2 text-[11px] mb-2 shrink-0">
-              <span className="tracking-[0.3em] uppercase text-foreground/80 font-medium">
+            <div className="flex items-center gap-2.5 mb-3 shrink-0">
+              <span className="tracking-[0.28em] uppercase text-[12px] font-medium text-accent">
                 {t(dish.category)}
               </span>
               {dish.badge && (
                 <>
-                  <span className="text-accent">•</span>
-                  <span className="text-foreground/60 text-[13px]">{t(dish.badge)}</span>
+                  <span className="text-foreground/30 text-[13px]">•</span>
+                  <span className="text-foreground/70 text-[15px]">{t(dish.badge)}</span>
                 </>
               )}
             </div>
 
-            <div className="flex items-start justify-center gap-2 shrink-0">
-              <h1 className="font-sans text-[28px] leading-tight font-bold text-foreground">
+            <div className="relative w-full shrink-0">
+              <h1 className="font-sans text-[32px] leading-[1.12] font-bold tracking-[-0.01em] text-foreground px-8">
                 {t(dish.name)}
               </h1>
               <button
                 onClick={() => onToggleFavorite(dish.id)}
-                className="transition-transform active:scale-90 shrink-0 mt-1"
+                className="absolute right-0 top-1 transition-transform active:scale-90"
                 aria-label={isFavorite(dish.id) ? "Retirer des favoris" : "Ajouter aux favoris"}
               >
                 <Star
-                  className={`w-5 h-5 transition-colors ${
-                    isFavorite(dish.id) ? "fill-accent text-accent" : "text-foreground/60"
+                  className={`w-6 h-6 transition-colors ${
+                    isFavorite(dish.id) ? "fill-accent text-accent" : "text-foreground/50"
                   }`}
                   strokeWidth={1.5}
                 />
               </button>
             </div>
 
-            <p className="font-sans text-2xl font-bold text-accent tabular-nums mt-2 mb-3 shrink-0">
-              {dish.price.toFixed(2).replace(/\.00$/, "")} €
+            <p className="font-sans text-[30px] font-bold text-accent tabular-nums mt-3 mb-4 shrink-0">
+              {dish.price.toFixed(2).replace(/\.00$/, "")}€
             </p>
 
-            <p className="font-sans text-[15px] text-foreground/60 leading-relaxed max-w-[320px]">
+            <p className="font-sans text-[17px] text-foreground/55 leading-[1.75] max-w-[320px]">
               {t(dish.ingredients)}
             </p>
           </motion.div>
         </AnimatePresence>
 
         {/* ─── CTA + actions ─── */}
-        <div className="mt-auto pt-5 shrink-0">
+        <div className="mt-auto pt-6 shrink-0">
           {hasARModel(dish) && (
             <div className="relative w-full max-w-sm mx-auto">
               {showTooltip && (
@@ -221,11 +221,14 @@ export default function AmrCardView({
 
               <button
                 onClick={handleAR}
-                className="relative w-full rounded-full py-4 animate-ar-glow transition-transform duration-300 active:scale-[0.97]"
-                style={{ background: "hsl(43 88% 62%)" }}
+                className="relative w-full rounded-full py-[18px] animate-ar-glow transition-transform duration-300 active:scale-[0.97]"
+                style={{ background: "hsl(43 88% 55%)" }}
               >
-                <span className="flex items-center justify-center gap-3 font-sans text-lg font-medium" style={{ color: "hsl(30 40% 12%)" }}>
-                  <Box className="w-5 h-5" strokeWidth={1.75} />
+                <span
+                  className="flex items-center justify-center gap-3 font-sans text-[19px] font-medium"
+                  style={{ color: "hsl(30 45% 14%)" }}
+                >
+                  <Box className="w-[22px] h-[22px]" strokeWidth={1.75} />
                   {t("Projeter sur ma table")}
                 </span>
               </button>
@@ -233,38 +236,40 @@ export default function AmrCardView({
           )}
 
           {/* Infos / Allergènes */}
-          <div className="flex justify-center gap-8 mt-5">
+          <div className="flex justify-center gap-10 mt-6">
             <button
               onClick={() => setOpenInfo(true)}
-              className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
+              className="flex flex-col items-center gap-2 active:scale-95 transition-transform"
             >
-              <span className="w-12 h-12 rounded-full border border-foreground/25 flex items-center justify-center text-foreground/70">
-                <Info className="w-5 h-5" strokeWidth={1.5} />
+              <span className="w-[52px] h-[52px] rounded-full border border-foreground/20 flex items-center justify-center text-foreground/65">
+                <Info className="w-[22px] h-[22px]" strokeWidth={1.4} />
               </span>
-              <span className="font-sans text-[12px] text-foreground/55">{t("Infos")}</span>
+              <span className="font-sans text-[13px] tracking-wide text-foreground/50">{t("Infos")}</span>
             </button>
             {dish.allergens?.length > 0 && (
               <button
                 onClick={() => setOpenAllergens(true)}
-                className="flex flex-col items-center gap-1.5 active:scale-95 transition-transform"
+                className="flex flex-col items-center gap-2 active:scale-95 transition-transform"
               >
-                <span className="w-12 h-12 rounded-full border border-foreground/25 flex items-center justify-center text-foreground/70">
-                  <TriangleAlert className="w-5 h-5" strokeWidth={1.5} />
+                <span className="w-[52px] h-[52px] rounded-full border border-foreground/20 flex items-center justify-center text-foreground/65">
+                  <TriangleAlert className="w-[22px] h-[22px]" strokeWidth={1.4} />
                 </span>
-                <span className="font-sans text-[12px] text-foreground/55">{t("Allergènes")}</span>
+                <span className="font-sans text-[13px] tracking-wide text-foreground/50">
+                  {t("Allergènes")}
+                </span>
               </button>
             )}
           </div>
 
           {/* Pastilles de progression dans la catégorie */}
-          <div className="flex justify-center items-center gap-2 mt-4">
+          <div className="flex justify-center items-center gap-2 mt-5">
             {sameCategory.map(({ i }, k) => (
               <button
                 key={i}
                 onClick={() => onSelect(i)}
                 aria-label={`Plat ${k + 1}`}
                 className={`h-2 rounded-full transition-all ${
-                  k === posInCategory ? "w-6 bg-accent" : "w-2 bg-foreground/25"
+                  k === posInCategory ? "w-7 bg-accent" : "w-2 bg-foreground/25"
                 }`}
               />
             ))}
@@ -272,31 +277,34 @@ export default function AmrCardView({
         </div>
 
         {/* ─── Barre de catégories ─── */}
-        <div className="shrink-0 border-t border-foreground/10 mt-4 pt-3 pb-safe">
+        <div className="shrink-0 border-t border-foreground/10 mt-5 pt-3 pb-safe">
           <div className="flex items-center justify-around gap-2 pb-2">
             {categories.map((cat) => {
               const active = normalize(cat) === normalize(dish.category);
               const firstIdx = dishes.findIndex((d) => normalize(d.category) === normalize(cat));
+              const Icon = categoryIcon(cat);
               return (
                 <button
                   key={cat}
                   onClick={() => onSelect(firstIdx)}
-                  className={`px-6 py-2 rounded-full font-sans text-[13px] transition-colors ${
-                    active ? "font-semibold" : "text-foreground/50"
+                  className={`flex flex-col items-center gap-1 px-7 py-2 rounded-full font-sans text-[14px] transition-colors ${
+                    active ? "font-medium" : "text-foreground/45"
                   }`}
                   style={
                     active
-                      ? { background: "hsl(43 88% 62%)", color: "hsl(30 40% 12%)" }
+                      ? { background: "hsl(43 88% 55%)", color: "hsl(30 45% 14%)" }
                       : undefined
                   }
                 >
-                  {t(cat)}
+                  <Icon className="w-[22px] h-[22px]" strokeWidth={1.4} />
+                  <span>{t(cat)}</span>
                 </button>
               );
             })}
           </div>
         </div>
       </div>
+
 
       {/* Dialogs */}
       <Dialog open={openInfo} onOpenChange={setOpenInfo}>
