@@ -39,6 +39,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   is_draft: false,
   formulas: [],
   template_id: "dark-luxe",
+  custom_font_name: "",
+  custom_font_url: "",
 };
 
 export const FONT_OPTIONS = [
