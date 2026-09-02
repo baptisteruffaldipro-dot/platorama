@@ -23,6 +23,7 @@ import OrganicStoriesView from "@/components/menu-views/OrganicStoriesView";
 import VintageBookView from "@/components/menu-views/VintageBookView";
 import WalletStackView from "@/components/menu-views/WalletStackView";
 import SignatureView from "@/components/menu-views/SignatureView";
+import AmrCardView from "@/components/menu-views/AmrCardView";
 import type { Dish } from "@/hooks/useDishes";
 import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS, isInAppBrowser } from "@/lib/platform";
@@ -201,9 +202,10 @@ const Index = () => {
   };
 
   const layout = getLayoutVariant(siteSettings?.template_id);
-  const useListView = layout !== "classic" && layout !== "vision" && layout !== "signature";
+  const useListView = layout !== "classic" && layout !== "vision" && layout !== "signature" && layout !== "amr";
   const isVision = layout === "vision";
   const isSignature = layout === "signature";
+  const isAmr = layout === "amr";
 
   return (
     <div className={`h-full flex flex-col relative overflow-hidden ${isVision ? "bg-black" : "bg-background"}`}>
@@ -217,7 +219,7 @@ const Index = () => {
       <OpenInBrowserDialog open={showBrowserHint} onOpenChange={setShowBrowserHint} />
 
       {/* Top-left icon buttons (horizontal row) */}
-      <div className="absolute top-4 left-4 z-20 flex flex-row gap-2">
+      <div className={`absolute top-4 left-4 z-20 flex flex-row gap-2 ${isAmr ? "hidden" : ""}`}>
         {/* Formulas / Info — only show if formulas exist */}
         {formulas.length > 0 && (
           <Dialog>
@@ -316,7 +318,19 @@ const Index = () => {
         )}
       </div>
 
-      {isSignature ? (
+      {isAmr ? (
+        <div className="flex-1 min-h-0">
+          <AmrCardView
+            dishes={dishes}
+            activeIndex={safeIndex}
+            onSelect={setActiveIndex}
+            onLaunchAR={(d) => handleLaunchAR(d)}
+            isFavorite={isFavorite}
+            onToggleFavorite={toggle}
+            restaurantId={restaurantId!}
+          />
+        </div>
+      ) : isSignature ? (
         <div className="flex-1 min-h-0">
           <SignatureView
             dishes={dishes}
