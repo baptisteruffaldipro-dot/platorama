@@ -210,7 +210,9 @@ export type Database = {
           button_text_color: string
           created_at: string
           custom_font_name: string
+          custom_font_name_2: string
           custom_font_url: string
+          custom_font_url_2: string
           formulas: Json
           heading_font: string
           id: string
@@ -230,7 +232,9 @@ export type Database = {
           button_text_color?: string
           created_at?: string
           custom_font_name?: string
+          custom_font_name_2?: string
           custom_font_url?: string
+          custom_font_url_2?: string
           formulas?: Json
           heading_font?: string
           id?: string
@@ -250,7 +254,9 @@ export type Database = {
           button_text_color?: string
           created_at?: string
           custom_font_name?: string
+          custom_font_name_2?: string
           custom_font_url?: string
+          custom_font_url_2?: string
           formulas?: Json
           heading_font?: string
           id?: string

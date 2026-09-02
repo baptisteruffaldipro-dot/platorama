@@ -24,6 +24,8 @@ export interface SiteSettings {
   template_id: string;
   custom_font_name: string;
   custom_font_url: string;
+  custom_font_name_2: string;
+  custom_font_url_2: string;
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -41,6 +43,8 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   template_id: "dark-luxe",
   custom_font_name: "",
   custom_font_url: "",
+  custom_font_name_2: "",
+  custom_font_url_2: "",
 };
 
 export const FONT_OPTIONS = [
@@ -65,6 +69,8 @@ function parseRow(row: any): SiteSettings {
     template_id: row.template_id || "dark-luxe",
     custom_font_name: row.custom_font_name || "",
     custom_font_url: row.custom_font_url || "",
+    custom_font_name_2: row.custom_font_name_2 || "",
+    custom_font_url_2: row.custom_font_url_2 || "",
   } as SiteSettings;
 }
 
