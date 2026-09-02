@@ -22,6 +22,8 @@ export interface SiteSettings {
   restaurant_id?: string | null;
   formulas: FormulaItem[];
   template_id: string;
+  custom_font_name: string;
+  custom_font_url: string;
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
