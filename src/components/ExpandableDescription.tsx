@@ -6,12 +6,14 @@ interface Props {
   children: string;
   lines?: number;
   className?: string;
+  style?: React.CSSProperties;
 }
 
 export default function ExpandableDescription({
   children,
   lines = 2,
   className = "",
+  style,
 }: Props) {
   const { t } = useTranslation();
   const ref = useRef<HTMLParagraphElement>(null);
