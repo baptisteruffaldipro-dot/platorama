@@ -184,12 +184,13 @@ export default function WalletStackView({
 
                         {/* Infos + actions — compactes */}
                         <div className="px-5 pb-6 pt-1">
-                          <p
-                            className="text-xs italic line-clamp-2 opacity-80"
+                          <ExpandableDescription
+                            lines={2}
+                            className="text-xs italic opacity-80"
                             style={{ fontFamily: "var(--font-body)" }}
                           >
                             {t(d.ingredients)}
-                          </p>
+                          </ExpandableDescription>
                           <div className="flex items-center gap-2 mt-3">
                             <button
                               onClick={() => onToggleFavorite(d.id)}
