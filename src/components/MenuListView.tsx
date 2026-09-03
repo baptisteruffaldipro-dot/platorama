@@ -106,7 +106,7 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                 <div className="flex-1 min-w-0">
                   <div className="table w-full mb-2">
                     <div className="table-cell" style={{ width: "1%" }}>
-                      <h3 className="text-base font-bold text-foreground leading-snug break-words" style={{ fontFamily: "var(--font-serif)" }}>
+                      <h3 className="text-base font-bold text-foreground leading-snug" style={{ fontFamily: "var(--font-serif)" }}>
                         {t(d.name)}
                       </h3>
                     </div>
