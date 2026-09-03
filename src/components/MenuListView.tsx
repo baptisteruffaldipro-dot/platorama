@@ -104,11 +104,12 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-start justify-between gap-3">
-                    <h3 className="text-base font-bold text-foreground leading-snug" style={{ fontFamily: "var(--font-serif)" }}>
+                  <div className="flex items-end gap-2">
+                    <h3 className="text-base font-bold text-foreground leading-snug break-words" style={{ fontFamily: "var(--font-serif)" }}>
                       {t(d.name)}
                     </h3>
-                    <span className="text-base font-bold tabular-nums shrink-0 mt-0.5" style={{ fontFamily: "var(--font-serif)" }}>
+                    <div className="flex-1 border-b border-dotted border-foreground/30 mb-1.5 min-w-[16px]" />
+                    <span className="text-base font-bold tabular-nums shrink-0" style={{ fontFamily: "var(--font-serif)" }}>
                       {d.price.toFixed(2)}€
                     </span>
                   </div>
