@@ -21,20 +21,22 @@ export default function ExpandableDescription({
   const [overflow, setOverflow] = useState(false);
   const [lineHeight, setLineHeight] = useState(0);
 
+  const measure = () => {
+    const el = ref.current;
+    if (!el) return;
+    // On mesure la hauteur naturelle (sans contrainte)
+    el.style.maxHeight = "none";
+    const computedLh = parseFloat(getComputedStyle(el).lineHeight);
+    const lh = Number.isFinite(computedLh) && computedLh > 0 ? computedLh : el.clientHeight;
+    setLineHeight(lh);
+    setOverflow(el.scrollHeight > lh * lines + 1);
+  };
+
+  useLayoutEffect(measure, [children, lines]);
+
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
-    const measure = () => {
-      // On mesure la hauteur naturelle (sans contrainte)
-      el.style.maxHeight = "none";
-      const computedLh = parseFloat(getComputedStyle(el).lineHeight);
-      const lh = Number.isFinite(computedLh) && computedLh > 0 ? computedLh : el.clientHeight;
-      setLineHeight(lh);
-      setOverflow(el.scrollHeight > lh * lines + 1);
-    };
-
-    measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
     window.addEventListener("resize", measure);
