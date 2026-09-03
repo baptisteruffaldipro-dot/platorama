@@ -17,8 +17,8 @@ import {
 import { useTranslation } from "@/hooks/useTranslation";
 import { hasARModel } from "@/lib/dishHasAR";
 import type { Dish } from "@/hooks/useDishes";
-import {
 import { getBadge, BadgeMark } from "@/lib/badges";
+import {
   Dialog,
   DialogContent,
   DialogHeader,
