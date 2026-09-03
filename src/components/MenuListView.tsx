@@ -104,14 +104,14 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="table w-full mb-2">
-                    <div className="table-cell" style={{ width: "1%" }}>
-                      <h3 className="text-base font-bold text-foreground leading-snug" style={{ fontFamily: "var(--font-serif)" }}>
-                        {t(d.name)}
-                      </h3>
-                    </div>
-                    <div className="table-cell w-full min-w-12 border-b border-dotted border-foreground/30 align-bottom" />
-                    <span className="table-cell text-base font-bold tabular-nums align-bottom pl-2" style={{ fontFamily: "var(--font-serif)" }}>
+                  <div className="relative overflow-hidden mb-2">
+                    <h3
+                      className="relative inline text-base font-bold text-foreground leading-snug pr-2 bg-background after:content-[''] after:absolute after:bottom-[0.15em] after:left-full after:w-[100vw] after:border-b after:border-dotted after:border-foreground/30"
+                      style={{ fontFamily: "var(--font-serif)", WebkitBoxDecorationBreak: "clone", boxDecorationBreak: "clone" }}
+                    >
+                      {t(d.name)}
+                    </h3>
+                    <span className="absolute right-0 bottom-0 text-base font-bold tabular-nums pl-2 bg-background" style={{ fontFamily: "var(--font-serif)" }}>
                       {d.price.toFixed(2)}€
                     </span>
                   </div>
