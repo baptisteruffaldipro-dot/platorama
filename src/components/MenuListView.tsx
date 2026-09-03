@@ -272,7 +272,9 @@ function PopGrid({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavor
                 >
                   {t(d.name)}
                 </p>
-                <p className="text-[11px] text-foreground/60 truncate">{t(d.ingredients)}</p>
+                <ExpandableDescription lines={1} className="text-[11px] text-foreground/60">
+                  {t(d.ingredients)}
+                </ExpandableDescription>
               </div>
               <div className="flex flex-col items-end gap-1 shrink-0">
                 <span
