@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Clock, Flame, Heart, Leaf, ChevronDown, ChevronUp } from "lucide-react";
+import { Star, Clock, Leaf, ChevronDown, ChevronUp } from "lucide-react";
+import { getBadge, BadgeMark } from "@/lib/badges";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { LayoutVariant } from "@/lib/menuTemplates";
 
@@ -21,17 +22,22 @@ interface DishInfoProps {
   layout?: LayoutVariant;
 }
 
+const BADGE_STYLE: Record<string, string> = {
+  bestseller: "bg-orange-500/20 text-orange-400 border-orange-500/30",
+  coup_de_coeur: "bg-pink-500/20 text-pink-400 border-pink-500/30",
+  nouveau: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
+  viande_bovine_francaise: "bg-foreground/10 text-foreground/80 border-foreground/20",
+};
+
 const BadgeChip = ({ badge }: { badge: string }) => {
-  const config: Record<string, { icon: React.ElementType; label: string; className: string }> = {
-    bestseller: { icon: Flame, label: "Best seller", className: "bg-orange-500/20 text-orange-400 border-orange-500/30" },
-    coup_de_coeur: { icon: Heart, label: "Coup de cœur", className: "bg-pink-500/20 text-pink-400 border-pink-500/30" },
-  };
-  const c = config[badge];
+  const c = getBadge(badge);
   if (!c) return null;
-  const Icon = c.icon;
+  if (c.image) {
+    return <BadgeMark badge={c} className="h-6" />;
+  }
   return (
-    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${c.className}`}>
-      <Icon className="w-3 h-3" />
+    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${BADGE_STYLE[badge] ?? "bg-foreground/10 text-foreground/80 border-foreground/20"}`}>
+      <BadgeMark badge={c} className="w-3 h-3" />
       {c.label}
     </span>
   );

@@ -17,6 +17,7 @@ import {
 import { useTranslation } from "@/hooks/useTranslation";
 import { hasARModel } from "@/lib/dishHasAR";
 import type { Dish } from "@/hooks/useDishes";
+import { getBadge, BadgeMark } from "@/lib/badges";
 import {
   Dialog,
   DialogContent,
@@ -178,10 +179,14 @@ export default function AmrCardView({
               <span className="tracking-[0.28em] uppercase text-[12px] font-medium text-accent">
                 {t(dish.category)}
               </span>
-              {dish.badge && (
+              {getBadge(dish.badge) && (
                 <>
                   <span className="text-foreground/30 text-[13px]">•</span>
-                  <span className="text-foreground/70 text-[15px]">{t(dish.badge)}</span>
+                  {getBadge(dish.badge)!.image ? (
+                    <BadgeMark badge={getBadge(dish.badge)!} className="h-5" />
+                  ) : (
+                    <span className="text-foreground/70 text-[15px]">{t(getBadge(dish.badge)!.label)}</span>
+                  )}
                 </>
               )}
             </div>

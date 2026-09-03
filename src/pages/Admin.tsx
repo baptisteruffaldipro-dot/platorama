@@ -38,6 +38,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { BADGES, getBadge } from "@/lib/badges";
 
 /* ─── Stats types ─── */
 interface DishStats {
@@ -280,8 +281,7 @@ const SortableRow = ({
       <td className="py-2.5 px-3 font-medium text-sm">
         <div className="flex items-center gap-1.5">
           {dish.name}
-          {dish.badge === "bestseller" && <span title="Best seller">🔥</span>}
-          {dish.badge === "coup_de_coeur" && <span title="Coup de cœur">❤️</span>}
+          {getBadge(dish.badge) && <span title={getBadge(dish.badge)!.label}>{getBadge(dish.badge)!.emoji}</span>}
           {!dish.is_available && <span className="text-[10px] px-1.5 py-0.5 rounded bg-destructive/20 text-destructive font-semibold">Indispo</span>}
         </div>
       </td>
@@ -754,8 +754,9 @@ const Admin = () => {
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   >
                     <option value="">Aucun</option>
-                    <option value="bestseller">🔥 Best seller</option>
-                    <option value="coup_de_coeur">❤️ Coup de cœur</option>
+                    {BADGES.map((b) => (
+                      <option key={b.value} value={b.value}>{b.emoji} {b.label}</option>
+                    ))}
                   </select>
                 </div>
               </div>

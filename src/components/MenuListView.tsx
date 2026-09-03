@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Rotate3d, Clock, Leaf, Star, Flame, Heart } from "lucide-react";
+import { Rotate3d, Clock, Leaf, Star } from "lucide-react";
+import { getBadge, BadgeMark } from "@/lib/badges";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
 import type { LayoutVariant } from "@/lib/menuTemplates";
@@ -13,18 +14,21 @@ interface Props {
   onToggleFavorite: (id: string) => void;
 }
 
+const BADGE_CLS: Record<string, string> = {
+  bestseller: "bg-orange-500/20 text-orange-500",
+  coup_de_coeur: "bg-pink-500/20 text-pink-500",
+  nouveau: "bg-emerald-500/20 text-emerald-500",
+  viande_bovine_francaise: "bg-foreground/10 text-foreground/80",
+};
+
 const BadgeChip = ({ badge }: { badge: string }) => {
-  const map: Record<string, { Icon: any; label: string; cls: string }> = {
-    bestseller: { Icon: Flame, label: "Best", cls: "bg-orange-500/20 text-orange-500" },
-    coup_de_coeur: { Icon: Heart, label: "♥", cls: "bg-pink-500/20 text-pink-500" },
-  };
-  const c = map[badge];
+  const c = getBadge(badge);
   if (!c) return null;
-  const { Icon } = c;
+  if (c.image) return <BadgeMark badge={c} className="h-4" />;
   return (
-    <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full ${c.cls}`}>
-      <Icon className="w-2.5 h-2.5" />
-      {c.label}
+    <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full ${BADGE_CLS[badge] ?? "bg-foreground/10 text-foreground/80"}`}>
+      <BadgeMark badge={c} className="w-2.5 h-2.5" />
+      {c.shortLabel}
     </span>
   );
 };
