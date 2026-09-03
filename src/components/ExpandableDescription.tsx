@@ -17,15 +17,19 @@ export default function ExpandableDescription({
   const ref = useRef<HTMLParagraphElement>(null);
   const [expanded, setExpanded] = useState(false);
   const [overflow, setOverflow] = useState(false);
+  const [lineHeight, setLineHeight] = useState(0);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
 
     const measure = () => {
-      const lineHeight = parseFloat(getComputedStyle(el).lineHeight) || el.clientHeight;
-      const max = lines * lineHeight;
-      setOverflow(el.scrollHeight > max + 1); // +1 pour les arrondis
+      // On mesure la hauteur naturelle (sans contrainte)
+      el.style.maxHeight = "none";
+      const computedLh = parseFloat(getComputedStyle(el).lineHeight);
+      const lh = Number.isFinite(computedLh) && computedLh > 0 ? computedLh : el.clientHeight;
+      setLineHeight(lh);
+      setOverflow(el.scrollHeight > lh * lines + 1);
     };
 
     measure();
@@ -38,22 +42,18 @@ export default function ExpandableDescription({
     };
   }, [children, lines]);
 
-  const style: React.CSSProperties = expanded
-    ? {}
-    : {
-        display: "-webkit-box",
-        WebkitBoxOrient: "vertical",
-        WebkitLineClamp: lines,
-        overflow: "hidden",
-      };
+  const collapsedStyle: React.CSSProperties =
+    lineHeight > 0 && !expanded
+      ? {
+          maxHeight: lineHeight * lines,
+          overflow: "hidden",
+          lineHeight: `${lineHeight}px`,
+        }
+      : {};
 
   return (
     <div className={className}>
-      <p
-        ref={ref}
-        style={style}
-        className="leading-snug"
-      >
+      <p ref={ref} style={collapsedStyle}>
         {children}
       </p>
       {overflow && (
