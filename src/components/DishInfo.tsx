@@ -164,20 +164,23 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
             <span className="text-[10px] tracking-[0.4em] uppercase text-muted-foreground">{t(dish.category)}</span>
             {dish.badge && <BadgeChip badge={dish.badge} />}
           </div>
-          <div className="relative overflow-hidden mb-2">
-            <h1
-              className="relative inline text-2xl font-bold text-foreground tracking-tight leading-tight pr-2 bg-background after:content-[''] after:absolute after:bottom-[0.12em] after:left-full after:w-[100vw] after:border-b after:border-dotted after:border-foreground/30"
-              style={{ fontFamily: "var(--font-serif)", WebkitBoxDecorationBreak: "clone", boxDecorationBreak: "clone" }}
-            >
-              {t(dish.name)}
-            </h1>
-            <div className="absolute right-0 bottom-0 flex items-center gap-2 bg-background pl-2">
+          <div className="flex items-end gap-1 mb-2">
+            <div className="flex-1 min-w-0 overflow-hidden">
+              <h1
+                className="relative inline text-2xl font-bold text-foreground tracking-tight leading-tight pr-2 after:content-[''] after:absolute after:bottom-[0.12em] after:left-full after:w-[100vw] after:border-b after:border-dotted after:border-foreground/30"
+                style={{ fontFamily: "var(--font-serif)", WebkitBoxDecorationBreak: "clone", boxDecorationBreak: "clone" }}
+              >
+                {t(dish.name)}
+              </h1>
+            </div>
+            <div className="shrink-0 flex items-center gap-2">
               <p className="text-2xl font-bold text-accent tabular-nums" style={{ fontFamily: "var(--font-serif)" }}>
                 {dish.price.toFixed(2)}€
               </p>
               <FavBtn active={isFavorite} onClick={onToggleFavorite} />
             </div>
           </div>
+
 
           <ExpandableDescription lines={2} className="text-sm text-muted-foreground leading-snug" style={{ fontFamily: "var(--font-body)" }}>
             {t(dish.ingredients)}
