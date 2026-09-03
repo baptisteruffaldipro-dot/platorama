@@ -105,17 +105,20 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                   />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="relative overflow-hidden mb-2">
-                    <h3
-                      className="relative inline text-base font-bold text-foreground leading-snug pr-2 bg-background after:content-[''] after:absolute after:bottom-[0.15em] after:left-full after:w-[100vw] after:border-b after:border-dotted after:border-foreground/30"
-                      style={{ fontFamily: "var(--font-serif)", WebkitBoxDecorationBreak: "clone", boxDecorationBreak: "clone" }}
-                    >
-                      {t(d.name)}
-                    </h3>
-                    <span className="absolute right-0 bottom-0 text-base font-bold tabular-nums pl-2 bg-background" style={{ fontFamily: "var(--font-serif)" }}>
+                  <div className="flex items-end gap-1 mb-2">
+                    <div className="flex-1 min-w-0 overflow-hidden">
+                      <h3
+                        className="relative inline text-base font-bold text-foreground leading-snug pr-2 after:content-[''] after:absolute after:bottom-[0.15em] after:left-full after:w-[100vw] after:border-b after:border-dotted after:border-foreground/30"
+                        style={{ fontFamily: "var(--font-serif)", WebkitBoxDecorationBreak: "clone", boxDecorationBreak: "clone" }}
+                      >
+                        {t(d.name)}
+                      </h3>
+                    </div>
+                    <span className="shrink-0 text-base font-bold tabular-nums" style={{ fontFamily: "var(--font-serif)" }}>
                       {d.price.toFixed(2)}€
                     </span>
                   </div>
+
                   <ExpandableDescription lines={2} className="text-xs text-muted-foreground mt-1">
                     {t(d.ingredients)}
                   </ExpandableDescription>
