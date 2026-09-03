@@ -55,7 +55,7 @@ export default function ExpandableDescription({
 
   return (
     <div className={className}>
-      <p ref={ref} style={collapsedStyle}>
+      <p ref={ref} style={{ ...style, ...collapsedStyle }}>
         {children}
       </p>
       {overflow && (
