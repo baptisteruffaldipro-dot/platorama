@@ -105,9 +105,11 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="table w-full mb-2">
-                    <h3 className="table-cell text-base font-bold text-foreground leading-snug break-words" style={{ fontFamily: "var(--font-serif)" }}>
-                      {t(d.name)}
-                    </h3>
+                    <div className="table-cell" style={{ width: "1%" }}>
+                      <h3 className="text-base font-bold text-foreground leading-snug break-words" style={{ fontFamily: "var(--font-serif)" }}>
+                        {t(d.name)}
+                      </h3>
+                    </div>
                     <div className="table-cell w-full min-w-12 border-b border-dotted border-foreground/30 align-bottom" />
                     <span className="table-cell text-base font-bold tabular-nums align-bottom pl-2" style={{ fontFamily: "var(--font-serif)" }}>
                       {d.price.toFixed(2)}€
