@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Star, Hand, X } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import ExpandableDescription from "@/components/ExpandableDescription";
 import { hasARModel } from "@/lib/dishHasAR";
 import type { Dish } from "@/hooks/useDishes";
 
@@ -141,12 +142,13 @@ export default function SignatureView({
               </button>
             </div>
 
-            <p
-              className="text-lg italic text-foreground/75 leading-relaxed max-w-[380px] mb-3"
+            <ExpandableDescription
+              lines={2}
+              className="text-lg italic text-foreground/75 leading-relaxed max-w-[380px] mb-3 text-center"
               style={{ fontFamily: "var(--font-serif)" }}
             >
               {t(dish.ingredients)}
-            </p>
+            </ExpandableDescription>
 
             <p
               className="text-2xl font-medium text-accent tabular-nums mb-6 shrink-0"
