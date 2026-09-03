@@ -5,6 +5,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
 import type { LayoutVariant } from "@/lib/menuTemplates";
 import { hasARModel } from "@/lib/dishHasAR";
+import ExpandableDescription from "@/components/ExpandableDescription";
 
 interface Props {
   dishes: Dish[];
@@ -115,7 +116,9 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                       {d.price.toFixed(2)}€
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground leading-snug mt-1 line-clamp-2">{t(d.ingredients)}</p>
+                  <ExpandableDescription lines={2} className="text-xs text-muted-foreground mt-1">
+                    {t(d.ingredients)}
+                  </ExpandableDescription>
                   <div className="flex items-center justify-between mt-2 gap-2">
                     <div className="flex items-center gap-2">
                       {d.badge && <BadgeChip badge={d.badge} />}
@@ -269,7 +272,9 @@ function PopGrid({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavor
                 >
                   {t(d.name)}
                 </p>
-                <p className="text-[11px] text-foreground/60 truncate">{t(d.ingredients)}</p>
+                <ExpandableDescription lines={1} className="text-[11px] text-foreground/60">
+                  {t(d.ingredients)}
+                </ExpandableDescription>
               </div>
               <div className="flex flex-col items-end gap-1 shrink-0">
                 <span
