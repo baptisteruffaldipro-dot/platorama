@@ -5,6 +5,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
 import type { LayoutVariant } from "@/lib/menuTemplates";
 import { hasARModel } from "@/lib/dishHasAR";
+import ExpandableDescription from "@/components/ExpandableDescription";
 
 interface Props {
   dishes: Dish[];
