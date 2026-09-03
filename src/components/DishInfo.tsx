@@ -163,16 +163,15 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
             <span className="text-[10px] tracking-[0.4em] uppercase text-muted-foreground">{t(dish.category)}</span>
             {dish.badge && <BadgeChip badge={dish.badge} />}
           </div>
-          <div className="flex items-start justify-between gap-3 mb-2">
+          <div className="flex items-end gap-2 mb-2">
             <h1 className="text-2xl font-bold text-foreground tracking-tight leading-tight break-words" style={{ fontFamily: "var(--font-serif)" }}>
               {t(dish.name)}
             </h1>
-            <div className="flex items-center gap-2 shrink-0">
-              <p className="text-2xl font-bold text-accent tabular-nums" style={{ fontFamily: "var(--font-serif)" }}>
-                {dish.price.toFixed(2)}€
-              </p>
-              <FavBtn active={isFavorite} onClick={onToggleFavorite} />
-            </div>
+            <div className="flex-1 border-b border-dotted border-foreground/30 mb-1.5 min-w-[16px]" />
+            <p className="text-2xl font-bold text-accent tabular-nums shrink-0" style={{ fontFamily: "var(--font-serif)" }}>
+              {dish.price.toFixed(2)}€
+            </p>
+            <FavBtn active={isFavorite} onClick={onToggleFavorite} />
           </div>
 
           <p className="text-sm text-muted-foreground leading-snug" style={{ fontFamily: "var(--font-body)" }}>
