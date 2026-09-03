@@ -6,6 +6,7 @@ import type { Dish } from "@/hooks/useDishes";
 import { hasARModel } from "@/lib/dishHasAR";
 import DishViewer from "@/components/DishViewer";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import ExpandableDescription from "@/components/ExpandableDescription";
 
 interface Props {
   dishes: Dish[];
