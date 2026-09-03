@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useLayoutEffect } from "react";
 import { motion, AnimatePresence, LayoutGroup } from "framer-motion";
 import { Rotate3d, Star } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -55,6 +55,16 @@ export default function WalletStackView({
   const [openIdx, setOpenIdx] = useState<number>(0);
   const scrollRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const headerRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const [headerHeights, setHeaderHeights] = useState<number[]>(() => Array(dishes.length).fill(CARD_PEEK));
+
+  // Mesure la hauteur réelle de chaque en-tête (titres longs qui wrap)
+  useLayoutEffect(() => {
+    const heights = headerRefs.current.map((el) => (el ? el.getBoundingClientRect().height : CARD_PEEK));
+    setHeaderHeights(heights);
+  }, [dishes, openIdx]);
+
+  const closedHeight = (i: number) => (headerHeights[i] ?? CARD_PEEK) + 18;
 
   // Recentre la carte ouverte dans la zone scrollable
   useEffect(() => {
@@ -95,9 +105,9 @@ export default function WalletStackView({
               // Position verticale : somme des hauteurs précédentes (ouverte ou peek)
               let top = 0;
               for (let k = 0; k < i; k++) {
-                top += k === openIdx ? CARD_OPEN : CARD_PEEK;
+                top += k === openIdx ? CARD_OPEN : closedHeight(k);
               }
-              const height = isOpen ? CARD_OPEN : CARD_PEEK + 18;
+              const height = isOpen ? CARD_OPEN : closedHeight(i);
 
               return (
                 <motion.div
@@ -117,7 +127,10 @@ export default function WalletStackView({
                   }}
                 >
                   {/* En-tête (toujours visible) */}
-                  <div className="px-5 pt-4 pb-2 flex items-center justify-between gap-3">
+                  <div
+                    ref={(el) => (headerRefs.current[i] = el)}
+                    className="px-5 pt-4 pb-2 flex items-start justify-between gap-3"
+                  >
                     <div className="flex-1 min-w-0">
                       <p
                         className="text-[9px] uppercase tracking-[0.3em] opacity-70"
@@ -126,7 +139,7 @@ export default function WalletStackView({
                         {t(d.category)}
                       </p>
                       <h3
-                        className="text-base font-bold mt-0.5 truncate"
+                        className="text-base font-bold mt-0.5 leading-snug"
                         style={{ fontFamily: "var(--font-serif)" }}
                       >
                         {t(d.name)}
@@ -154,7 +167,8 @@ export default function WalletStackView({
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.25, delay: 0.1 }}
                         onClick={(e) => e.stopPropagation()}
-                        className="flex flex-col h-[calc(100%-58px)]"
+                        className="flex flex-col"
+                        style={{ height: `calc(100% - ${headerHeights[i] ?? CARD_PEEK}px)` }}
                       >
                         {/* Visuel 3D / image — padding réduit */}
                         <div className="flex-1 min-h-0 px-2 -my-1 flex items-center justify-center">

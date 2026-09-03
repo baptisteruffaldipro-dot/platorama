@@ -15,6 +15,7 @@ import {
   IceCreamCone,
 } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import ExpandableDescription from "@/components/ExpandableDescription";
 import { hasARModel } from "@/lib/dishHasAR";
 import type { Dish } from "@/hooks/useDishes";
 import { getBadge, BadgeMark } from "@/lib/badges";
@@ -213,9 +214,9 @@ export default function AmrCardView({
               {dish.price.toFixed(2).replace(/\.00$/, "")}€
             </p>
 
-            <p className="font-sans text-[17px] text-foreground/55 leading-[1.75] max-w-[320px]">
+            <ExpandableDescription lines={2} className="font-sans text-[17px] text-foreground/55 leading-[1.75] max-w-[320px] text-center">
               {t(dish.ingredients)}
-            </p>
+            </ExpandableDescription>
           </motion.div>
         </AnimatePresence>
 

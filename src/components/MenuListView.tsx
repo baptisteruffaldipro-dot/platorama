@@ -267,12 +267,12 @@ function PopGrid({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavor
                   {d.badge && <BadgeChip badge={d.badge} />}
                 </div>
                 <p
-                  className="text-sm font-bold text-foreground truncate"
+                  className="text-sm font-bold text-foreground leading-snug"
                   style={{ fontFamily: "var(--font-serif)" }}
                 >
                   {t(d.name)}
                 </p>
-                <ExpandableDescription lines={1} className="text-[11px] text-foreground/60">
+                <ExpandableDescription lines={2} className="text-[11px] text-foreground/60">
                   {t(d.ingredients)}
                 </ExpandableDescription>
               </div>

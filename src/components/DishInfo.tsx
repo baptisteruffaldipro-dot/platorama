@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Star, Clock, Leaf, ChevronDown, ChevronUp } from "lucide-react";
 import { getBadge, BadgeMark } from "@/lib/badges";
 import { useTranslation } from "@/hooks/useTranslation";
+import ExpandableDescription from "@/components/ExpandableDescription";
 import type { LayoutVariant } from "@/lib/menuTemplates";
 
 interface DishInfoProps {
@@ -178,9 +179,9 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
             </div>
           </div>
 
-          <p className="text-sm text-muted-foreground leading-snug" style={{ fontFamily: "var(--font-body)" }}>
+          <ExpandableDescription lines={2} className="text-sm text-muted-foreground leading-snug" style={{ fontFamily: "var(--font-body)" }}>
             {t(dish.ingredients)}
-          </p>
+          </ExpandableDescription>
           {dish.prep_time && (
             <p className="text-[11px] text-muted-foreground mt-1.5 flex items-center gap-1">
               <Clock className="w-3 h-3" /> ~{dish.prep_time} min
@@ -216,9 +217,9 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
             </h1>
             <FavBtn active={isFavorite} onClick={onToggleFavorite} />
           </div>
-          <p className="text-sm text-foreground/80 leading-relaxed max-w-[320px] mb-2" style={{ fontFamily: "var(--font-body)" }}>
+          <ExpandableDescription lines={2} className="text-sm text-foreground/80 leading-relaxed max-w-[320px] mb-2" style={{ fontFamily: "var(--font-body)" }}>
             {t(dish.ingredients)}
-          </p>
+          </ExpandableDescription>
           <div className="inline-flex items-center gap-3 px-4 py-1 border-2 border-accent/40 rounded-sm">
             <p className="text-xl font-bold text-accent tabular-nums" style={{ fontFamily: "var(--font-serif)" }}>
               {dish.price.toFixed(2)} €
@@ -257,9 +258,9 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
                 </h1>
                 <FavBtn active={isFavorite} onClick={onToggleFavorite} />
               </div>
-              <p className="text-sm text-foreground/70 leading-snug" style={{ fontFamily: "var(--font-body)" }}>
+              <ExpandableDescription lines={2} className="text-sm text-foreground/70 leading-snug" style={{ fontFamily: "var(--font-body)" }}>
                 {t(dish.ingredients)}
-              </p>
+              </ExpandableDescription>
               <div className="flex items-center gap-2 mt-2 flex-wrap">
                 {dish.badge && <BadgeChip badge={dish.badge} />}
                 {dish.prep_time && (
@@ -304,9 +305,9 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
             </h1>
             <FavBtn active={isFavorite} onClick={onToggleFavorite} />
           </div>
-          <p className="text-sm text-foreground/70 italic leading-relaxed max-w-[320px] mb-2.5" style={{ fontFamily: "var(--font-body)" }}>
+          <ExpandableDescription lines={2} className="text-sm text-foreground/70 italic leading-relaxed max-w-[320px] mb-2.5" style={{ fontFamily: "var(--font-body)" }}>
             {t(dish.ingredients)}
-          </p>
+          </ExpandableDescription>
           <div className="flex items-center gap-2">
             <span
               className="inline-flex items-center justify-center px-4 py-1 rounded-full text-sm font-semibold tabular-nums"

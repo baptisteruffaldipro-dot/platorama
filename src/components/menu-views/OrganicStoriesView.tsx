@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Rotate3d, Star, Leaf, ChevronUp } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import ExpandableDescription from "@/components/ExpandableDescription";
 import type { Dish } from "@/hooks/useDishes";
 import { hasARModel } from "@/lib/dishHasAR";
 import DishViewer from "@/components/DishViewer";
@@ -122,12 +123,13 @@ export default function OrganicStoriesView({
               >
                 {t(d.name)}
               </h2>
-              <p
+              <ExpandableDescription
+                lines={2}
                 className="text-sm italic text-foreground/80 mt-2 max-w-sm leading-relaxed"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {t(d.ingredients)}
-              </p>
+              </ExpandableDescription>
               <div className="flex items-center gap-3 mt-5">
                 <span
                   className="text-xl font-semibold px-4 py-2 rounded-full backdrop-blur-md"

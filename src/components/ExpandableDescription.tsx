@@ -9,6 +9,29 @@ interface Props {
   style?: React.CSSProperties;
 }
 
+function getLineHeight(el: HTMLElement): number {
+  const computed = getComputedStyle(el);
+  const explicit = parseFloat(computed.lineHeight);
+  if (Number.isFinite(explicit) && explicit > 0) return explicit;
+
+  // line-height: normal -> mesure sur une ligne isolée avec les mêmes styles
+  const probe = document.createElement("span");
+  probe.textContent = "M";
+  probe.style.position = "absolute";
+  probe.style.visibility = "hidden";
+  probe.style.whiteSpace = "nowrap";
+  probe.style.lineHeight = computed.lineHeight;
+  probe.style.fontSize = computed.fontSize;
+  probe.style.fontFamily = computed.fontFamily;
+  probe.style.fontWeight = computed.fontWeight;
+  probe.style.letterSpacing = computed.letterSpacing;
+  probe.style.textTransform = computed.textTransform;
+  document.body.appendChild(probe);
+  const height = probe.getBoundingClientRect().height;
+  document.body.removeChild(probe);
+  return height || el.clientHeight;
+}
+
 export default function ExpandableDescription({
   children,
   lines = 2,
@@ -24,12 +47,12 @@ export default function ExpandableDescription({
   const measure = () => {
     const el = ref.current;
     if (!el) return;
-    // On mesure la hauteur naturelle (sans contrainte)
+    const previousMaxHeight = el.style.maxHeight;
     el.style.maxHeight = "none";
-    const computedLh = parseFloat(getComputedStyle(el).lineHeight);
-    const lh = Number.isFinite(computedLh) && computedLh > 0 ? computedLh : el.clientHeight;
+    const lh = getLineHeight(el);
     setLineHeight(lh);
     setOverflow(el.scrollHeight > lh * lines + 1);
+    el.style.maxHeight = previousMaxHeight;
   };
 
   useLayoutEffect(measure, [children, lines]);

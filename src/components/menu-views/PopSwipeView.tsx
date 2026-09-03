@@ -149,7 +149,7 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
               >
                 {t(dish.name)}
               </h2>
-              <ExpandableDescription lines={3} className="text-xs text-foreground/70 mt-1.5 flex-1">
+              <ExpandableDescription lines={2} className="text-xs text-foreground/70 mt-1.5 flex-1">
                 {t(dish.ingredients)}
               </ExpandableDescription>
               <div className="flex items-center justify-between mt-3 gap-3">
