@@ -120,6 +120,71 @@ export type Database = {
           },
         ]
       }
+      restaurant_features: {
+        Row: {
+          allergens_enabled: boolean
+          created_at: string
+          daily_menu_enabled: boolean
+          diet_profiles_enabled: boolean
+          google_review_url: string | null
+          id: string
+          loyalty_enabled: boolean
+          pick_for_me_enabled: boolean
+          popups_enabled: boolean
+          restaurant_id: string
+          reviews_enabled: boolean
+          reviews_prompt: string | null
+          reviews_threshold: number
+          top_dishes_enabled: boolean
+          trending_enabled: boolean
+          updated_at: string
+        }
+        Insert: {
+          allergens_enabled?: boolean
+          created_at?: string
+          daily_menu_enabled?: boolean
+          diet_profiles_enabled?: boolean
+          google_review_url?: string | null
+          id?: string
+          loyalty_enabled?: boolean
+          pick_for_me_enabled?: boolean
+          popups_enabled?: boolean
+          restaurant_id: string
+          reviews_enabled?: boolean
+          reviews_prompt?: string | null
+          reviews_threshold?: number
+          top_dishes_enabled?: boolean
+          trending_enabled?: boolean
+          updated_at?: string
+        }
+        Update: {
+          allergens_enabled?: boolean
+          created_at?: string
+          daily_menu_enabled?: boolean
+          diet_profiles_enabled?: boolean
+          google_review_url?: string | null
+          id?: string
+          loyalty_enabled?: boolean
+          pick_for_me_enabled?: boolean
+          popups_enabled?: boolean
+          restaurant_id?: string
+          reviews_enabled?: boolean
+          reviews_prompt?: string | null
+          reviews_threshold?: number
+          top_dishes_enabled?: boolean
+          trending_enabled?: boolean
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "restaurant_features_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: true
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       restaurant_members: {
         Row: {
           created_at: string
@@ -198,6 +263,56 @@ export type Database = {
             columns: ["subscription_id"]
             isOneToOne: false
             referencedRelation: "subscriptions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          email: string | null
+          first_name: string | null
+          id: string
+          lang: string | null
+          phone: string | null
+          rating: number
+          redirected_to_google: boolean
+          restaurant_id: string
+          updated_at: string
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          lang?: string | null
+          phone?: string | null
+          rating: number
+          redirected_to_google?: boolean
+          restaurant_id: string
+          updated_at?: string
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          lang?: string | null
+          phone?: string | null
+          rating?: number
+          redirected_to_google?: boolean
+          restaurant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
             referencedColumns: ["id"]
           },
         ]
