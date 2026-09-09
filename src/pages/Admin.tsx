@@ -19,6 +19,7 @@ import PopupsPanel from "@/components/admin/PopupsPanel";
 import DailyMenuPanel from "@/components/admin/DailyMenuPanel";
 import ReportsPanel from "@/components/admin/ReportsPanel";
 import SmartMenuPanel from "@/components/admin/SmartMenuPanel";
+import CampaignsPanel from "@/components/admin/CampaignsPanel";
 
 import UsersPanel from "@/components/UsersPanel";
 import InfoPanel from "@/components/InfoPanel";
@@ -610,6 +611,7 @@ const Admin = () => {
           { key: "daily", icon: CalendarDays, label: "Menu du jour", superOnly: false, needsFeature: null },
           { key: "reports", icon: FileText, label: "Rapports", superOnly: false, needsFeature: null },
           { key: "smart", icon: Sparkles, label: "Aide au choix", superOnly: false, needsFeature: null },
+          { key: "campaigns", icon: Send, label: "Campagnes", superOnly: false, needsFeature: null },
 
           { key: "settings", icon: Settings, label: "Réglages", superOnly: false, needsFeature: null },
           { key: "users", icon: Users, label: "Utilisateurs", superOnly: true, needsFeature: null },
@@ -678,6 +680,8 @@ const Admin = () => {
         <ReportsPanel restaurantId={restaurantId} />
       ) : tab === "smart" ? (
         <SmartMenuPanel restaurantId={restaurantId} />
+      ) : tab === "campaigns" ? (
+        <CampaignsPanel restaurantId={restaurantId} />
       ) : tab === "users" ? (
 
         <UsersPanel restaurantId={restaurantId} isSuperAdmin={isSuperAdmin} />
