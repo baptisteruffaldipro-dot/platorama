@@ -54,7 +54,19 @@ const Index = () => {
   const [showBrowserHint, setShowBrowserHint] = useState(false);
   const { data: allDishes, isLoading } = useDishes(restaurantId);
   // Filter out unavailable dishes for the public menu
-  const dishes = allDishes?.filter(d => d.is_available);
+  const availableDishes = allDishes?.filter(d => d.is_available);
+  // Menu intelligent : préférences alimentaires / allergies du client
+  const [prefs, setPrefs] = useState<MenuPreferences>(emptyPreferences);
+  useEffect(() => {
+    if (restaurantId) setPrefs(loadPreferences(restaurantId));
+  }, [restaurantId]);
+  const updatePrefs = (next: MenuPreferences) => {
+    setPrefs(next);
+    if (restaurantId) savePreferences(restaurantId, next);
+    setActiveIndex(0);
+  };
+  const filteredDishes = availableDishes ? filterDishes(availableDishes, prefs) : undefined;
+  const dishes = filteredDishes?.length ? filteredDishes : availableDishes;
   const { data: siteSettings } = usePublishedSettings(restaurantId);
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
   const { isFavorite, toggle } = useFavorites();
