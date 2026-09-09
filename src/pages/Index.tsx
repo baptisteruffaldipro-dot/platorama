@@ -33,6 +33,14 @@ import ReviewFlow from "@/components/ReviewFlow";
 import LoyaltyCard from "@/components/LoyaltyCard";
 import PromoPopup from "@/components/PromoPopup";
 import DailyMenuBanner from "@/components/DailyMenuBanner";
+import SmartMenuAssistant from "@/components/SmartMenuAssistant";
+import {
+  filterDishes,
+  loadPreferences,
+  savePreferences,
+  emptyPreferences,
+  type MenuPreferences,
+} from "@/lib/dietProfiles";
 
 import { useRestaurantFeatures } from "@/hooks/useRestaurantFeatures";
 import { Info, ChefHat, BookOpen } from "lucide-react";
