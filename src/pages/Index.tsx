@@ -29,6 +29,8 @@ import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS, isInAppBrowser } from "@/lib/platform";
 import { hasARModel } from "@/lib/dishHasAR";
 import OpenInBrowserDialog from "@/components/OpenInBrowserDialog";
+import ReviewFlow from "@/components/ReviewFlow";
+import { useRestaurantFeatures } from "@/hooks/useRestaurantFeatures";
 import { Info, ChefHat, BookOpen } from "lucide-react";
 import {
   Dialog,
@@ -53,6 +55,7 @@ const Index = () => {
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
   const { isFavorite, toggle } = useFavorites();
   const features = useSubscriptionFeatures(restaurantId);
+  const { data: restoFeatures } = useRestaurantFeatures(restaurantId);
   const { lang, t, translateBatch } = useTranslation();
 
   // Trigger translation when language or dishes change
@@ -217,6 +220,9 @@ const Index = () => {
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
       <LanguageSelector multilingual={features.hasMultilingual} />
       <OpenInBrowserDialog open={showBrowserHint} onOpenChange={setShowBrowserHint} />
+      {restaurantId && restoFeatures && (
+        <ReviewFlow restaurantId={restaurantId} features={restoFeatures} lang={lang} />
+      )}
 
       {/* Top-left icon buttons (horizontal row) */}
       <div className={`absolute top-4 left-4 z-20 flex flex-row gap-2 ${isAmr ? "hidden" : ""}`}>
