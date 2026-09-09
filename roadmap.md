@@ -7,7 +7,7 @@
 Priorité annoncée par le client :
 1. [x] Avis Google (note interne 1-5, redirection Google si 4-5, retour privé si 1-3, stats)
 2. [x] Fidélité digitale (compte léger, points, niveaux, récompenses, validation caisse)
-3. [ ] Pop-up promotionnel (image, CTA, dates, fréquence, ciblage langue, stats)
+3. [x] Pop-up promotionnel (image, CTA, dates, fréquence, ciblage langue, stats)
 4. [ ] Menu du jour (page publique, visuels carré + story, légende, archivage)
 5. [ ] Rapports mensuels (vues, plats top/flop, avis, campagnes, export PDF)
 6. [ ] Menu intelligent : profils alimentaires, mode allergies, « Choisis pour moi »
