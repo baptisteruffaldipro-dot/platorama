@@ -215,11 +215,7 @@ const ReviewFlow = ({ restaurantId, features, lang }: Props) => {
                   )}
                   <button
                     className="text-xs text-muted-foreground underline"
-                    onClick={() => {
-                      remember();
-                      setOpen(false);
-                      setVisible(false);
-                    }}
+                    onClick={handleSkipPositive}
                   >
                     Plus tard
                   </button>
