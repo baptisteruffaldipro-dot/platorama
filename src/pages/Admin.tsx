@@ -14,6 +14,7 @@ import { Navigate } from "react-router-dom";
 import { LogOut, Plus, Pencil, Trash2, Upload, Star, Gift, Rotate3d, BarChart3, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail, ArrowLeft } from "lucide-react";
 import SettingsPanel from "@/components/SettingsPanel";
 import ReviewsPanel from "@/components/admin/ReviewsPanel";
+import LoyaltyPanel from "@/components/admin/LoyaltyPanel";
 import UsersPanel from "@/components/UsersPanel";
 import InfoPanel from "@/components/InfoPanel";
 import {
