@@ -32,6 +32,7 @@ import OpenInBrowserDialog from "@/components/OpenInBrowserDialog";
 import ReviewFlow from "@/components/ReviewFlow";
 import LoyaltyCard from "@/components/LoyaltyCard";
 import PromoPopup from "@/components/PromoPopup";
+import DailyMenuBanner from "@/components/DailyMenuBanner";
 
 import { useRestaurantFeatures } from "@/hooks/useRestaurantFeatures";
 import { Info, ChefHat, BookOpen } from "lucide-react";
@@ -237,6 +238,9 @@ const Index = () => {
       )}
       {restaurantId && restoFeatures?.popups_enabled && !showSplash && (
         <PromoPopup restaurantId={restaurantId} lang={lang} />
+      )}
+      {restaurantId && restoFeatures?.daily_menu_enabled && !showSplash && (
+        <DailyMenuBanner restaurantId={restaurantId} />
       )}
 
 
