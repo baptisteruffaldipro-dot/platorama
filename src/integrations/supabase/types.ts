@@ -65,6 +65,62 @@ export type Database = {
           },
         ]
       }
+      daily_menus: {
+        Row: {
+          caption: string
+          created_at: string
+          formula_label: string
+          formula_price: number | null
+          id: string
+          image_square: string
+          image_story: string
+          is_published: boolean
+          items: Json
+          menu_date: string
+          restaurant_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          caption?: string
+          created_at?: string
+          formula_label?: string
+          formula_price?: number | null
+          id?: string
+          image_square?: string
+          image_story?: string
+          is_published?: boolean
+          items?: Json
+          menu_date?: string
+          restaurant_id: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          caption?: string
+          created_at?: string
+          formula_label?: string
+          formula_price?: number | null
+          id?: string
+          image_square?: string
+          image_story?: string
+          is_published?: boolean
+          items?: Json
+          menu_date?: string
+          restaurant_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_menus_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dish_events: {
         Row: {
           created_at: string
