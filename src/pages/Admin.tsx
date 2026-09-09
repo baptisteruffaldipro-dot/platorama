@@ -676,6 +676,8 @@ const Admin = () => {
         <DailyMenuPanel restaurantId={restaurantId} />
       ) : tab === "reports" ? (
         <ReportsPanel restaurantId={restaurantId} />
+      ) : tab === "smart" ? (
+        <SmartMenuPanel restaurantId={restaurantId} />
       ) : tab === "users" ? (
 
         <UsersPanel restaurantId={restaurantId} isSuperAdmin={isSuperAdmin} />
