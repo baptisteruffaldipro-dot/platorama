@@ -335,6 +335,97 @@ export type Database = {
           },
         ]
       }
+      popup_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          popup_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          popup_id: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          popup_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "popup_events_popup_id_fkey"
+            columns: ["popup_id"]
+            isOneToOne: false
+            referencedRelation: "popups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      popups: {
+        Row: {
+          body: string
+          created_at: string
+          cta_label: string
+          cta_url: string
+          ends_at: string | null
+          frequency: string
+          id: string
+          image_url: string
+          is_active: boolean
+          restaurant_id: string
+          sort_order: number
+          starts_at: string | null
+          target_lang: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          cta_label?: string
+          cta_url?: string
+          ends_at?: string | null
+          frequency?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          restaurant_id: string
+          sort_order?: number
+          starts_at?: string | null
+          target_lang?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          cta_label?: string
+          cta_url?: string
+          ends_at?: string | null
+          frequency?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          restaurant_id?: string
+          sort_order?: number
+          starts_at?: string | null
+          target_lang?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "popups_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       restaurant_features: {
         Row: {
           allergens_enabled: boolean
