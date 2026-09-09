@@ -11,7 +11,7 @@ Priorité annoncée par le client :
 4. [x] Menu du jour (page publique, visuels carré + story, légende, archivage)
 5. [x] Rapports mensuels (vues, plats top/flop, avis, campagnes, export PDF)
 6. [x] Menu intelligent : profils alimentaires, mode allergies, « Choisis pour moi »
-7. [ ] Campagnes CRM email/SMS + médiathèque
+7. [x] Campagnes CRM email + médiathèque (envoi réel en attente du service d'emails Resend ; SMS non traité)
 Ensuite : comparateur de plats, Top du restaurant, Tendance aujourd'hui,
 mode « Profitez du moment », vidéos « Derrière le plat ».
 
