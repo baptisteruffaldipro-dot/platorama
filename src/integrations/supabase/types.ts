@@ -14,6 +14,122 @@ export type Database = {
   }
   public: {
     Tables: {
+      campaign_recipients: {
+        Row: {
+          campaign_id: string
+          created_at: string
+          email: string | null
+          error: string | null
+          id: string
+          member_id: string | null
+          phone: string | null
+          status: string
+        }
+        Insert: {
+          campaign_id: string
+          created_at?: string
+          email?: string | null
+          error?: string | null
+          id?: string
+          member_id?: string | null
+          phone?: string | null
+          status?: string
+        }
+        Update: {
+          campaign_id?: string
+          created_at?: string
+          email?: string | null
+          error?: string | null
+          id?: string
+          member_id?: string | null
+          phone?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaign_recipients_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "campaign_recipients_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "loyalty_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      campaigns: {
+        Row: {
+          body: string
+          channel: string
+          created_at: string
+          cta_label: string
+          cta_url: string
+          error: string | null
+          failed_count: number
+          id: string
+          image_url: string
+          name: string
+          restaurant_id: string
+          sent_at: string | null
+          sent_count: number
+          status: string
+          subject: string
+          target_lang: string | null
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          channel?: string
+          created_at?: string
+          cta_label?: string
+          cta_url?: string
+          error?: string | null
+          failed_count?: number
+          id?: string
+          image_url?: string
+          name?: string
+          restaurant_id: string
+          sent_at?: string | null
+          sent_count?: number
+          status?: string
+          subject?: string
+          target_lang?: string | null
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          channel?: string
+          created_at?: string
+          cta_label?: string
+          cta_url?: string
+          error?: string | null
+          failed_count?: number
+          id?: string
+          image_url?: string
+          name?: string
+          restaurant_id?: string
+          sent_at?: string | null
+          sent_count?: number
+          status?: string
+          subject?: string
+          target_lang?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "campaigns_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       consent_events: {
         Row: {
           channel: string
@@ -391,6 +507,44 @@ export type Database = {
           },
         ]
       }
+      media_assets: {
+        Row: {
+          created_at: string
+          id: string
+          kind: string
+          label: string
+          restaurant_id: string
+          storage_path: string | null
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          kind?: string
+          label?: string
+          restaurant_id: string
+          storage_path?: string | null
+          url: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          kind?: string
+          label?: string
+          restaurant_id?: string
+          storage_path?: string | null
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_assets_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       popup_events: {
         Row: {
           created_at: string
@@ -486,6 +640,9 @@ export type Database = {
         Row: {
           allergens_enabled: boolean
           created_at: string
+          crm_enabled: boolean
+          crm_sender_email: string | null
+          crm_sender_name: string | null
           daily_menu_enabled: boolean
           diet_profiles_enabled: boolean
           google_review_url: string | null
@@ -508,6 +665,9 @@ export type Database = {
         Insert: {
           allergens_enabled?: boolean
           created_at?: string
+          crm_enabled?: boolean
+          crm_sender_email?: string | null
+          crm_sender_name?: string | null
           daily_menu_enabled?: boolean
           diet_profiles_enabled?: boolean
           google_review_url?: string | null
@@ -530,6 +690,9 @@ export type Database = {
         Update: {
           allergens_enabled?: boolean
           created_at?: string
+          crm_enabled?: boolean
+          crm_sender_email?: string | null
+          crm_sender_name?: string | null
           daily_menu_enabled?: boolean
           diet_profiles_enabled?: boolean
           google_review_url?: string | null
