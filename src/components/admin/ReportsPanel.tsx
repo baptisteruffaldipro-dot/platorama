@@ -264,7 +264,7 @@ const ReportsPanel = ({
       ) : (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-            <Stat icon={Eye} label="Vues de plats" value={String(data?.views ?? 0)} hint={`${data?.arViews ?? 0} ouvertures en réalité augmentée`} />
+            <Stat icon={Eye} label="Vues de plats" value={String(data?.views ?? 0)} hint={`${data?.arViews ?? 0} ouverture${(data?.arViews ?? 0) > 1 ? "s" : ""} en réalité augmentée`} />
             <Stat
               icon={Star}
               label="Avis reçus"
