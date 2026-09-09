@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
-import { LogOut, Plus, Pencil, Trash2, Upload, Star, Gift, Megaphone, CalendarDays, Rotate3d, BarChart3, FileText, Sparkles, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail, ArrowLeft } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Upload, Star, Gift, Megaphone, CalendarDays, Rotate3d, BarChart3, FileText, Sparkles, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail, Send, ArrowLeft } from "lucide-react";
 import SettingsPanel from "@/components/SettingsPanel";
 import ReviewsPanel from "@/components/admin/ReviewsPanel";
 import LoyaltyPanel from "@/components/admin/LoyaltyPanel";
@@ -19,6 +19,7 @@ import PopupsPanel from "@/components/admin/PopupsPanel";
 import DailyMenuPanel from "@/components/admin/DailyMenuPanel";
 import ReportsPanel from "@/components/admin/ReportsPanel";
 import SmartMenuPanel from "@/components/admin/SmartMenuPanel";
+import CampaignsPanel from "@/components/admin/CampaignsPanel";
 
 import UsersPanel from "@/components/UsersPanel";
 import InfoPanel from "@/components/InfoPanel";
@@ -320,7 +321,7 @@ const Admin = () => {
   const [isNew, setIsNew] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [tab, setTab] = useState<"menu" | "stats" | "reports" | "reviews" | "loyalty" | "popups" | "daily" | "smart" | "settings" | "users" | "info">("menu");
+  const [tab, setTab] = useState<"menu" | "stats" | "reports" | "reviews" | "loyalty" | "popups" | "daily" | "smart" | "campaigns" | "settings" | "users" | "info">("menu");
   const [isResolvingRestaurant, setIsResolvingRestaurant] = useState(false);
   const [scopeError, setScopeError] = useState<string | null>(null);
   
@@ -610,6 +611,7 @@ const Admin = () => {
           { key: "daily", icon: CalendarDays, label: "Menu du jour", superOnly: false, needsFeature: null },
           { key: "reports", icon: FileText, label: "Rapports", superOnly: false, needsFeature: null },
           { key: "smart", icon: Sparkles, label: "Aide au choix", superOnly: false, needsFeature: null },
+          { key: "campaigns", icon: Send, label: "Campagnes", superOnly: false, needsFeature: null },
 
           { key: "settings", icon: Settings, label: "Réglages", superOnly: false, needsFeature: null },
           { key: "users", icon: Users, label: "Utilisateurs", superOnly: true, needsFeature: null },
@@ -678,6 +680,8 @@ const Admin = () => {
         <ReportsPanel restaurantId={restaurantId} />
       ) : tab === "smart" ? (
         <SmartMenuPanel restaurantId={restaurantId} />
+      ) : tab === "campaigns" ? (
+        <CampaignsPanel restaurantId={restaurantId} />
       ) : tab === "users" ? (
 
         <UsersPanel restaurantId={restaurantId} isSuperAdmin={isSuperAdmin} />
