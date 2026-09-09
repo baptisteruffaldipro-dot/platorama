@@ -57,24 +57,20 @@ const ReviewFlow = ({ restaurantId, features, lang }: Props) => {
   const googleUrl = features.google_review_url?.trim();
 
   const saveReview = async (redirected: boolean) => {
-    if (rating === null) return null;
+    if (rating === null) return;
     const isEmail = contact.includes("@");
-    const { data, error } = await supabase
-      .from("reviews")
-      .insert({
-        restaurant_id: restaurantId,
-        rating,
-        comment: comment.trim() || null,
-        first_name: firstName.trim() || null,
-        email: isEmail ? contact.trim() : null,
-        phone: !isEmail && contact.trim() ? contact.trim() : null,
-        lang: lang ?? null,
-        redirected_to_google: redirected,
-      })
-      .select("id")
-      .maybeSingle();
+    // Pas de .select() : les visiteurs anonymes n'ont pas le droit de relire les avis.
+    const { error } = await supabase.from("reviews").insert({
+      restaurant_id: restaurantId,
+      rating,
+      comment: comment.trim() || null,
+      first_name: firstName.trim() || null,
+      email: isEmail ? contact.trim() : null,
+      phone: !isEmail && contact.trim() ? contact.trim() : null,
+      lang: lang ?? null,
+      redirected_to_google: redirected,
+    });
     if (error) throw error;
-    return data;
   };
 
   const handleSelect = (value: number) => {
