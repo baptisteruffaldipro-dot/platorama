@@ -603,6 +603,8 @@ const Admin = () => {
           { key: "stats", icon: BarChart3, label: "Stats", superOnly: false, needsFeature: "hasStats" as const },
           { key: "reviews", icon: Star, label: "Avis", superOnly: false, needsFeature: null },
           { key: "loyalty", icon: Gift, label: "Fidélité", superOnly: false, needsFeature: null },
+          { key: "popups", icon: Megaphone, label: "Pop-ups", superOnly: false, needsFeature: null },
+
           { key: "settings", icon: Settings, label: "Réglages", superOnly: false, needsFeature: null },
           { key: "users", icon: Users, label: "Utilisateurs", superOnly: true, needsFeature: null },
           { key: "info", icon: Mail, label: "Infos", superOnly: true, needsFeature: null },
