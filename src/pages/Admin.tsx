@@ -609,6 +609,7 @@ const Admin = () => {
           { key: "popups", icon: Megaphone, label: "Pop-ups", superOnly: false, needsFeature: null },
           { key: "daily", icon: CalendarDays, label: "Menu du jour", superOnly: false, needsFeature: null },
           { key: "reports", icon: FileText, label: "Rapports", superOnly: false, needsFeature: null },
+          { key: "smart", icon: Sparkles, label: "Aide au choix", superOnly: false, needsFeature: null },
 
           { key: "settings", icon: Settings, label: "Réglages", superOnly: false, needsFeature: null },
           { key: "users", icon: Users, label: "Utilisateurs", superOnly: true, needsFeature: null },
