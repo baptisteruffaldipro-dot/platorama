@@ -15,6 +15,8 @@ import { LogOut, Plus, Pencil, Trash2, Upload, Star, Gift, Megaphone, Rotate3d, 
 import SettingsPanel from "@/components/SettingsPanel";
 import ReviewsPanel from "@/components/admin/ReviewsPanel";
 import LoyaltyPanel from "@/components/admin/LoyaltyPanel";
+import PopupsPanel from "@/components/admin/PopupsPanel";
+
 import UsersPanel from "@/components/UsersPanel";
 import InfoPanel from "@/components/InfoPanel";
 import {
