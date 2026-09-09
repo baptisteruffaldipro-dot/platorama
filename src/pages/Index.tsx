@@ -220,6 +220,9 @@ const Index = () => {
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
       <LanguageSelector multilingual={features.hasMultilingual} />
       <OpenInBrowserDialog open={showBrowserHint} onOpenChange={setShowBrowserHint} />
+      {restaurantId && restoFeatures && (
+        <ReviewFlow restaurantId={restaurantId} features={restoFeatures} lang={lang} />
+      )}
 
       {/* Top-left icon buttons (horizontal row) */}
       <div className={`absolute top-4 left-4 z-20 flex flex-row gap-2 ${isAmr ? "hidden" : ""}`}>
