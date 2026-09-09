@@ -18,6 +18,7 @@ import LoyaltyPanel from "@/components/admin/LoyaltyPanel";
 import PopupsPanel from "@/components/admin/PopupsPanel";
 import DailyMenuPanel from "@/components/admin/DailyMenuPanel";
 import ReportsPanel from "@/components/admin/ReportsPanel";
+import SmartMenuPanel from "@/components/admin/SmartMenuPanel";
 
 import UsersPanel from "@/components/UsersPanel";
 import InfoPanel from "@/components/InfoPanel";
