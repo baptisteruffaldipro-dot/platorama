@@ -9,10 +9,16 @@ const corsHeaders = {
 // Hard input limits to prevent abuse of AI credits
 const MAX_TEXTS = 200;
 const MAX_TEXT_LENGTH = 500;
-const ALLOWED_LANGS = new Set([
-  "en", "es", "de", "it", "pt", "nl", "ja", "zh", "ko", "ar", "ru", "tr",
-  "pl", "sv", "no", "da", "fi", "el", "he", "hi", "th", "vi", "id", "uk",
-]);
+// Accept both ISO codes and English language names
+const LANG_NAMES: Record<string, string> = {
+  en: "English", es: "Spanish", de: "German", it: "Italian", pt: "Portuguese",
+  nl: "Dutch", ja: "Japanese", zh: "Chinese", ko: "Korean", ar: "Arabic",
+  ru: "Russian", tr: "Turkish", pl: "Polish", sv: "Swedish", no: "Norwegian",
+  da: "Danish", fi: "Finnish", el: "Greek", he: "Hebrew", hi: "Hindi",
+  th: "Thai", vi: "Vietnamese", id: "Indonesian", uk: "Ukrainian",
+  fr: "French",
+};
+const NAME_SET = new Set(Object.values(LANG_NAMES).map((n) => n.toLowerCase()));
 
 serve(async (req) => {
   if (req.method === "OPTIONS")
