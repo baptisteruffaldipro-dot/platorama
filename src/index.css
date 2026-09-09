@@ -166,3 +166,18 @@
 }
 .animate-ar-glow { animation: ar-glow 2.4s ease-in-out infinite; }
 
+
+/* Rapport mensuel : impression / export PDF */
+@media print {
+  body * { visibility: hidden !important; }
+  #monthly-report, #monthly-report * { visibility: visible !important; }
+  #monthly-report {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    color: #000;
+    background: #fff;
+  }
+  #monthly-report .bg-card { background: #fff !important; }
+}
