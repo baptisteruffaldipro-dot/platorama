@@ -74,7 +74,7 @@ export const TranslationProvider = ({ children }: { children: ReactNode }) => {
 
     setIsTranslating(true);
     try {
-      const targetLang = LANG_TARGETS[lang] || "English";
+      const targetLang = lang;
       const { data, error } = await supabase.functions.invoke("translate", {
         body: { texts: uncached, target_lang: targetLang },
       });
