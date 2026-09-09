@@ -31,6 +31,8 @@ import { hasARModel } from "@/lib/dishHasAR";
 import OpenInBrowserDialog from "@/components/OpenInBrowserDialog";
 import ReviewFlow from "@/components/ReviewFlow";
 import LoyaltyCard from "@/components/LoyaltyCard";
+import PromoPopup from "@/components/PromoPopup";
+
 import { useRestaurantFeatures } from "@/hooks/useRestaurantFeatures";
 import { Info, ChefHat, BookOpen } from "lucide-react";
 import {
