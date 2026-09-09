@@ -6,7 +6,7 @@
 ## Évolution demandée (activable par restaurant, multi-établissement, RGPD)
 Priorité annoncée par le client :
 1. [x] Avis Google (note interne 1-5, redirection Google si 4-5, retour privé si 1-3, stats)
-2. [ ] Fidélité digitale (compte léger, points, niveaux, récompenses, validation caisse)
+2. [x] Fidélité digitale (compte léger, points, niveaux, récompenses, validation caisse)
 3. [ ] Pop-up promotionnel (image, CTA, dates, fréquence, ciblage langue, stats)
 4. [ ] Menu du jour (page publique, visuels carré + story, légende, archivage)
 5. [ ] Rapports mensuels (vues, plats top/flop, avis, campagnes, export PDF)
@@ -17,7 +17,7 @@ mode « Profitez du moment », vidéos « Derrière le plat ».
 
 ## Transverse
 - [x] Table de réglages de fonctionnalités par restaurant (interrupteurs prêts pour les modules suivants)
-- [ ] Consentements email/SMS avec historique et désinscription
+- [x] Consentements email/SMS avec historique et désinscription (base posée avec la fidélité)
 - [ ] Données de démonstration réalistes
 
 ## En attente d'une réponse

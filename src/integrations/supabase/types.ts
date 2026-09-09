@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      consent_events: {
+        Row: {
+          channel: string
+          created_at: string
+          email: string | null
+          granted: boolean
+          id: string
+          member_id: string | null
+          phone: string | null
+          restaurant_id: string
+          source: string | null
+        }
+        Insert: {
+          channel: string
+          created_at?: string
+          email?: string | null
+          granted: boolean
+          id?: string
+          member_id?: string | null
+          phone?: string | null
+          restaurant_id: string
+          source?: string | null
+        }
+        Update: {
+          channel?: string
+          created_at?: string
+          email?: string | null
+          granted?: boolean
+          id?: string
+          member_id?: string | null
+          phone?: string | null
+          restaurant_id?: string
+          source?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consent_events_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "loyalty_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consent_events_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dish_events: {
         Row: {
           created_at: string
@@ -120,6 +171,170 @@ export type Database = {
           },
         ]
       }
+      loyalty_members: {
+        Row: {
+          access_token: string
+          card_code: string
+          consent_at: string | null
+          consent_email: boolean
+          consent_sms: boolean
+          created_at: string
+          email: string | null
+          first_name: string | null
+          id: string
+          lang: string | null
+          phone: string | null
+          points: number
+          restaurant_id: string
+          unsubscribed_at: string | null
+          updated_at: string
+          visits: number
+        }
+        Insert: {
+          access_token?: string
+          card_code: string
+          consent_at?: string | null
+          consent_email?: boolean
+          consent_sms?: boolean
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          lang?: string | null
+          phone?: string | null
+          points?: number
+          restaurant_id: string
+          unsubscribed_at?: string | null
+          updated_at?: string
+          visits?: number
+        }
+        Update: {
+          access_token?: string
+          card_code?: string
+          consent_at?: string | null
+          consent_email?: boolean
+          consent_sms?: boolean
+          created_at?: string
+          email?: string | null
+          first_name?: string | null
+          id?: string
+          lang?: string | null
+          phone?: string | null
+          points?: number
+          restaurant_id?: string
+          unsubscribed_at?: string | null
+          updated_at?: string
+          visits?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_members_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      loyalty_rewards: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean
+          label: string
+          points_cost: number
+          restaurant_id: string
+          sort_order: number
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          label: string
+          points_cost?: number
+          restaurant_id: string
+          sort_order?: number
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          label?: string
+          points_cost?: number
+          restaurant_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_rewards_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      loyalty_transactions: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          kind: string
+          label: string | null
+          member_id: string
+          points: number
+          restaurant_id: string
+          reward_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          label?: string | null
+          member_id: string
+          points: number
+          restaurant_id: string
+          reward_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          kind?: string
+          label?: string | null
+          member_id?: string
+          points?: number
+          restaurant_id?: string
+          reward_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_transactions_member_id_fkey"
+            columns: ["member_id"]
+            isOneToOne: false
+            referencedRelation: "loyalty_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loyalty_transactions_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "loyalty_transactions_reward_id_fkey"
+            columns: ["reward_id"]
+            isOneToOne: false
+            referencedRelation: "loyalty_rewards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       restaurant_features: {
         Row: {
           allergens_enabled: boolean
@@ -129,6 +344,10 @@ export type Database = {
           google_review_url: string | null
           id: string
           loyalty_enabled: boolean
+          loyalty_points_per_visit: number
+          loyalty_program_name: string | null
+          loyalty_reward_threshold: number
+          loyalty_welcome_text: string | null
           pick_for_me_enabled: boolean
           popups_enabled: boolean
           restaurant_id: string
@@ -147,6 +366,10 @@ export type Database = {
           google_review_url?: string | null
           id?: string
           loyalty_enabled?: boolean
+          loyalty_points_per_visit?: number
+          loyalty_program_name?: string | null
+          loyalty_reward_threshold?: number
+          loyalty_welcome_text?: string | null
           pick_for_me_enabled?: boolean
           popups_enabled?: boolean
           restaurant_id: string
@@ -165,6 +388,10 @@ export type Database = {
           google_review_url?: string | null
           id?: string
           loyalty_enabled?: boolean
+          loyalty_points_per_visit?: number
+          loyalty_program_name?: string | null
+          loyalty_reward_threshold?: number
+          loyalty_welcome_text?: string | null
           pick_for_me_enabled?: boolean
           popups_enabled?: boolean
           restaurant_id?: string

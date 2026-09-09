@@ -30,6 +30,7 @@ import { isIOS, isInAppBrowser } from "@/lib/platform";
 import { hasARModel } from "@/lib/dishHasAR";
 import OpenInBrowserDialog from "@/components/OpenInBrowserDialog";
 import ReviewFlow from "@/components/ReviewFlow";
+import LoyaltyCard from "@/components/LoyaltyCard";
 import { useRestaurantFeatures } from "@/hooks/useRestaurantFeatures";
 import { Info, ChefHat, BookOpen } from "lucide-react";
 import {
@@ -222,6 +223,15 @@ const Index = () => {
       <OpenInBrowserDialog open={showBrowserHint} onOpenChange={setShowBrowserHint} />
       {restaurantId && restoFeatures && (
         <ReviewFlow restaurantId={restaurantId} features={restoFeatures} lang={lang} />
+      )}
+      {restaurantId && restoFeatures?.loyalty_enabled && (
+        <LoyaltyCard
+          restaurantId={restaurantId}
+          programName={restoFeatures.loyalty_program_name}
+          welcomeText={restoFeatures.loyalty_welcome_text}
+          rewardThreshold={restoFeatures.loyalty_reward_threshold}
+          lang={lang}
+        />
       )}
 
       {/* Top-left icon buttons (horizontal row) */}

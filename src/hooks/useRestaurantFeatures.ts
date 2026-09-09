@@ -9,6 +9,10 @@ export interface RestaurantFeatures {
   reviews_threshold: number;
   reviews_prompt: string | null;
   loyalty_enabled: boolean;
+  loyalty_points_per_visit: number;
+  loyalty_reward_threshold: number;
+  loyalty_welcome_text: string | null;
+  loyalty_program_name: string | null;
   popups_enabled: boolean;
   daily_menu_enabled: boolean;
   allergens_enabled: boolean;
@@ -26,6 +30,10 @@ export const defaultFeatures = (restaurantId: string): RestaurantFeatures => ({
   reviews_threshold: 4,
   reviews_prompt: null,
   loyalty_enabled: false,
+  loyalty_points_per_visit: 1,
+  loyalty_reward_threshold: 10,
+  loyalty_welcome_text: null,
+  loyalty_program_name: null,
   popups_enabled: false,
   daily_menu_enabled: false,
   allergens_enabled: false,
