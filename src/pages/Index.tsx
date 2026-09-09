@@ -223,6 +223,15 @@ const Index = () => {
       {restaurantId && restoFeatures && (
         <ReviewFlow restaurantId={restaurantId} features={restoFeatures} lang={lang} />
       )}
+      {restaurantId && restoFeatures?.loyalty_enabled && (
+        <LoyaltyCard
+          restaurantId={restaurantId}
+          programName={restoFeatures.loyalty_program_name}
+          welcomeText={restoFeatures.loyalty_welcome_text}
+          rewardThreshold={restoFeatures.loyalty_reward_threshold}
+          lang={lang}
+        />
+      )}
 
       {/* Top-left icon buttons (horizontal row) */}
       <div className={`absolute top-4 left-4 z-20 flex flex-row gap-2 ${isAmr ? "hidden" : ""}`}>
