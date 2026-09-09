@@ -34,9 +34,10 @@ serve(async (req) => {
       );
     }
 
-    // Validate target_lang against allowlist
-    const lang = target_lang.toLowerCase().trim();
-    if (!ALLOWED_LANGS.has(lang)) {
+    // Validate target_lang (ISO code or English name)
+    const raw = target_lang.toLowerCase().trim();
+    const lang = LANG_NAMES[raw] ?? (NAME_SET.has(raw) ? target_lang.trim() : "");
+    if (!lang) {
       return new Response(
         JSON.stringify({ error: "Unsupported target language" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
