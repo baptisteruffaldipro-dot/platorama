@@ -20,6 +20,9 @@ export interface RestaurantFeatures {
   pick_for_me_enabled: boolean;
   top_dishes_enabled: boolean;
   trending_enabled: boolean;
+  crm_enabled: boolean;
+  crm_sender_name: string | null;
+  crm_sender_email: string | null;
 }
 
 export const defaultFeatures = (restaurantId: string): RestaurantFeatures => ({
@@ -41,6 +44,9 @@ export const defaultFeatures = (restaurantId: string): RestaurantFeatures => ({
   pick_for_me_enabled: false,
   top_dishes_enabled: false,
   trending_enabled: false,
+  crm_enabled: false,
+  crm_sender_name: null,
+  crm_sender_email: null,
 });
 
 export const useRestaurantFeatures = (restaurantId?: string | null) => {
