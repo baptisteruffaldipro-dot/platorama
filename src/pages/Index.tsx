@@ -262,6 +262,21 @@ const Index = () => {
       {restaurantId && restoFeatures?.daily_menu_enabled && !showSplash && (
         <DailyMenuBanner restaurantId={restaurantId} />
       )}
+      {availableDishes && restoFeatures && !showSplash && (
+        <SmartMenuAssistant
+          dishes={availableDishes}
+          prefs={prefs}
+          onChange={updatePrefs}
+          onPick={(picked) => {
+            const list = filteredDishes?.length ? filteredDishes : availableDishes;
+            const idx = list.findIndex((d) => d.id === picked.id);
+            if (idx >= 0) setActiveIndex(idx);
+          }}
+          showProfiles={restoFeatures.diet_profiles_enabled}
+          showAllergens={restoFeatures.allergens_enabled}
+          showPickForMe={restoFeatures.pick_for_me_enabled}
+        />
+      )}
 
 
       {/* Top-left icon buttons (horizontal row) */}
