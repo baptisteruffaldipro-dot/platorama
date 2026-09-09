@@ -55,6 +55,7 @@ const Index = () => {
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
   const { isFavorite, toggle } = useFavorites();
   const features = useSubscriptionFeatures(restaurantId);
+  const { data: restoFeatures } = useRestaurantFeatures(restaurantId);
   const { lang, t, translateBatch } = useTranslation();
 
   // Trigger translation when language or dishes change
