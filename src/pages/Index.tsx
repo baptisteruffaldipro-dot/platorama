@@ -233,6 +233,10 @@ const Index = () => {
           lang={lang}
         />
       )}
+      {restaurantId && restoFeatures?.popups_enabled && !showSplash && (
+        <PromoPopup restaurantId={restaurantId} lang={lang} />
+      )}
+
 
       {/* Top-left icon buttons (horizontal row) */}
       <div className={`absolute top-4 left-4 z-20 flex flex-row gap-2 ${isAmr ? "hidden" : ""}`}>
