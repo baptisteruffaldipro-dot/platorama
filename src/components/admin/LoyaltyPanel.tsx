@@ -233,7 +233,7 @@ const LoyaltyPanel = ({ restaurantId }: { restaurantId: string | null }) => {
           <Input
             value={programName}
             onChange={(e) => setProgramName(e.target.value)}
-            placeholder="Le Club La Boucherie"
+            placeholder="Ex. : Le Club des habitués"
           />
         </div>
         <div>
