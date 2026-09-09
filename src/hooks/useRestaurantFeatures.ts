@@ -9,6 +9,10 @@ export interface RestaurantFeatures {
   reviews_threshold: number;
   reviews_prompt: string | null;
   loyalty_enabled: boolean;
+  loyalty_points_per_visit: number;
+  loyalty_reward_threshold: number;
+  loyalty_welcome_text: string | null;
+  loyalty_program_name: string | null;
   popups_enabled: boolean;
   daily_menu_enabled: boolean;
   allergens_enabled: boolean;
