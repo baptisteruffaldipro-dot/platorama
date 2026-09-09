@@ -33,6 +33,14 @@ import ReviewFlow from "@/components/ReviewFlow";
 import LoyaltyCard from "@/components/LoyaltyCard";
 import PromoPopup from "@/components/PromoPopup";
 import DailyMenuBanner from "@/components/DailyMenuBanner";
+import SmartMenuAssistant from "@/components/SmartMenuAssistant";
+import {
+  filterDishes,
+  loadPreferences,
+  savePreferences,
+  emptyPreferences,
+  type MenuPreferences,
+} from "@/lib/dietProfiles";
 
 import { useRestaurantFeatures } from "@/hooks/useRestaurantFeatures";
 import { Info, ChefHat, BookOpen } from "lucide-react";
@@ -54,7 +62,19 @@ const Index = () => {
   const [showBrowserHint, setShowBrowserHint] = useState(false);
   const { data: allDishes, isLoading } = useDishes(restaurantId);
   // Filter out unavailable dishes for the public menu
-  const dishes = allDishes?.filter(d => d.is_available);
+  const availableDishes = allDishes?.filter(d => d.is_available);
+  // Menu intelligent : préférences alimentaires / allergies du client
+  const [prefs, setPrefs] = useState<MenuPreferences>(emptyPreferences);
+  useEffect(() => {
+    if (restaurantId) setPrefs(loadPreferences(restaurantId));
+  }, [restaurantId]);
+  const updatePrefs = (next: MenuPreferences) => {
+    setPrefs(next);
+    if (restaurantId) savePreferences(restaurantId, next);
+    setActiveIndex(0);
+  };
+  const filteredDishes = availableDishes ? filterDishes(availableDishes, prefs) : undefined;
+  const dishes = filteredDishes?.length ? filteredDishes : availableDishes;
   const { data: siteSettings } = usePublishedSettings(restaurantId);
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
   const { isFavorite, toggle } = useFavorites();
@@ -241,6 +261,21 @@ const Index = () => {
       )}
       {restaurantId && restoFeatures?.daily_menu_enabled && !showSplash && (
         <DailyMenuBanner restaurantId={restaurantId} />
+      )}
+      {availableDishes && restoFeatures && !showSplash && (
+        <SmartMenuAssistant
+          dishes={availableDishes}
+          prefs={prefs}
+          onChange={updatePrefs}
+          onPick={(picked) => {
+            const list = filteredDishes?.length ? filteredDishes : availableDishes;
+            const idx = list.findIndex((d) => d.id === picked.id);
+            if (idx >= 0) setActiveIndex(idx);
+          }}
+          showProfiles={restoFeatures.diet_profiles_enabled}
+          showAllergens={restoFeatures.allergens_enabled}
+          showPickForMe={restoFeatures.pick_for_me_enabled}
+        />
       )}
 
 
