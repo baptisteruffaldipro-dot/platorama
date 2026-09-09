@@ -653,6 +653,8 @@ const Admin = () => {
         </div>
       ) : tab === "stats" ? (
         <StatsPanel dishes={dishes ?? []} />
+      ) : tab === "reviews" ? (
+        <ReviewsPanel restaurantId={restaurantId} />
       ) : tab === "users" ? (
         <UsersPanel restaurantId={restaurantId} isSuperAdmin={isSuperAdmin} />
       ) : tab === "info" ? (
