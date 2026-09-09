@@ -77,30 +77,30 @@ const ReviewFlow = ({ restaurantId, features, lang }: Props) => {
     return data;
   };
 
-  const handleSelect = async (value: number) => {
+  const handleSelect = (value: number) => {
     setRating(value);
-    if (value >= threshold) {
-      // Positive: log immediately so the redirect rate is measurable
-      try {
-        await saveReview(false);
-      } catch {
-        /* silencieux : l'expérience client ne doit pas casser */
-      }
-    }
   };
 
   const handleGoogle = async () => {
     remember();
-    if (rating !== null) {
-      await supabase
-        .from("reviews")
-        .update({ redirected_to_google: true })
-        .eq("restaurant_id", restaurantId)
-        .eq("rating", rating)
-        .order("created_at", { ascending: false })
-        .limit(1);
-    }
+    // Ouvrir d'abord pour rester dans le geste utilisateur (anti popup-blocker)
     if (googleUrl) window.open(googleUrl, "_blank", "noopener");
+    try {
+      await saveReview(true);
+    } catch {
+      /* silencieux : l'expérience client ne doit pas casser */
+    }
+    setOpen(false);
+    setVisible(false);
+  };
+
+  const handleSkipPositive = async () => {
+    remember();
+    try {
+      await saveReview(false);
+    } catch {
+      /* silencieux */
+    }
     setOpen(false);
     setVisible(false);
   };
