@@ -9,7 +9,7 @@ Priorité annoncée par le client :
 2. [x] Fidélité digitale (compte léger, points, niveaux, récompenses, validation caisse)
 3. [x] Pop-up promotionnel (image, CTA, dates, fréquence, ciblage langue, stats)
 4. [x] Menu du jour (page publique, visuels carré + story, légende, archivage)
-5. [ ] Rapports mensuels (vues, plats top/flop, avis, campagnes, export PDF)
+5. [x] Rapports mensuels (vues, plats top/flop, avis, campagnes, export PDF)
 6. [ ] Menu intelligent : profils alimentaires, mode allergies, « Choisis pour moi »
 7. [ ] Campagnes CRM email/SMS + médiathèque
 Ensuite : comparateur de plats, Top du restaurant, Tendance aujourd'hui,
