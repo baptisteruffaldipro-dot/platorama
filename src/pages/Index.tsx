@@ -258,8 +258,23 @@ const Index = () => {
             : "border-border/60 bg-background/75"
         } backdrop-blur-xl`}
       >
-        <div className="px-4 pt-3 pb-2 flex items-center justify-between gap-2 min-h-[3rem]">
-          {/* Contextual dish icons */}
+        <div className="px-4 pt-2 pb-1.5 flex items-center justify-between gap-2 min-h-[2.75rem]">
+          {/* Logo + contextual dish icons */}
+          <div className="flex flex-row items-center gap-2 min-w-0">
+            {siteSettings?.logo_url ? (
+              <img
+                src={siteSettings.logo_url}
+                alt={siteSettings?.restaurant_name ? `${siteSettings.restaurant_name} logo` : "Logo"}
+                className="h-8 w-auto max-w-[7.5rem] object-contain shrink-0"
+              />
+            ) : siteSettings?.restaurant_name ? (
+              <span
+                className={`text-sm tracking-wide uppercase truncate ${isVision ? "text-white/90" : "text-foreground"}`}
+                style={{ fontFamily: "var(--font-serif)" }}
+              >
+                {siteSettings.restaurant_name}
+              </span>
+            ) : null}
           <div className={`flex flex-row items-center gap-2 ${isAmr ? "hidden" : ""}`}>
         {/* Formulas / Info — only show if formulas exist */}
         {formulas.length > 0 && (
