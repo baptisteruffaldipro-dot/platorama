@@ -242,7 +242,6 @@ const Index = () => {
         </>
       )}
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
-      <LanguageSelector multilingual={features.hasMultilingual} />
       <OpenInBrowserDialog open={showBrowserHint} onOpenChange={setShowBrowserHint} />
       {restaurantId && restoFeatures && (
         <ReviewFlow restaurantId={restaurantId} features={restoFeatures} lang={lang} />
@@ -251,40 +250,17 @@ const Index = () => {
         <PromoPopup restaurantId={restaurantId} lang={lang} />
       )}
 
-      {/* Top-right action row: Menu du jour · Aide au choix · Fidélité */}
-      <div className="fixed top-16 right-4 z-40 flex flex-row items-center gap-2">
-        {restaurantId && restoFeatures?.daily_menu_enabled && !showSplash && (
-          <DailyMenuBanner restaurantId={restaurantId} />
-        )}
-        {availableDishes && restoFeatures && !showSplash && (
-          <SmartMenuAssistant
-            dishes={availableDishes}
-            prefs={prefs}
-            onChange={updatePrefs}
-            onPick={(picked) => {
-              const list = filteredDishes?.length ? filteredDishes : availableDishes;
-              const idx = list.findIndex((d) => d.id === picked.id);
-              if (idx >= 0) setActiveIndex(idx);
-            }}
-            showProfiles={restoFeatures.diet_profiles_enabled}
-            showAllergens={restoFeatures.allergens_enabled}
-            showPickForMe={restoFeatures.pick_for_me_enabled}
-          />
-        )}
-        {restaurantId && restoFeatures?.loyalty_enabled && (
-          <LoyaltyCard
-            restaurantId={restaurantId}
-            programName={restoFeatures.loyalty_program_name}
-            welcomeText={restoFeatures.loyalty_welcome_text}
-            rewardThreshold={restoFeatures.loyalty_reward_threshold}
-            lang={lang}
-          />
-        )}
-      </div>
-
-
-      {/* Top-left icon buttons (horizontal row) */}
-      <div className={`absolute top-4 left-4 z-20 flex flex-row gap-2 ${isAmr ? "hidden" : ""}`}>
+      {/* Header ancré en haut */}
+      <header
+        className={`shrink-0 relative z-40 border-b ${
+          isVision
+            ? "border-white/10 bg-black/40"
+            : "border-border/60 bg-background/75"
+        } backdrop-blur-xl`}
+      >
+        <div className="px-4 pt-3 pb-2 flex items-center justify-between gap-2 min-h-[3rem]">
+          {/* Contextual dish icons */}
+          <div className={`flex flex-row items-center gap-2 ${isAmr ? "hidden" : ""}`}>
         {/* Formulas / Info — only show if formulas exist */}
         {formulas.length > 0 && (
           <Dialog>
@@ -381,7 +357,44 @@ const Index = () => {
             </DialogContent>
           </Dialog>
         )}
-      </div>
+          </div>
+
+          <LanguageSelector multilingual={features.hasMultilingual} />
+        </div>
+
+        {/* Quick actions : Menu du jour · Aide au choix · Fidélité */}
+        {!showSplash && (
+          <div className="px-4 pb-3 flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+            {restaurantId && restoFeatures?.daily_menu_enabled && (
+              <DailyMenuBanner restaurantId={restaurantId} />
+            )}
+            {availableDishes && restoFeatures && (
+              <SmartMenuAssistant
+                dishes={availableDishes}
+                prefs={prefs}
+                onChange={updatePrefs}
+                onPick={(picked) => {
+                  const list = filteredDishes?.length ? filteredDishes : availableDishes;
+                  const idx = list.findIndex((d) => d.id === picked.id);
+                  if (idx >= 0) setActiveIndex(idx);
+                }}
+                showProfiles={restoFeatures.diet_profiles_enabled}
+                showAllergens={restoFeatures.allergens_enabled}
+                showPickForMe={restoFeatures.pick_for_me_enabled}
+              />
+            )}
+            {restaurantId && restoFeatures?.loyalty_enabled && (
+              <LoyaltyCard
+                restaurantId={restaurantId}
+                programName={restoFeatures.loyalty_program_name}
+                welcomeText={restoFeatures.loyalty_welcome_text}
+                rewardThreshold={restoFeatures.loyalty_reward_threshold}
+                lang={lang}
+              />
+            )}
+          </div>
+        )}
+      </header>
 
       {isAmr ? (
         <div className="flex-1 min-h-0">
