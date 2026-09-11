@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { CalendarDays, X } from "lucide-react";
 import { useTodayDailyMenu } from "@/hooks/useDailyMenu";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -83,7 +84,7 @@ const DailyMenuBanner = ({ restaurantId }: { restaurantId: string }) => {
         <span className="truncate">{label}</span>
       </button>
 
-      {open && (
+      {open && createPortal(
         <div
           className="fixed inset-0 z-[70] flex items-end justify-center bg-black/60 backdrop-blur-sm p-4"
           onClick={closeOverlay}
@@ -156,7 +157,8 @@ const DailyMenuBanner = ({ restaurantId }: { restaurantId: string }) => {
               )}
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </>
   );

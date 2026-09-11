@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, X, Dices, ShieldAlert, RotateCcw } from "lucide-react";
 import type { Dish } from "@/hooks/useDishes";
@@ -85,7 +86,8 @@ const SmartMenuAssistant = ({
         )}
       </button>
 
-      <AnimatePresence>
+      {createPortal(
+        <AnimatePresence>
         {open && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -220,7 +222,9 @@ const SmartMenuAssistant = ({
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   );
 };
