@@ -258,129 +258,133 @@ const Index = () => {
             : "border-border/60 bg-background/75"
         } backdrop-blur-xl`}
       >
-        <div className="px-4 pt-3 pb-2 flex items-center justify-between gap-2">
-          {/* Logo + contextual dish icons */}
-          <div className="flex flex-row items-center gap-3 min-w-0">
+        <div className="px-4 pt-3 pb-2 flex items-center justify-between gap-3">
+          {/* Logo */}
+          <div className="flex items-center min-w-0">
             {siteSettings?.logo_url ? (
               <img
                 src={siteSettings.logo_url}
                 alt={siteSettings?.restaurant_name ? `${siteSettings.restaurant_name} logo` : "Logo"}
-                className="h-24 w-auto max-w-[16rem] object-contain shrink-0"
+                className="h-20 w-auto max-w-[13rem] object-contain shrink-0"
               />
             ) : siteSettings?.restaurant_name ? (
               <span
-                className={`text-2xl tracking-wide uppercase truncate ${isVision ? "text-white/90" : "text-foreground"}`}
+                className={`text-xl tracking-wide uppercase truncate ${isVision ? "text-white/90" : "text-foreground"}`}
                 style={{ fontFamily: "var(--font-serif)" }}
               >
                 {siteSettings.restaurant_name}
               </span>
             ) : null}
-          <div className={`flex flex-row items-center gap-2 ${isAmr ? "hidden" : ""}`}>
-        {/* Formulas / Info — only show if formulas exist */}
-        {formulas.length > 0 && (
-          <Dialog>
-            <DialogTrigger asChild>
-              <button
-                className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
-                aria-label="Voir les formules"
-              >
-                <Info className="w-5 h-5 text-muted-foreground" />
-              </button>
-            </DialogTrigger>
-            <DialogContent className="bg-card border-border max-w-xs">
-              <DialogHeader>
-                <DialogTitle
-                  className="text-xl text-foreground tracking-wide uppercase text-center"
-                  style={{ fontFamily: "var(--font-serif)" }}
-                >
-                  {t("Nos Formules")}
-                </DialogTitle>
-              </DialogHeader>
-              <div className="space-y-3 pt-2 text-center" style={{ fontFamily: "var(--font-serif)" }}>
-                {formulas.map((f, i) => (
-                  <div key={i}>
-                    {i > 0 && <div className="border-t border-border mb-3" />}
-                    <p className="text-sm text-foreground">{t(f.label)}</p>
-                    <p className="text-lg font-semibold text-accent">{f.price}</p>
-                  </div>
-                ))}
-              </div>
-            </DialogContent>
-          </Dialog>
-        )}
+          </div>
 
-        {/* Chef note */}
-        {dish.chef_note && (
-          <Dialog>
-            <DialogTrigger asChild>
-              <button
-                className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
-                aria-label="Note du chef"
-              >
-                <ChefHat className="w-5 h-5 text-muted-foreground" />
-              </button>
-            </DialogTrigger>
-            <DialogContent className="bg-card border-border max-w-sm">
-              <DialogHeader>
-                <DialogTitle
-                  className="text-xl text-foreground tracking-wide uppercase text-center flex items-center justify-center gap-2"
-                  style={{ fontFamily: "var(--font-serif)" }}
-                >
-                  <ChefHat className="w-5 h-5 text-accent" />
-                  {t("Note du Chef")}
-                </DialogTitle>
-              </DialogHeader>
-              <p className="text-sm text-foreground leading-relaxed italic text-center pt-2" style={{ fontFamily: "var(--font-serif)" }}>
-                {t(dish.chef_note)}
-              </p>
-            </DialogContent>
-          </Dialog>
-        )}
-
-        {/* Allergens */}
-        {dish.allergens && dish.allergens.length > 0 && (
-          <AllergensDialog allergens={dish.allergens} />
-        )}
-
-        {/* Storytelling */}
-        {dish.story_text && (
-          <Dialog>
-            <DialogTrigger asChild>
-              <button
-                className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
-                aria-label="Histoire du plat"
-              >
-                <BookOpen className="w-5 h-5 text-muted-foreground" />
-              </button>
-            </DialogTrigger>
-            <DialogContent className="bg-card border-border max-w-sm">
-              <DialogHeader>
-                <DialogTitle
-                  className="text-xl text-foreground tracking-wide uppercase text-center flex items-center justify-center gap-2"
-                  style={{ fontFamily: "var(--font-serif)" }}
-                >
-                  <BookOpen className="w-5 h-5 text-accent" />
-                  {t("L'histoire du plat")}
-                </DialogTitle>
-              </DialogHeader>
-              {dish.story_image && (
-                <img src={dish.story_image} alt="" className="w-full h-40 object-cover rounded-lg" />
+          {/* Contextual dish icons + language */}
+          <div className="flex items-center gap-2 shrink-0">
+            <div className={`flex items-center gap-2 ${isAmr ? "hidden" : ""}`}>
+              {/* Formulas / Info */}
+              {formulas.length > 0 && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button
+                      className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
+                      aria-label="Voir les formules"
+                    >
+                      <Info className="w-5 h-5 text-muted-foreground" />
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-card border-border max-w-xs">
+                    <DialogHeader>
+                      <DialogTitle
+                        className="text-xl text-foreground tracking-wide uppercase text-center"
+                        style={{ fontFamily: "var(--font-serif)" }}
+                      >
+                        {t("Nos Formules")}
+                      </DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-3 pt-2 text-center" style={{ fontFamily: "var(--font-serif)" }}>
+                      {formulas.map((f, i) => (
+                        <div key={i}>
+                          {i > 0 && <div className="border-t border-border mb-3" />}
+                          <p className="text-sm text-foreground">{t(f.label)}</p>
+                          <p className="text-lg font-semibold text-accent">{f.price}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </DialogContent>
+                </Dialog>
               )}
-              <p className="text-sm text-foreground leading-relaxed italic text-center pt-2" style={{ fontFamily: "var(--font-serif)" }}>
-                {t(dish.story_text)}
-              </p>
-            </DialogContent>
-          </Dialog>
-        )}
-          </div>
-          </div>
 
-          <LanguageSelector multilingual={features.hasMultilingual} />
+              {/* Chef note */}
+              {dish?.chef_note && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button
+                      className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
+                      aria-label="Note du chef"
+                    >
+                      <ChefHat className="w-5 h-5 text-muted-foreground" />
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-card border-border max-w-sm">
+                    <DialogHeader>
+                      <DialogTitle
+                        className="text-xl text-foreground tracking-wide uppercase text-center flex items-center justify-center gap-2"
+                        style={{ fontFamily: "var(--font-serif)" }}
+                      >
+                        <ChefHat className="w-5 h-5 text-accent" />
+                        {t("Note du Chef")}
+                      </DialogTitle>
+                    </DialogHeader>
+                    <p className="text-sm text-foreground leading-relaxed italic text-center pt-2" style={{ fontFamily: "var(--font-serif)" }}>
+                      {t(dish.chef_note)}
+                    </p>
+                  </DialogContent>
+                </Dialog>
+              )}
+
+              {/* Allergens */}
+              {dish?.allergens && dish.allergens.length > 0 && (
+                <AllergensDialog allergens={dish.allergens} />
+              )}
+
+              {/* Storytelling */}
+              {dish?.story_text && (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <button
+                      className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
+                      aria-label="Histoire du plat"
+                    >
+                      <BookOpen className="w-5 h-5 text-muted-foreground" />
+                    </button>
+                  </DialogTrigger>
+                  <DialogContent className="bg-card border-border max-w-sm">
+                    <DialogHeader>
+                      <DialogTitle
+                        className="text-xl text-foreground tracking-wide uppercase text-center flex items-center justify-center gap-2"
+                        style={{ fontFamily: "var(--font-serif)" }}
+                      >
+                        <BookOpen className="w-5 h-5 text-accent" />
+                        {t("L'histoire du plat")}
+                      </DialogTitle>
+                    </DialogHeader>
+                    {dish.story_image && (
+                      <img src={dish.story_image} alt="" className="w-full h-40 object-cover rounded-lg" />
+                    )}
+                    <p className="text-sm text-foreground leading-relaxed italic text-center pt-2" style={{ fontFamily: "var(--font-serif)" }}>
+                      {t(dish.story_text)}
+                    </p>
+                  </DialogContent>
+                </Dialog>
+              )}
+            </div>
+
+            <LanguageSelector multilingual={features.hasMultilingual} />
+          </div>
         </div>
 
         {/* Quick actions : Menu du jour · Aide au choix · Fidélité */}
         {!showSplash && (
-          <div className="px-4 pb-2 flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          <div className="px-4 pb-3 flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
             {restaurantId && restoFeatures?.daily_menu_enabled && (
               <DailyMenuBanner restaurantId={restaurantId} />
             )}
