@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation, ALL_LANGUAGES, type Lang } from "@/hooks/useTranslation";
-import { Languages, ChevronDown } from "lucide-react";
+import { Languages } from "lucide-react";
 
 interface LanguageSelectorProps {
   /** If true, show all languages (Premium). If false, only FR/EN */
