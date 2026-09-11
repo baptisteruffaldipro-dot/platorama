@@ -114,7 +114,7 @@ const DailyMenuBanner = ({ restaurantId }: { restaurantId: string }) => {
                   )}
                 </div>
                 <button
-                  onClick={() => setOpen(false)}
+                  onClick={closeOverlay}
                   aria-label={t("Fermer")}
                   className="shrink-0 w-8 h-8 rounded-full border border-border flex items-center justify-center"
                 >
