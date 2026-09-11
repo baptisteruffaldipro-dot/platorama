@@ -258,18 +258,18 @@ const Index = () => {
             : "border-border/60 bg-background/75"
         } backdrop-blur-xl`}
       >
-        <div className="px-4 pt-2 pb-1.5 flex items-center justify-between gap-2 min-h-[2.75rem]">
+        <div className="px-4 pt-3 pb-2 flex items-center justify-between gap-2">
           {/* Logo + contextual dish icons */}
-          <div className="flex flex-row items-center gap-2 min-w-0">
+          <div className="flex flex-row items-center gap-3 min-w-0">
             {siteSettings?.logo_url ? (
               <img
                 src={siteSettings.logo_url}
                 alt={siteSettings?.restaurant_name ? `${siteSettings.restaurant_name} logo` : "Logo"}
-                className="h-12 w-auto max-w-[11rem] object-contain shrink-0"
+                className="h-24 w-auto max-w-[16rem] object-contain shrink-0"
               />
             ) : siteSettings?.restaurant_name ? (
               <span
-                className={`text-lg tracking-wide uppercase truncate ${isVision ? "text-white/90" : "text-foreground"}`}
+                className={`text-2xl tracking-wide uppercase truncate ${isVision ? "text-white/90" : "text-foreground"}`}
                 style={{ fontFamily: "var(--font-serif)" }}
               >
                 {siteSettings.restaurant_name}
