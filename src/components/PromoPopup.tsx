@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { X } from "lucide-react";
+import { onOverlayFree, releaseOverlay, tryOpenOverlay } from "@/lib/popupQueue";
+
+const OVERLAY_ID = "promo-popup";
+
 
 export interface Popup {
   id: string;
@@ -50,10 +54,18 @@ interface Props {
 const PromoPopup = ({ restaurantId, lang, delayMs = 4000 }: Props) => {
   const [popup, setPopup] = useState<Popup | null>(null);
   const [visible, setVisible] = useState(false);
+  const visibleRef = useRef(false);
+
+  const hide = useCallback(() => {
+    visibleRef.current = false;
+    setVisible(false);
+    setTimeout(() => setPopup(null), 250);
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
     let timer: ReturnType<typeof setTimeout>;
+    let unsubscribe: (() => void) | undefined;
 
     const load = async () => {
       const nowIso = new Date().toISOString();
@@ -74,12 +86,27 @@ const PromoPopup = ({ restaurantId, lang, delayMs = 4000 }: Props) => {
 
       const next = candidates[0];
       if (cancelled || !next) return;
-      timer = setTimeout(() => {
-        if (cancelled) return;
+
+      const attempt = () => {
+        if (cancelled) return true;
+        if (visibleRef.current) return true;
+        // Wait for our turn: another overlay (daily menu, …) may be open.
+        if (!tryOpenOverlay({ id: OVERLAY_ID, close: hide })) return false;
+        visibleRef.current = true;
         setPopup(next);
         setVisible(true);
         markSeen(next);
         track(next.id, "impression");
+        unsubscribe?.();
+        return true;
+      };
+
+      timer = setTimeout(() => {
+        if (!attempt()) {
+          unsubscribe = onOverlayFree(() => {
+            attempt();
+          });
+        }
       }, delayMs);
     };
 
@@ -87,14 +114,16 @@ const PromoPopup = ({ restaurantId, lang, delayMs = 4000 }: Props) => {
     return () => {
       cancelled = true;
       if (timer) clearTimeout(timer);
+      unsubscribe?.();
     };
-  }, [restaurantId, lang, delayMs]);
+  }, [restaurantId, lang, delayMs, hide]);
 
   const close = (dismissed = true) => {
     if (popup && dismissed) track(popup.id, "dismiss");
-    setVisible(false);
-    setTimeout(() => setPopup(null), 250);
+    hide();
+    releaseOverlay(OVERLAY_ID);
   };
+
 
   const handleCta = () => {
     if (!popup) return;
