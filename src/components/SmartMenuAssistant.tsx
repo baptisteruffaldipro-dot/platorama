@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Sparkles, X, Dices, ShieldAlert, RotateCcw } from "lucide-react";
 import type { Dish } from "@/hooks/useDishes";
