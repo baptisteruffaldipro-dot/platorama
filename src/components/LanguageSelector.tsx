@@ -35,7 +35,7 @@ const LanguageSelector = ({ multilingual = false }: LanguageSelectorProps) => {
 
   // Dropdown for multilingual
   return (
-    <div className="fixed top-4 right-4 z-50">
+    <div className="relative shrink-0 z-50">
       <button
         onClick={() => setOpen(!open)}
         disabled={isTranslating}
