@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Megaphone, Plus, Trash2, Eye, MousePointerClick, Upload, Pencil } from "lucide-react";
+import { Megaphone, Plus, Trash2, Eye, MousePointerClick, Upload, Pencil, Play, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
