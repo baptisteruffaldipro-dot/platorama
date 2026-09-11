@@ -49,7 +49,7 @@ export default function MenuListView({ dishes, layout, onLaunchAR, isFavorite, o
   const categories = Object.keys(grouped);
 
   return (
-    <div className="h-full overflow-y-auto overflow-x-hidden px-4 pt-20 pb-32">
+    <div className="h-full overflow-y-auto overflow-x-hidden px-4 pt-2 pb-32">
       {layout === "editorial" && (
         <EditorialList grouped={grouped} categories={categories} t={t} onLaunchAR={onLaunchAR} isFavorite={isFavorite} onToggleFavorite={onToggleFavorite} />
       )}
