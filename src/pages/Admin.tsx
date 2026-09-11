@@ -712,16 +712,17 @@ const Admin = () => {
         <ReviewsPanel restaurantId={restaurantId} />
       ) : tab === "loyalty" ? (
         <LoyaltyPanel restaurantId={restaurantId} />
-      ) : tab === "popups" ? (
-        <PopupsPanel restaurantId={restaurantId} />
+      ) : tab === "marketing" ? (
+        <MarketingPanel restaurantId={restaurantId} />
       ) : tab === "daily" ? (
         <DailyMenuPanel restaurantId={restaurantId} />
       ) : tab === "reports" ? (
         <ReportsPanel restaurantId={restaurantId} />
       ) : tab === "smart" ? (
         <SmartMenuPanel restaurantId={restaurantId} />
-      ) : tab === "campaigns" ? (
-        <CampaignsPanel restaurantId={restaurantId} />
+      ) : tab === "supports" ? (
+        <SupportsPanel restaurantId={restaurantId} />
+
       ) : tab === "users" ? (
 
         <UsersPanel restaurantId={restaurantId} isSuperAdmin={isSuperAdmin} />
