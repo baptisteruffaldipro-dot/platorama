@@ -295,6 +295,9 @@ const PopupsPanel = ({ restaurantId }: { restaurantId: string | null }) => {
 
           <div className="flex gap-2 pt-1">
             <Button onClick={handleSavePopup} className="flex-1">Enregistrer</Button>
+            <Button variant="secondary" onClick={() => setPreview(true)}>
+              <Play className="w-4 h-4 mr-1" /> Aperçu
+            </Button>
             <Button variant="outline" onClick={() => setEditing(null)}>Annuler</Button>
           </div>
         </div>
