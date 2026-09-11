@@ -265,11 +265,11 @@ const Index = () => {
               <img
                 src={siteSettings.logo_url}
                 alt={siteSettings?.restaurant_name ? `${siteSettings.restaurant_name} logo` : "Logo"}
-                className="h-8 w-auto max-w-[7.5rem] object-contain shrink-0"
+                className="h-12 w-auto max-w-[11rem] object-contain shrink-0"
               />
             ) : siteSettings?.restaurant_name ? (
               <span
-                className={`text-sm tracking-wide uppercase truncate ${isVision ? "text-white/90" : "text-foreground"}`}
+                className={`text-lg tracking-wide uppercase truncate ${isVision ? "text-white/90" : "text-foreground"}`}
                 style={{ fontFamily: "var(--font-serif)" }}
               >
                 {siteSettings.restaurant_name}
