@@ -357,7 +357,44 @@ const Index = () => {
             </DialogContent>
           </Dialog>
         )}
-      </div>
+          </div>
+
+          <LanguageSelector multilingual={features.hasMultilingual} />
+        </div>
+
+        {/* Quick actions : Menu du jour · Aide au choix · Fidélité */}
+        {!showSplash && (
+          <div className="px-4 pb-3 flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+            {restaurantId && restoFeatures?.daily_menu_enabled && (
+              <DailyMenuBanner restaurantId={restaurantId} />
+            )}
+            {availableDishes && restoFeatures && (
+              <SmartMenuAssistant
+                dishes={availableDishes}
+                prefs={prefs}
+                onChange={updatePrefs}
+                onPick={(picked) => {
+                  const list = filteredDishes?.length ? filteredDishes : availableDishes;
+                  const idx = list.findIndex((d) => d.id === picked.id);
+                  if (idx >= 0) setActiveIndex(idx);
+                }}
+                showProfiles={restoFeatures.diet_profiles_enabled}
+                showAllergens={restoFeatures.allergens_enabled}
+                showPickForMe={restoFeatures.pick_for_me_enabled}
+              />
+            )}
+            {restaurantId && restoFeatures?.loyalty_enabled && (
+              <LoyaltyCard
+                restaurantId={restaurantId}
+                programName={restoFeatures.loyalty_program_name}
+                welcomeText={restoFeatures.loyalty_welcome_text}
+                rewardThreshold={restoFeatures.loyalty_reward_threshold}
+                lang={lang}
+              />
+            )}
+          </div>
+        )}
+      </header>
 
       {isAmr ? (
         <div className="flex-1 min-h-0">
