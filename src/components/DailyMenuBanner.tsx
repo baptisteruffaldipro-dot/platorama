@@ -1,12 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CalendarDays, X } from "lucide-react";
 import { useTodayDailyMenu } from "@/hooks/useDailyMenu";
 import { useTranslation } from "@/hooks/useTranslation";
+
+const seenKey = (id: string) => `daily_menu_seen_${id}`;
+const today = () => new Date().toISOString().slice(0, 10);
 
 const DailyMenuBanner = ({ restaurantId }: { restaurantId: string }) => {
   const { data: menu } = useTodayDailyMenu(restaurantId);
   const [open, setOpen] = useState(false);
   const { t } = useTranslation();
+
+  // Auto-show once per day, like a promotional pop-up
+  useEffect(() => {
+    if (!menu) return;
+    if (localStorage.getItem(seenKey(menu.id)) === today()) return;
+    const timer = setTimeout(() => {
+      setOpen(true);
+      localStorage.setItem(seenKey(menu.id), today());
+    }, 1800);
+    return () => clearTimeout(timer);
+  }, [menu]);
 
   if (!menu) return null;
 
@@ -16,7 +30,7 @@ const DailyMenuBanner = ({ restaurantId }: { restaurantId: string }) => {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="absolute top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-md border border-border text-xs font-medium hover:border-accent hover:text-accent transition-colors active:scale-95 max-w-[60vw]"
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-md border border-border text-xs font-medium hover:border-accent hover:text-accent transition-colors active:scale-95 max-w-[40vw]"
       >
         <CalendarDays className="w-3.5 h-3.5 shrink-0" />
         <span className="truncate">{label}</span>
@@ -24,18 +38,18 @@ const DailyMenuBanner = ({ restaurantId }: { restaurantId: string }) => {
 
       {open && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center bg-black/60 backdrop-blur-sm"
+          className="fixed inset-0 z-[70] flex items-end justify-center bg-black/60 backdrop-blur-sm p-4"
           onClick={() => setOpen(false)}
         >
           <div
-            className="w-full max-w-md bg-card rounded-t-3xl border-t border-border max-h-[85vh] overflow-y-auto animate-in slide-in-from-bottom duration-300"
+            className="w-full max-w-sm bg-card rounded-2xl border border-border shadow-2xl max-h-[85vh] overflow-y-auto animate-in slide-in-from-bottom duration-300"
             onClick={(e) => e.stopPropagation()}
           >
             {menu.image_square && (
               <img
                 src={menu.image_square}
                 alt={label}
-                className="w-full aspect-square object-cover rounded-t-3xl"
+                className="w-full aspect-square object-cover rounded-t-2xl"
               />
             )}
             <div className="p-5 space-y-4">
