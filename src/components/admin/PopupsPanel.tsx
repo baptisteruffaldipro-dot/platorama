@@ -73,6 +73,10 @@ const PopupsPanel = ({ restaurantId }: { restaurantId: string | null }) => {
   const save = useSaveRestaurantFeatures(restaurantId);
   const [editing, setEditing] = useState<(Omit<Popup, "id"> & { id?: string }) | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [preview, setPreview] = useState(false);
+  const [previewData, setPreviewData] = useState<Omit<Popup, "id"> | null>(null);
+
+  const shown = previewData ?? editing;
 
   const { data: popups, refetch } = useQuery({
     queryKey: ["popups", restaurantId],
