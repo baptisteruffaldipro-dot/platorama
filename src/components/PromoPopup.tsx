@@ -1,6 +1,10 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { X } from "lucide-react";
+import { onOverlayFree, releaseOverlay, tryOpenOverlay } from "@/lib/popupQueue";
+
+const OVERLAY_ID = "promo-popup";
+
 
 export interface Popup {
   id: string;
