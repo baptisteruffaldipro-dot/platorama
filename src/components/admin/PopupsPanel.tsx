@@ -335,6 +335,15 @@ const PopupsPanel = ({ restaurantId }: { restaurantId: string | null }) => {
                 <span className="flex items-center gap-1"><MousePointerClick className="w-3.5 h-3.5" /> {s.click}</span>
                 <span>{ctr}% de clics</span>
                 <span className="ml-auto flex gap-2">
+                  <button
+                    onClick={() => {
+                      setPreviewData({ ...p });
+                      setPreview(true);
+                    }}
+                    aria-label="Aperçu"
+                  >
+                    <Play className="w-4 h-4" />
+                  </button>
                   <button onClick={() => setEditing({ ...p })} aria-label="Modifier">
                     <Pencil className="w-4 h-4" />
                   </button>
@@ -347,6 +356,63 @@ const PopupsPanel = ({ restaurantId }: { restaurantId: string | null }) => {
           );
         })}
       </div>
+
+      {preview && shown && (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <button
+            className="absolute inset-0"
+            aria-label="Fermer l'aperçu"
+            onClick={() => {
+              setPreview(false);
+              setPreviewData(null);
+            }}
+          />
+          <div className="relative w-full max-w-sm">
+            <p className="text-center text-xs text-white/70 mb-2">
+              Aperçu — tel que vos clients le verront
+            </p>
+            {/* Phone frame */}
+            <div className="mx-auto w-full rounded-[2rem] border-4 border-white/20 bg-background overflow-hidden shadow-2xl">
+              <div className="relative min-h-[420px] flex items-end justify-center p-4 bg-muted/40">
+                <div className="relative w-full rounded-2xl overflow-hidden bg-card border border-border shadow-2xl">
+                  <span className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-background/70 backdrop-blur flex items-center justify-center text-foreground">
+                    <X className="w-4 h-4" />
+                  </span>
+                  {shown.image_url && (
+                    <img src={shown.image_url} alt={shown.title || "Aperçu"} className="w-full h-40 object-cover" />
+                  )}
+                  <div className="p-5 space-y-2 text-center">
+                    {shown.title && <h2 className="text-lg font-semibold leading-snug">{shown.title}</h2>}
+                    {shown.body && (
+                      <p className="text-sm text-muted-foreground whitespace-pre-line">{shown.body}</p>
+                    )}
+                    <div className="pt-2 space-y-1.5">
+                      {shown.cta_label && (
+                        <span className="block w-full py-2.5 rounded-full bg-accent text-accent-foreground text-sm font-medium">
+                          {shown.cta_label}
+                        </span>
+                      )}
+                      <span className="block w-full py-2 text-xs text-muted-foreground">
+                        Continuer vers la carte
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <Button
+              variant="secondary"
+              className="w-full mt-3"
+              onClick={() => {
+                setPreview(false);
+                setPreviewData(null);
+              }}
+            >
+              Fermer l'aperçu
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
