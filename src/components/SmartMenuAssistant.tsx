@@ -86,7 +86,8 @@ const SmartMenuAssistant = ({
         )}
       </button>
 
-      <AnimatePresence>
+      {createPortal(
+        <AnimatePresence>
         {open && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -221,7 +222,9 @@ const SmartMenuAssistant = ({
             </motion.div>
           </motion.div>
         )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </>
   );
 };
