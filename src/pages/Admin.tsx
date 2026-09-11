@@ -11,15 +11,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
-import { LogOut, Plus, Pencil, Trash2, Upload, Star, Gift, Megaphone, CalendarDays, Rotate3d, BarChart3, FileText, Sparkles, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail, Send, ArrowLeft } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Upload, Star, Gift, Megaphone, CalendarDays, Rotate3d, BarChart3, FileText, Sparkles, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail, Send, ArrowLeft, ChevronDown, Printer, Building2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import SettingsPanel from "@/components/SettingsPanel";
 import ReviewsPanel from "@/components/admin/ReviewsPanel";
 import LoyaltyPanel from "@/components/admin/LoyaltyPanel";
-import PopupsPanel from "@/components/admin/PopupsPanel";
+import MarketingPanel from "@/components/admin/MarketingPanel";
+import SupportsPanel from "@/components/admin/SupportsPanel";
 import DailyMenuPanel from "@/components/admin/DailyMenuPanel";
 import ReportsPanel from "@/components/admin/ReportsPanel";
 import SmartMenuPanel from "@/components/admin/SmartMenuPanel";
-import CampaignsPanel from "@/components/admin/CampaignsPanel";
+
 
 import UsersPanel from "@/components/UsersPanel";
 import InfoPanel from "@/components/InfoPanel";
@@ -321,7 +329,7 @@ const Admin = () => {
   const [isNew, setIsNew] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [tab, setTab] = useState<"menu" | "stats" | "reports" | "reviews" | "loyalty" | "popups" | "daily" | "smart" | "campaigns" | "settings" | "users" | "info">("menu");
+  const [tab, setTab] = useState<"menu" | "stats" | "reports" | "reviews" | "loyalty" | "marketing" | "daily" | "smart" | "supports" | "settings" | "users" | "info">("menu");
   const [isResolvingRestaurant, setIsResolvingRestaurant] = useState(false);
   const [scopeError, setScopeError] = useState<string | null>(null);
   
@@ -601,38 +609,78 @@ const Admin = () => {
       </header>
 
       {/* Tabs */}
-      <div className="flex border-b border-border overflow-x-auto">
-        {([
+      {(() => {
+        const mainTabs = ([
           { key: "menu", icon: UtensilsCrossed, label: "Menu", superOnly: false, needsFeature: null },
           { key: "stats", icon: BarChart3, label: "Stats", superOnly: false, needsFeature: "hasStats" as const },
           { key: "reviews", icon: Star, label: "Avis", superOnly: false, needsFeature: null },
           { key: "loyalty", icon: Gift, label: "Fidélité", superOnly: false, needsFeature: null },
-          { key: "popups", icon: Megaphone, label: "Pop-ups", superOnly: false, needsFeature: null },
+          { key: "marketing", icon: Megaphone, label: "Marketing", superOnly: false, needsFeature: null },
           { key: "daily", icon: CalendarDays, label: "Menu du jour", superOnly: false, needsFeature: null },
           { key: "reports", icon: FileText, label: "Rapports", superOnly: false, needsFeature: null },
-          { key: "smart", icon: Sparkles, label: "Aide au choix", superOnly: false, needsFeature: null },
-          { key: "campaigns", icon: Send, label: "Campagnes", superOnly: false, needsFeature: null },
+        ] as const).filter(
+          (t) => (!t.superOnly || isSuperAdmin) && (!t.needsFeature || (features as any)[t.needsFeature])
+        );
 
-          { key: "settings", icon: Settings, label: "Réglages", superOnly: false, needsFeature: null },
-          { key: "users", icon: Users, label: "Utilisateurs", superOnly: true, needsFeature: null },
-          { key: "info", icon: Mail, label: "Infos", superOnly: true, needsFeature: null },
-        ] as const)
-          .filter((t) => (!t.superOnly || isSuperAdmin) && (!t.needsFeature || (features as any)[t.needsFeature]))
-          .map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            className={`flex items-center justify-center gap-2 px-4 py-3 text-sm sm:text-base font-medium transition-colors whitespace-nowrap ${
-              tab === t.key
-                ? "text-accent border-b-2 border-accent"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <t.icon className="w-4 h-4" />
-            {t.label}
-          </button>
-        ))}
-      </div>
+        const moreTabs = ([
+          { key: "smart", icon: Sparkles, label: "Aide au choix", superOnly: false },
+          { key: "supports", icon: Printer, label: "Supports & QR", superOnly: false },
+          { key: "settings", icon: Settings, label: "Réglages", superOnly: false },
+          { key: "users", icon: Users, label: "Utilisateurs", superOnly: true },
+          { key: "info", icon: Mail, label: "Infos", superOnly: true },
+        ] as const).filter((t) => !t.superOnly || isSuperAdmin);
+
+        const moreActive = moreTabs.some((t) => t.key === tab);
+
+        return (
+          <div className="flex items-stretch border-b border-border overflow-x-auto">
+            {mainTabs.map((t) => (
+              <button
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                className={`flex items-center justify-center gap-2 px-4 py-3 text-sm sm:text-base font-medium transition-colors whitespace-nowrap ${
+                  tab === t.key
+                    ? "text-accent border-b-2 border-accent"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <t.icon className="w-4 h-4" />
+                {t.label}
+              </button>
+            ))}
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className={`flex items-center justify-center gap-1.5 px-4 py-3 text-sm sm:text-base font-medium transition-colors whitespace-nowrap ${
+                    moreActive
+                      ? "text-accent border-b-2 border-accent"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  Plus
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {moreTabs.map((t) => (
+                  <DropdownMenuItem key={t.key} onClick={() => setTab(t.key)} className="gap-2">
+                    <t.icon className="w-4 h-4" />
+                    {t.label}
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate("/dashboard")} className="gap-2">
+                  <Building2 className="w-4 h-4" />
+                  Établissements
+                  <span className="ml-auto text-xs text-muted-foreground">Premium</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      })()}
+
 
       {/* Content */}
       {tab === "menu" ? (
@@ -672,16 +720,17 @@ const Admin = () => {
         <ReviewsPanel restaurantId={restaurantId} />
       ) : tab === "loyalty" ? (
         <LoyaltyPanel restaurantId={restaurantId} />
-      ) : tab === "popups" ? (
-        <PopupsPanel restaurantId={restaurantId} />
+      ) : tab === "marketing" ? (
+        <MarketingPanel restaurantId={restaurantId} />
       ) : tab === "daily" ? (
         <DailyMenuPanel restaurantId={restaurantId} />
       ) : tab === "reports" ? (
         <ReportsPanel restaurantId={restaurantId} />
       ) : tab === "smart" ? (
         <SmartMenuPanel restaurantId={restaurantId} />
-      ) : tab === "campaigns" ? (
-        <CampaignsPanel restaurantId={restaurantId} />
+      ) : tab === "supports" ? (
+        <SupportsPanel restaurantId={restaurantId} />
+
       ) : tab === "users" ? (
 
         <UsersPanel restaurantId={restaurantId} isSuperAdmin={isSuperAdmin} />
