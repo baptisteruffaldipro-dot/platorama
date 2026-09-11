@@ -258,29 +258,10 @@ const Index = () => {
             : "border-border/60 bg-background/75"
         } backdrop-blur-xl`}
       >
-        <div className="px-4 pt-3 pb-2 flex items-center justify-between gap-3">
-          {/* Logo */}
-          <div className="flex items-center min-w-0">
-            {siteSettings?.logo_url ? (
-              <img
-                src={siteSettings.logo_url}
-                alt={siteSettings?.restaurant_name ? `${siteSettings.restaurant_name} logo` : "Logo"}
-                className="h-20 w-auto max-w-[13rem] object-contain shrink-0"
-              />
-            ) : siteSettings?.restaurant_name ? (
-              <span
-                className={`text-xl tracking-wide uppercase truncate ${isVision ? "text-white/90" : "text-foreground"}`}
-                style={{ fontFamily: "var(--font-serif)" }}
-              >
-                {siteSettings.restaurant_name}
-              </span>
-            ) : null}
-          </div>
+        <div className="px-4 pt-3 pb-1 relative flex items-start justify-between gap-2">
+          {/* Icônes contextuelles (gauche) */}
+          <div className={`flex items-center gap-2 shrink-0 pt-1 ${isAmr ? "hidden" : ""}`}>
 
-          {/* Contextual dish icons + language */}
-          <div className="flex items-center gap-2 shrink-0">
-            <div className={`flex items-center gap-2 ${isAmr ? "hidden" : ""}`}>
-              {/* Formulas / Info */}
               {formulas.length > 0 && (
                 <Dialog>
                   <DialogTrigger asChild>
@@ -340,7 +321,29 @@ const Index = () => {
                   </DialogContent>
                 </Dialog>
               )}
+          </div>
 
+          {/* Logo centré */}
+          <div className="flex-1 min-w-0 flex flex-col items-center justify-center px-1">
+            {siteSettings?.logo_url ? (
+              <img
+                src={siteSettings.logo_url}
+                alt={siteSettings?.restaurant_name ? `${siteSettings.restaurant_name} logo` : "Logo"}
+                className="h-24 w-auto max-w-[15rem] object-contain"
+              />
+            ) : siteSettings?.restaurant_name ? (
+              <span
+                className={`text-2xl tracking-wide uppercase text-center ${isVision ? "text-white/90" : "text-foreground"}`}
+                style={{ fontFamily: "var(--font-serif)" }}
+              >
+                {siteSettings.restaurant_name}
+              </span>
+            ) : null}
+          </div>
+
+          {/* Icônes contextuelles (droite) + langue */}
+          <div className="flex items-center gap-2 shrink-0 pt-1">
+            <div className={`flex items-center gap-2 ${isAmr ? "hidden" : ""}`}>
               {/* Allergens */}
               {dish?.allergens && dish.allergens.length > 0 && (
                 <AllergensDialog allergens={dish.allergens} />
@@ -384,7 +387,8 @@ const Index = () => {
 
         {/* Quick actions : Menu du jour · Aide au choix · Fidélité */}
         {!showSplash && (
-          <div className="px-4 pb-3 flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          <div className="px-4 pb-3 flex items-center justify-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+
             {restaurantId && restoFeatures?.daily_menu_enabled && (
               <DailyMenuBanner restaurantId={restaurantId} />
             )}
