@@ -258,29 +258,10 @@ const Index = () => {
             : "border-border/60 bg-background/75"
         } backdrop-blur-xl`}
       >
-        <div className="px-4 pt-3 pb-2 flex items-center justify-between gap-3">
-          {/* Logo */}
-          <div className="flex items-center min-w-0">
-            {siteSettings?.logo_url ? (
-              <img
-                src={siteSettings.logo_url}
-                alt={siteSettings?.restaurant_name ? `${siteSettings.restaurant_name} logo` : "Logo"}
-                className="h-20 w-auto max-w-[13rem] object-contain shrink-0"
-              />
-            ) : siteSettings?.restaurant_name ? (
-              <span
-                className={`text-xl tracking-wide uppercase truncate ${isVision ? "text-white/90" : "text-foreground"}`}
-                style={{ fontFamily: "var(--font-serif)" }}
-              >
-                {siteSettings.restaurant_name}
-              </span>
-            ) : null}
-          </div>
+        <div className="px-4 pt-3 pb-1 relative flex items-start justify-between gap-2">
+          {/* Icônes contextuelles (gauche) */}
+          <div className={`flex items-center gap-2 shrink-0 pt-1 ${isAmr ? "hidden" : ""}`}>
 
-          {/* Contextual dish icons + language */}
-          <div className="flex items-center gap-2 shrink-0">
-            <div className={`flex items-center gap-2 ${isAmr ? "hidden" : ""}`}>
-              {/* Formulas / Info */}
               {formulas.length > 0 && (
                 <Dialog>
                   <DialogTrigger asChild>
