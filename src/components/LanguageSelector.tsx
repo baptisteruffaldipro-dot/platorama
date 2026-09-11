@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation, ALL_LANGUAGES, type Lang } from "@/hooks/useTranslation";
-import { Languages, ChevronDown } from "lucide-react";
+import { Languages } from "lucide-react";
 
 interface LanguageSelectorProps {
   /** If true, show all languages (Premium). If false, only FR/EN */
@@ -15,6 +15,9 @@ const LanguageSelector = ({ multilingual = false }: LanguageSelectorProps) => {
     ? ALL_LANGUAGES
     : ALL_LANGUAGES.filter((l) => l.code === "fr" || l.code === "en");
 
+  const circleBtn =
+    "w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95 disabled:opacity-50";
+
   // Simple toggle for 2 languages
   if (availableLanguages.length === 2) {
     const toggle = () => {
@@ -24,11 +27,11 @@ const LanguageSelector = ({ multilingual = false }: LanguageSelectorProps) => {
       <button
         onClick={toggle}
         disabled={isTranslating}
-        className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 border border-border backdrop-blur-md text-xs font-medium text-foreground hover:bg-card transition-all active:scale-95 disabled:opacity-50"
+        className={`shrink-0 ${circleBtn}`}
         aria-label="Changer de langue"
+        title={isTranslating ? "..." : lang.toUpperCase()}
       >
-        <Languages className="w-3.5 h-3.5" />
-        {isTranslating ? "..." : lang.toUpperCase()}
+        <Languages className="w-5 h-5 text-muted-foreground" />
       </button>
     );
   }
@@ -39,11 +42,11 @@ const LanguageSelector = ({ multilingual = false }: LanguageSelectorProps) => {
       <button
         onClick={() => setOpen(!open)}
         disabled={isTranslating}
-        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 border border-border backdrop-blur-md text-xs font-medium text-foreground hover:bg-card transition-all active:scale-95 disabled:opacity-50"
+        className={circleBtn}
+        aria-label="Changer de langue"
+        title={isTranslating ? "..." : lang.toUpperCase()}
       >
-        <Languages className="w-3.5 h-3.5" />
-        {isTranslating ? "..." : lang.toUpperCase()}
-        <ChevronDown className="w-3 h-3" />
+        <Languages className="w-5 h-5 text-muted-foreground" />
       </button>
 
       {open && (
