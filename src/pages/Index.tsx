@@ -373,13 +373,14 @@ const Index = () => {
           </Dialog>
         )}
           </div>
+          </div>
 
           <LanguageSelector multilingual={features.hasMultilingual} />
         </div>
 
         {/* Quick actions : Menu du jour · Aide au choix · Fidélité */}
         {!showSplash && (
-          <div className="px-4 pb-3 flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          <div className="px-4 pb-2 flex items-center gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden">
             {restaurantId && restoFeatures?.daily_menu_enabled && (
               <DailyMenuBanner restaurantId={restaurantId} />
             )}
