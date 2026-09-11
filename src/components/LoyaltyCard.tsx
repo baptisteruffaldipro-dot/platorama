@@ -62,7 +62,7 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <button
-          className="fixed top-16 right-4 z-40 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 border border-border backdrop-blur-md text-xs font-medium text-foreground hover:bg-card transition-all active:scale-95"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 border border-border backdrop-blur-md text-xs font-medium text-foreground hover:bg-card transition-all active:scale-95"
           aria-label="Ma carte de fidélité"
         >
           <Gift className="w-3.5 h-3.5 text-accent" />

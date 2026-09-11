@@ -73,7 +73,7 @@ const SmartMenuAssistant = ({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="fixed top-28 right-4 z-40 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 border border-border backdrop-blur-md text-xs font-medium text-foreground hover:bg-card transition-all active:scale-95"
+        className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-card/80 border border-border backdrop-blur-md text-xs font-medium text-foreground hover:bg-card transition-all active:scale-95"
         aria-label="Aide au choix"
       >
         <Sparkles className="w-3.5 h-3.5 text-accent" />
