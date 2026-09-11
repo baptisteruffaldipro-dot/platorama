@@ -11,15 +11,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
-import { LogOut, Plus, Pencil, Trash2, Upload, Star, Gift, Megaphone, CalendarDays, Rotate3d, BarChart3, FileText, Sparkles, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail, Send, ArrowLeft } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Upload, Star, Gift, Megaphone, CalendarDays, Rotate3d, BarChart3, FileText, Sparkles, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail, Send, ArrowLeft, ChevronDown, Printer, Building2 } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import SettingsPanel from "@/components/SettingsPanel";
 import ReviewsPanel from "@/components/admin/ReviewsPanel";
 import LoyaltyPanel from "@/components/admin/LoyaltyPanel";
-import PopupsPanel from "@/components/admin/PopupsPanel";
+import MarketingPanel from "@/components/admin/MarketingPanel";
+import SupportsPanel from "@/components/admin/SupportsPanel";
 import DailyMenuPanel from "@/components/admin/DailyMenuPanel";
 import ReportsPanel from "@/components/admin/ReportsPanel";
 import SmartMenuPanel from "@/components/admin/SmartMenuPanel";
-import CampaignsPanel from "@/components/admin/CampaignsPanel";
+
 
 import UsersPanel from "@/components/UsersPanel";
 import InfoPanel from "@/components/InfoPanel";
