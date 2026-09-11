@@ -601,38 +601,78 @@ const Admin = () => {
       </header>
 
       {/* Tabs */}
-      <div className="flex border-b border-border overflow-x-auto">
-        {([
+      {(() => {
+        const mainTabs = ([
           { key: "menu", icon: UtensilsCrossed, label: "Menu", superOnly: false, needsFeature: null },
           { key: "stats", icon: BarChart3, label: "Stats", superOnly: false, needsFeature: "hasStats" as const },
           { key: "reviews", icon: Star, label: "Avis", superOnly: false, needsFeature: null },
           { key: "loyalty", icon: Gift, label: "Fidélité", superOnly: false, needsFeature: null },
-          { key: "popups", icon: Megaphone, label: "Pop-ups", superOnly: false, needsFeature: null },
+          { key: "marketing", icon: Megaphone, label: "Marketing", superOnly: false, needsFeature: null },
           { key: "daily", icon: CalendarDays, label: "Menu du jour", superOnly: false, needsFeature: null },
           { key: "reports", icon: FileText, label: "Rapports", superOnly: false, needsFeature: null },
-          { key: "smart", icon: Sparkles, label: "Aide au choix", superOnly: false, needsFeature: null },
-          { key: "campaigns", icon: Send, label: "Campagnes", superOnly: false, needsFeature: null },
+        ] as const).filter(
+          (t) => (!t.superOnly || isSuperAdmin) && (!t.needsFeature || (features as any)[t.needsFeature])
+        );
 
-          { key: "settings", icon: Settings, label: "Réglages", superOnly: false, needsFeature: null },
-          { key: "users", icon: Users, label: "Utilisateurs", superOnly: true, needsFeature: null },
-          { key: "info", icon: Mail, label: "Infos", superOnly: true, needsFeature: null },
-        ] as const)
-          .filter((t) => (!t.superOnly || isSuperAdmin) && (!t.needsFeature || (features as any)[t.needsFeature]))
-          .map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            className={`flex items-center justify-center gap-2 px-4 py-3 text-sm sm:text-base font-medium transition-colors whitespace-nowrap ${
-              tab === t.key
-                ? "text-accent border-b-2 border-accent"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <t.icon className="w-4 h-4" />
-            {t.label}
-          </button>
-        ))}
-      </div>
+        const moreTabs = ([
+          { key: "smart", icon: Sparkles, label: "Aide au choix", superOnly: false },
+          { key: "supports", icon: Printer, label: "Supports & QR", superOnly: false },
+          { key: "settings", icon: Settings, label: "Réglages", superOnly: false },
+          { key: "users", icon: Users, label: "Utilisateurs", superOnly: true },
+          { key: "info", icon: Mail, label: "Infos", superOnly: true },
+        ] as const).filter((t) => !t.superOnly || isSuperAdmin);
+
+        const moreActive = moreTabs.some((t) => t.key === tab);
+
+        return (
+          <div className="flex items-stretch border-b border-border overflow-x-auto">
+            {mainTabs.map((t) => (
+              <button
+                key={t.key}
+                onClick={() => setTab(t.key)}
+                className={`flex items-center justify-center gap-2 px-4 py-3 text-sm sm:text-base font-medium transition-colors whitespace-nowrap ${
+                  tab === t.key
+                    ? "text-accent border-b-2 border-accent"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <t.icon className="w-4 h-4" />
+                {t.label}
+              </button>
+            ))}
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className={`flex items-center justify-center gap-1.5 px-4 py-3 text-sm sm:text-base font-medium transition-colors whitespace-nowrap ${
+                    moreActive
+                      ? "text-accent border-b-2 border-accent"
+                      : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  Plus
+                  <ChevronDown className="w-4 h-4" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                {moreTabs.map((t) => (
+                  <DropdownMenuItem key={t.key} onClick={() => setTab(t.key)} className="gap-2">
+                    <t.icon className="w-4 h-4" />
+                    {t.label}
+                  </DropdownMenuItem>
+                ))}
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => navigate("/dashboard")} className="gap-2">
+                  <Building2 className="w-4 h-4" />
+                  Établissements
+                  <span className="ml-auto text-xs text-muted-foreground">Premium</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      })()}
+
 
       {/* Content */}
       {tab === "menu" ? (
