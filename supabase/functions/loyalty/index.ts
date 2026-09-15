@@ -129,10 +129,10 @@ Deno.serve(async (req) => {
           .eq("phone_normalized", phoneNormalized)
           .maybeSingle(),
       ]);
-      if (emailMatch && phoneMatch && emailMatch.id !== phoneMatch.id) {
+      if ((emailMatch && !phoneMatch) || (!emailMatch && phoneMatch) || (emailMatch && phoneMatch && emailMatch.id !== phoneMatch.id)) {
         return json({ error: "Ces coordonnées correspondent à deux cartes différentes. Contactez le restaurant." }, 409);
       }
-      const existing = emailMatch ?? phoneMatch ?? null;
+      const existing = emailMatch && phoneMatch && emailMatch.id === phoneMatch.id ? emailMatch : null;
 
       if (existing) {
         const payload = await memberPayload(existing.id);
@@ -163,6 +163,7 @@ Deno.serve(async (req) => {
         else if (error && !error.message.includes("card_code")) throw error;
       }
       if (!created) return json({ error: "Création impossible, réessayez" }, 500);
+      const createdMember = created;
 
       const consents = [
         { channel: "email", granted: !!body.consent_email },
@@ -171,7 +172,7 @@ Deno.serve(async (req) => {
       await admin.from("consent_events").insert(
         consents.map((c) => ({
           restaurant_id: body.restaurant_id,
-          member_id: created!.id,
+          member_id: createdMember.id,
           email: emailNormalized,
           phone: body.phone.trim(),
           channel: c.channel,
@@ -180,8 +181,8 @@ Deno.serve(async (req) => {
         })),
       );
 
-      const payload = await memberPayload(created.id);
-      return json({ token: created.access_token, ...payload });
+      const payload = await memberPayload(createdMember.id);
+      return json({ token: createdMember.access_token, ...payload });
     }
 
     // me / prefs : accès par jeton porteur de la carte

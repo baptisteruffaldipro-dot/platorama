@@ -48,6 +48,9 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
   const points = member?.points ?? 0;
   const progress = threshold > 0 ? Math.min(100, Math.round((points / threshold) * 100)) : 0;
   const remaining = Math.max(0, threshold - points);
+  const userAgent = typeof navigator === "undefined" ? "" : navigator.userAgent;
+  const isAppleDevice = /iPhone|iPad|iPod|Macintosh/i.test(userAgent);
+  const isAndroidDevice = /Android/i.test(userAgent);
 
   const handleJoin = async () => {
     const parsed = identitySchema.safeParse({ firstName, lastName, email, phone });
@@ -151,6 +154,7 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
               onChange={(e) => setPhone(e.target.value)}
               maxLength={30}
             />
+            <p className="pt-1 text-[11px] font-medium text-foreground">Consentements marketing facultatifs</p>
             <label className="flex items-start gap-3 text-xs text-muted-foreground">
               <Switch checked={consentEmail} onCheckedChange={setConsentEmail} />
               <span>J'accepte de recevoir les nouveautés et offres par email.</span>
@@ -159,7 +163,6 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
               <Switch checked={consentSms} onCheckedChange={setConsentSms} />
               <span>J'accepte de recevoir les offres par SMS.</span>
             </label>
-            <p className="text-[11px] font-medium text-foreground">Consentements marketing facultatifs</p>
             <Button
               className="w-full bg-foreground text-background hover:bg-foreground/90"
               onClick={handleJoin}
@@ -209,24 +212,28 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
             <div className="space-y-2">
               <p className="text-xs font-semibold text-foreground">Ajouter cette carte à votre téléphone</p>
               <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => addToWallet("apple")}
-                  disabled={walletLoading !== null}
-                >
-                  {walletLoading === "apple" ? <Loader2 className="animate-spin" /> : <WalletCards />}
-                  Apple Wallet
-                </Button>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => addToWallet("google")}
-                  disabled={walletLoading !== null}
-                >
-                  {walletLoading === "google" ? <Loader2 className="animate-spin" /> : <Smartphone />}
-                  Google Wallet
-                </Button>
+                {!isAndroidDevice && (
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => addToWallet("apple")}
+                    disabled={walletLoading !== null}
+                  >
+                    {walletLoading === "apple" ? <Loader2 className="animate-spin" /> : <WalletCards />}
+                    Apple Wallet
+                  </Button>
+                )}
+                {!isAppleDevice && (
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => addToWallet("google")}
+                    disabled={walletLoading !== null}
+                  >
+                    {walletLoading === "google" ? <Loader2 className="animate-spin" /> : <Smartphone />}
+                    Google Wallet
+                  </Button>
+                )}
               </div>
             </div>
 
