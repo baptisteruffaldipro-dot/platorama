@@ -25,8 +25,6 @@ interface Popup {
   title: string;
   body: string;
   image_url: string;
-  cta_label: string;
-  cta_url: string;
   starts_at: string | null;
   ends_at: string | null;
   frequency: string;
@@ -39,8 +37,6 @@ const emptyPopup = (): Omit<Popup, "id"> => ({
   title: "",
   body: "",
   image_url: "",
-  cta_label: "",
-  cta_url: "",
   starts_at: null,
   ends_at: null,
   frequency: "once_per_day",
