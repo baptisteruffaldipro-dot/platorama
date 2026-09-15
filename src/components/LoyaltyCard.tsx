@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Gift, Sparkles, Check, Loader2, LogOut, WalletCards, Smartphone, Download } from "lucide-react";
+import { Gift, Sparkles, Check, Loader2, LogOut, Download } from "lucide-react";
 import { z } from "zod";
 import {
   Dialog,
@@ -13,7 +13,6 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useLoyalty } from "@/hooks/useLoyalty";
-import { supabase } from "@/integrations/supabase/client";
 import { useExclusiveOverlay } from "@/hooks/useExclusiveOverlay";
 
 const identitySchema = z.object({
@@ -41,7 +40,7 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
   const [phone, setPhone] = useState("");
   const [consentEmail, setConsentEmail] = useState(false);
   const [consentSms, setConsentSms] = useState(false);
-  const [walletLoading, setWalletLoading] = useState<"apple" | "google" | null>(null);
+  const [imageLoading, setImageLoading] = useState(false);
   useExclusiveOverlay("loyalty-card", open, setOpen);
 
   const member = data?.member;
@@ -50,9 +49,6 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
   const points = member?.points ?? 0;
   const progress = threshold > 0 ? Math.min(100, Math.round((points / threshold) * 100)) : 0;
   const remaining = Math.max(0, threshold - points);
-  const userAgent = typeof navigator === "undefined" ? "" : navigator.userAgent;
-  const isAppleDevice = /iPhone|iPad|iPod|Macintosh/i.test(userAgent);
-  const isAndroidDevice = /Android/i.test(userAgent);
 
   const handleJoin = async () => {
     const parsed = identitySchema.safeParse({ firstName, lastName, email, phone });
@@ -76,8 +72,9 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
     }
   };
 
-  const downloadCardImage = () => {
+  const saveCardImage = async () => {
     if (!member) return;
+    setImageLoading(true);
     const width = 1000;
     const height = 620;
     const canvas = document.createElement("canvas");
@@ -86,6 +83,7 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
     const ctx = canvas.getContext("2d");
     if (!ctx) {
       toast.error("Enregistrement impossible sur cet appareil");
+      setImageLoading(false);
       return;
     }
 
@@ -120,28 +118,39 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
     ctx.font = "20px Helvetica, Arial, sans-serif";
     ctx.fillText("Présentez ce code au restaurant pour cumuler vos points.", width / 2, 520);
 
-    const link = document.createElement("a");
-    link.download = `carte-fidelite-${member.card_code ?? "platorama"}.png`;
-    link.href = canvas.toDataURL("image/png");
-    link.click();
-    toast.success("Carte enregistrée dans vos images");
-  };
-
-  const addToWallet = async (provider: "apple" | "google") => {
-    if (!data?.token) return;
-    setWalletLoading(provider);
     try {
-      const { data: walletData, error } = await supabase.functions.invoke("wallet-pass", {
-        body: { provider, token: data.token },
+      const blob = await new Promise<Blob>((resolve, reject) => {
+        canvas.toBlob((result) => {
+          if (result) resolve(result);
+          else reject(new Error("image-generation-failed"));
+        }, "image/png");
       });
-      if (error) throw error;
-      if (!walletData?.url) throw new Error("not-configured");
-      window.location.assign(walletData.url);
-    } catch {
-      toast.info("Wallet pas encore activé : votre carte est enregistrée en image.");
-      downloadCardImage();
+      const filename = `carte-fidelite-${member.card_code ?? "platorama"}.png`;
+      const file = new File([blob], filename, { type: "image/png" });
+
+      if (navigator.share && navigator.canShare?.({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: title,
+          text: "Ma carte de fidélité",
+        });
+        return;
+      }
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = filename;
+      link.href = url;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 10_000);
+      toast.success("Carte téléchargée");
+    } catch (error) {
+      if (error instanceof DOMException && error.name === "AbortError") return;
+      toast.error("Impossible d’enregistrer la carte sur cet appareil");
     } finally {
-      setWalletLoading(null);
+      setImageLoading(false);
     }
   };
 
@@ -261,35 +270,14 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
             </div>
 
             <div className="space-y-2">
-              <p className="text-xs font-semibold text-foreground">Ajouter cette carte à votre téléphone</p>
-              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                {!isAndroidDevice && (
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => addToWallet("apple")}
-                    disabled={walletLoading !== null}
-                  >
-                    {walletLoading === "apple" ? <Loader2 className="animate-spin" /> : <WalletCards />}
-                    Apple Wallet
-                  </Button>
-                )}
-                {!isAppleDevice && (
-                  <Button
-                    variant="outline"
-                    className="w-full"
-                    onClick={() => addToWallet("google")}
-                    disabled={walletLoading !== null}
-                  >
-                    {walletLoading === "google" ? <Loader2 className="animate-spin" /> : <Smartphone />}
-                    Google Wallet
-                  </Button>
-                )}
-                <Button variant="ghost" className="w-full text-xs" onClick={downloadCardImage}>
-                  <Download className="w-4 h-4" />
-                  Enregistrer ma carte en image
-                </Button>
-              </div>
+              <p className="text-xs font-semibold text-foreground">Conserver cette carte sur votre téléphone</p>
+              <Button className="w-full" onClick={saveCardImage} disabled={imageLoading}>
+                {imageLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+                Enregistrer ou partager ma carte
+              </Button>
+              <p className="text-[11px] text-center text-muted-foreground">
+                Sur iPhone, choisissez « Enregistrer l’image » dans la fenêtre de partage.
+              </p>
             </div>
 
 
