@@ -17,9 +17,10 @@ const admin = createClient(
 const JoinSchema = z.object({
   action: z.literal("join"),
   restaurant_id: z.string().uuid(),
-  first_name: z.string().trim().min(1).max(60).optional(),
-  email: z.string().trim().email().max(180).optional(),
-  phone: z.string().trim().min(6).max(30).optional(),
+  first_name: z.string().trim().min(1).max(60),
+  last_name: z.string().trim().min(1).max(80),
+  email: z.string().trim().email().max(180),
+  phone: z.string().trim().min(6).max(30).regex(/^\+?[0-9 ()'.-]+$/),
   consent_email: z.boolean().optional(),
   consent_sms: z.boolean().optional(),
   lang: z.string().max(8).optional(),
@@ -43,6 +44,8 @@ const BodySchema = z.discriminatedUnion("action", [JoinSchema, MeSchema, PrefsSc
 const ALPHABET = "ACDEFGHJKLMNPQRTUVWXY34789";
 const makeCode = () =>
   Array.from({ length: 6 }, () => ALPHABET[Math.floor(Math.random() * ALPHABET.length)]).join("");
+const normalizeEmail = (value: string) => value.trim().toLowerCase();
+const normalizePhone = (value: string) => value.replace(/[^0-9+]/g, "");
 
 async function memberPayload(memberId: string) {
   const [{ data: member }, { data: tx }, { data: features }] = await Promise.all([
@@ -74,6 +77,7 @@ async function memberPayload(memberId: string) {
     member: {
       id: member.id,
       first_name: member.first_name,
+      last_name: member.last_name,
       email: member.email,
       phone: member.phone,
       card_code: member.card_code,
@@ -101,9 +105,8 @@ Deno.serve(async (req) => {
     const body = parsed.data;
 
     if (body.action === "join") {
-      if (!body.email && !body.phone) {
-        return json({ error: "Email ou téléphone requis" }, 400);
-      }
+      const emailNormalized = normalizeEmail(body.email);
+      const phoneNormalized = normalizePhone(body.phone);
       const { data: feat } = await admin
         .from("restaurant_features")
         .select("loyalty_enabled")
@@ -112,25 +115,24 @@ Deno.serve(async (req) => {
       if (!feat?.loyalty_enabled) return json({ error: "Programme de fidélité désactivé" }, 403);
 
       // Membre déjà existant pour ce restaurant ?
-      let existing: { id: string; access_token: string } | null = null;
-      if (body.email) {
-        const { data } = await admin
+      const [{ data: emailMatch }, { data: phoneMatch }] = await Promise.all([
+        admin
           .from("loyalty_members")
           .select("id, access_token")
           .eq("restaurant_id", body.restaurant_id)
-          .eq("email", body.email)
-          .maybeSingle();
-        existing = data ?? null;
-      }
-      if (!existing && body.phone) {
-        const { data } = await admin
+          .eq("email_normalized", emailNormalized)
+          .maybeSingle(),
+        admin
           .from("loyalty_members")
           .select("id, access_token")
           .eq("restaurant_id", body.restaurant_id)
-          .eq("phone", body.phone)
-          .maybeSingle();
-        existing = data ?? null;
+          .eq("phone_normalized", phoneNormalized)
+          .maybeSingle(),
+      ]);
+      if (emailMatch && phoneMatch && emailMatch.id !== phoneMatch.id) {
+        return json({ error: "Ces coordonnées correspondent à deux cartes différentes. Contactez le restaurant." }, 409);
       }
+      const existing = emailMatch ?? phoneMatch ?? null;
 
       if (existing) {
         const payload = await memberPayload(existing.id);
@@ -143,9 +145,12 @@ Deno.serve(async (req) => {
           .from("loyalty_members")
           .insert({
             restaurant_id: body.restaurant_id,
-            first_name: body.first_name ?? null,
-            email: body.email ?? null,
-            phone: body.phone ?? null,
+            first_name: body.first_name,
+            last_name: body.last_name,
+            email: emailNormalized,
+            phone: body.phone.trim(),
+            email_normalized: emailNormalized,
+            phone_normalized: phoneNormalized,
             card_code: makeCode(),
             consent_email: !!body.consent_email,
             consent_sms: !!body.consent_sms,
@@ -167,8 +172,8 @@ Deno.serve(async (req) => {
         consents.map((c) => ({
           restaurant_id: body.restaurant_id,
           member_id: created!.id,
-          email: body.email ?? null,
-          phone: body.phone ?? null,
+          email: emailNormalized,
+          phone: body.phone.trim(),
           channel: c.channel,
           granted: c.granted,
           source: "loyalty_signup",

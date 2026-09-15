@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 export interface LoyaltyMember {
   id: string;
   first_name: string | null;
+  last_name: string | null;
   email: string | null;
   phone: string | null;
   card_code: string;
@@ -79,9 +80,10 @@ export const useLoyalty = (restaurantId?: string | null) => {
 
   const join = useCallback(
     async (input: {
-      first_name?: string;
-      email?: string;
-      phone?: string;
+      first_name: string;
+      last_name: string;
+      email: string;
+      phone: string;
       consent_email?: boolean;
       consent_sms?: boolean;
       lang?: string;
