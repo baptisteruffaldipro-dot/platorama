@@ -48,9 +48,25 @@ export interface LoyaltyPayload {
 
 const storageKey = (restaurantId: string) => `loyalty_token_${restaurantId}`;
 
+const readError = async (error: unknown): Promise<string> => {
+  const ctx = (error as { context?: Response })?.context;
+  try {
+    const body = ctx ? await ctx.clone().json() : null;
+    const detail = body?.error;
+    if (typeof detail === "string") return detail;
+    if (detail && typeof detail === "object") {
+      const first = Object.values(detail as Record<string, string[]>)[0];
+      if (Array.isArray(first) && first[0]) return first[0];
+    }
+  } catch {
+    /* corps illisible */
+  }
+  return error instanceof Error ? error.message : "Erreur inconnue";
+};
+
 const call = async (body: Record<string, unknown>): Promise<LoyaltyPayload> => {
   const { data, error } = await supabase.functions.invoke("loyalty", { body });
-  if (error) throw error;
+  if (error) throw new Error(await readError(error));
   if (data?.error) throw new Error(typeof data.error === "string" ? data.error : "Erreur");
   return data as LoyaltyPayload;
 };

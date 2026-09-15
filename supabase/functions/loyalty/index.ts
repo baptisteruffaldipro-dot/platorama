@@ -129,12 +129,28 @@ Deno.serve(async (req) => {
           .eq("phone_normalized", phoneNormalized)
           .maybeSingle(),
       ]);
-      if ((emailMatch && !phoneMatch) || (!emailMatch && phoneMatch) || (emailMatch && phoneMatch && emailMatch.id !== phoneMatch.id)) {
-        return json({ error: "Ces coordonnées correspondent à deux cartes différentes. Contactez le restaurant." }, 409);
+      if (emailMatch && phoneMatch && emailMatch.id !== phoneMatch.id) {
+        return json(
+          { error: "Cet email et ce téléphone appartiennent à deux cartes différentes. Contactez le restaurant." },
+          409,
+        );
       }
-      const existing = emailMatch && phoneMatch && emailMatch.id === phoneMatch.id ? emailMatch : null;
+      // Une seule coordonnée connue : on retrouve la carte et on complète l'autre.
+      const existing = emailMatch ?? phoneMatch ?? null;
 
       if (existing) {
+        await admin
+          .from("loyalty_members")
+          .update({
+            first_name: body.first_name,
+            last_name: body.last_name,
+            email: emailNormalized,
+            email_normalized: emailNormalized,
+            phone: body.phone.trim(),
+            phone_normalized: phoneNormalized,
+            updated_at: new Date().toISOString(),
+          })
+          .eq("id", existing.id);
         const payload = await memberPayload(existing.id);
         return json({ token: existing.access_token, ...payload });
       }
