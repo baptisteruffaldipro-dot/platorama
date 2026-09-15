@@ -140,6 +140,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
       logo_url: src.logo_url,
       restaurant_name: src.restaurant_name,
       subtitle: src.subtitle,
+      splash_style: src.splash_style ?? "logo_text",
       formulas: src.formulas ?? [],
       template_id: src.template_id ?? "dark-luxe",
       custom_font_name: src.custom_font_name ?? "",
