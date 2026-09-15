@@ -25,8 +25,6 @@ interface Popup {
   title: string;
   body: string;
   image_url: string;
-  cta_label: string;
-  cta_url: string;
   starts_at: string | null;
   ends_at: string | null;
   frequency: string;
@@ -39,8 +37,6 @@ const emptyPopup = (): Omit<Popup, "id"> => ({
   title: "",
   body: "",
   image_url: "",
-  cta_label: "",
-  cta_url: "",
   starts_at: null,
   ends_at: null,
   frequency: "once_per_day",
@@ -226,25 +222,6 @@ const PopupsPanel = ({ restaurantId }: { restaurantId: string | null }) => {
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label>Texte du bouton</Label>
-              <Input
-                value={editing.cta_label}
-                onChange={(e) => setEditing({ ...editing, cta_label: e.target.value })}
-                placeholder="J'en profite"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Lien du bouton</Label>
-              <Input
-                value={editing.cta_url}
-                onChange={(e) => setEditing({ ...editing, cta_url: e.target.value })}
-                placeholder="https://..."
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
               <Label>Début</Label>
               <Input
                 type="datetime-local"
@@ -386,12 +363,7 @@ const PopupsPanel = ({ restaurantId }: { restaurantId: string | null }) => {
                     {shown.body && (
                       <p className="text-sm text-muted-foreground whitespace-pre-line">{shown.body}</p>
                     )}
-                    <div className="pt-2 space-y-1.5">
-                      {shown.cta_label && (
-                        <span className="block w-full py-2.5 rounded-full bg-accent text-accent-foreground text-sm font-medium">
-                          {shown.cta_label}
-                        </span>
-                      )}
+                    <div className="pt-2">
                       <span className="block w-full py-2 text-xs text-muted-foreground">
                         Continuer vers la carte
                       </span>

@@ -11,8 +11,6 @@ export interface Popup {
   title: string;
   body: string;
   image_url: string;
-  cta_label: string;
-  cta_url: string;
   frequency: string;
   target_lang: string | null;
   starts_at: string | null;
@@ -71,7 +69,7 @@ const PromoPopup = ({ restaurantId, lang, delayMs = 4000 }: Props) => {
       const nowIso = new Date().toISOString();
       const { data } = await supabase
         .from("popups")
-        .select("id, title, body, image_url, cta_label, cta_url, frequency, target_lang, starts_at, ends_at, sort_order")
+        .select("id, title, body, image_url, frequency, target_lang, starts_at, ends_at, sort_order")
         .eq("restaurant_id", restaurantId)
         .eq("is_active", true)
         .order("sort_order", { ascending: true })
@@ -124,14 +122,6 @@ const PromoPopup = ({ restaurantId, lang, delayMs = 4000 }: Props) => {
     releaseOverlay(OVERLAY_ID);
   };
 
-
-  const handleCta = () => {
-    if (!popup) return;
-    track(popup.id, "click");
-    if (popup.cta_url) window.open(popup.cta_url, "_blank", "noopener,noreferrer");
-    close(false);
-  };
-
   if (!popup) return null;
 
   return (
@@ -167,26 +157,18 @@ const PromoPopup = ({ restaurantId, lang, delayMs = 4000 }: Props) => {
           />
         )}
 
-        <div className="p-5 space-y-2 text-center">
-          {popup.title && <h2 className="text-lg font-semibold leading-snug">{popup.title}</h2>}
-          {popup.body && <p className="text-sm text-muted-foreground whitespace-pre-line">{popup.body}</p>}
-          <div className="pt-2 space-y-1.5">
-            {popup.cta_label && (
+          <div className="p-5 space-y-2 text-center">
+            {popup.title && <h2 className="text-lg font-semibold leading-snug">{popup.title}</h2>}
+            {popup.body && <p className="text-sm text-muted-foreground whitespace-pre-line">{popup.body}</p>}
+            <div className="pt-2">
               <button
-                onClick={handleCta}
-                className="w-full py-2.5 rounded-full bg-accent text-accent-foreground text-sm font-medium active:scale-[0.98] transition-transform"
+                onClick={() => close()}
+                className="w-full py-2 text-xs text-muted-foreground"
               >
-                {popup.cta_label}
+                Continuer vers la carte
               </button>
-            )}
-            <button
-              onClick={() => close()}
-              className="w-full py-2 text-xs text-muted-foreground"
-            >
-              Continuer vers la carte
-            </button>
+            </div>
           </div>
-        </div>
       </div>
     </div>
   );
