@@ -7,6 +7,7 @@ import { hasARModel } from "@/lib/dishHasAR";
 import DishViewer from "@/components/DishViewer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ExpandableDescription from "@/components/ExpandableDescription";
+import DishDetailsActions from "@/components/DishDetailsActions";
 
 interface Props {
   dishes: Dish[];
@@ -206,6 +207,7 @@ export default function WalletStackView({
                             {t(d.ingredients)}
                           </ExpandableDescription>
                           <div className="flex items-center gap-2 mt-3">
+                            <DishDetailsActions dish={d} contrast="inherit" />
                             <button
                               onClick={() => onToggleFavorite(d.id)}
                               aria-label="favori"
