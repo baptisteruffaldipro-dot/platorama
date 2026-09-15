@@ -271,7 +271,11 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
 
             <div className="space-y-2">
               <p className="text-xs font-semibold text-foreground">Conserver cette carte sur votre téléphone</p>
-              <Button className="w-full" onClick={saveCardImage} disabled={imageLoading}>
+              <Button
+                className="w-full bg-foreground text-background hover:bg-foreground/90 [&_svg]:text-background"
+                onClick={saveCardImage}
+                disabled={imageLoading}
+              >
                 {imageLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
                 Enregistrer ou partager ma carte
               </Button>
