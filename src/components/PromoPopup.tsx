@@ -71,7 +71,7 @@ const PromoPopup = ({ restaurantId, lang, delayMs = 4000 }: Props) => {
       const nowIso = new Date().toISOString();
       const { data } = await supabase
         .from("popups")
-        .select("id, title, body, image_url, cta_label, cta_url, frequency, target_lang, starts_at, ends_at, sort_order")
+        .select("id, title, body, image_url, frequency, target_lang, starts_at, ends_at, sort_order")
         .eq("restaurant_id", restaurantId)
         .eq("is_active", true)
         .order("sort_order", { ascending: true })
