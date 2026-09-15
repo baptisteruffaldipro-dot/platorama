@@ -4,6 +4,7 @@ import { Star, Clock, Leaf, ChevronDown, ChevronUp } from "lucide-react";
 import { getBadge, BadgeMark } from "@/lib/badges";
 import { useTranslation } from "@/hooks/useTranslation";
 import ExpandableDescription from "@/components/ExpandableDescription";
+import DishDetailsActions from "@/components/DishDetailsActions";
 import type { LayoutVariant } from "@/lib/menuTemplates";
 
 interface DishInfoProps {
@@ -360,6 +361,7 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
           price={dish.price}
           prepTime={dish.prep_time}
         />
+        <DishDetailsActions dish={dish} className="mt-2" />
       </motion.div>
     </AnimatePresence>
   );
