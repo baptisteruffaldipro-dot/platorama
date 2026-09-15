@@ -11,8 +11,6 @@ export interface Popup {
   title: string;
   body: string;
   image_url: string;
-  cta_label: string;
-  cta_url: string;
   frequency: string;
   target_lang: string | null;
   starts_at: string | null;
