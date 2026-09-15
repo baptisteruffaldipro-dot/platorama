@@ -124,14 +124,6 @@ const PromoPopup = ({ restaurantId, lang, delayMs = 4000 }: Props) => {
     releaseOverlay(OVERLAY_ID);
   };
 
-
-  const handleCta = () => {
-    if (!popup) return;
-    track(popup.id, "click");
-    if (popup.cta_url) window.open(popup.cta_url, "_blank", "noopener,noreferrer");
-    close(false);
-  };
-
   if (!popup) return null;
 
   return (
