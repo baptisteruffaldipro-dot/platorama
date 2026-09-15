@@ -32,7 +32,7 @@ export default function DishDetailsActions({ dish, className, contrast = "defaul
   );
 
   return (
-    <div className={cn("flex items-center gap-1.5", className)}>
+    <div className={cn("flex items-center gap-1.5", className)} onClick={(event) => event.stopPropagation()}>
       {hasChefNote && (
         <Dialog>
           <DialogTrigger asChild>
