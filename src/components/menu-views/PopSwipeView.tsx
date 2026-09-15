@@ -8,6 +8,7 @@ import { hasARModel } from "@/lib/dishHasAR";
 import DishViewer from "@/components/DishViewer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ExpandableDescription from "@/components/ExpandableDescription";
+import DishDetailsActions from "@/components/DishDetailsActions";
 
 interface Props {
   dishes: Dish[];
@@ -152,6 +153,7 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
               <ExpandableDescription lines={2} className="text-xs text-foreground/70 mt-1.5 flex-1">
                 {t(dish.ingredients)}
               </ExpandableDescription>
+              <DishDetailsActions dish={dish} className="mt-2" />
               <div className="flex items-center justify-between mt-3 gap-3">
                 <span
                   className="text-xl font-black h-12 min-w-[64px] px-4 rounded-xl inline-flex items-center justify-center tabular-nums"

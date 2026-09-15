@@ -14,7 +14,6 @@ import DishViewerErrorFallback from "@/components/DishViewerErrorFallback";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import SplashScreen from "@/components/SplashScreen";
 import LanguageSelector from "@/components/LanguageSelector";
-import AllergensDialog from "@/components/AllergensDialog";
 import ARButton from "@/components/ARButton";
 import MenuListView from "@/components/MenuListView";
 import CameraBackground from "@/components/CameraBackground";
@@ -43,7 +42,7 @@ import {
 } from "@/lib/dietProfiles";
 
 import { useRestaurantFeatures } from "@/hooks/useRestaurantFeatures";
-import { Info, ChefHat, BookOpen } from "lucide-react";
+import { BadgeEuro, BookOpen } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -269,7 +268,7 @@ const Index = () => {
                       className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
                       aria-label="Voir les formules"
                     >
-                      <Info className="w-5 h-5 text-muted-foreground" />
+                      <BadgeEuro className="w-5 h-5 text-muted-foreground" />
                     </button>
                   </DialogTrigger>
                   <DialogContent className="bg-card border-border max-w-xs">
@@ -294,33 +293,6 @@ const Index = () => {
                 </Dialog>
               )}
 
-              {/* Chef note */}
-              {dish?.chef_note && (
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <button
-                      className="w-10 h-10 rounded-full bg-card/80 backdrop-blur-md border border-border flex items-center justify-center hover:border-accent hover:text-accent transition-colors active:scale-95"
-                      aria-label="Note du chef"
-                    >
-                      <ChefHat className="w-5 h-5 text-muted-foreground" />
-                    </button>
-                  </DialogTrigger>
-                  <DialogContent className="bg-card border-border max-w-sm">
-                    <DialogHeader>
-                      <DialogTitle
-                        className="text-xl text-foreground tracking-wide uppercase text-center flex items-center justify-center gap-2"
-                        style={{ fontFamily: "var(--font-serif)" }}
-                      >
-                        <ChefHat className="w-5 h-5 text-accent" />
-                        {t("Note du Chef")}
-                      </DialogTitle>
-                    </DialogHeader>
-                    <p className="text-sm text-foreground leading-relaxed italic text-center pt-2" style={{ fontFamily: "var(--font-serif)" }}>
-                      {t(dish.chef_note)}
-                    </p>
-                  </DialogContent>
-                </Dialog>
-              )}
           </div>
 
           {/* Logo centré */}
@@ -344,11 +316,6 @@ const Index = () => {
           {/* Icônes contextuelles (droite) + langue */}
           <div className="flex items-center gap-2 shrink-0 pt-1">
             <div className={`flex items-center gap-2 ${isAmr ? "hidden" : ""}`}>
-              {/* Allergens */}
-              {dish?.allergens && dish.allergens.length > 0 && (
-                <AllergensDialog allergens={dish.allergens} />
-              )}
-
               {/* Storytelling */}
               {dish?.story_text && (
                 <Dialog>

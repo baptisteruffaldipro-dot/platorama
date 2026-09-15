@@ -7,6 +7,7 @@ import type { Dish } from "@/hooks/useDishes";
 import { hasARModel } from "@/lib/dishHasAR";
 import DishViewer from "@/components/DishViewer";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import DishDetailsActions from "@/components/DishDetailsActions";
 
 interface Props {
   dishes: Dish[];
@@ -130,6 +131,7 @@ export default function OrganicStoriesView({
               >
                 {t(d.ingredients)}
               </ExpandableDescription>
+              <DishDetailsActions dish={d} className="mt-3" />
               <div className="flex items-center gap-3 mt-5">
                 <span
                   className="text-xl font-semibold px-4 py-2 rounded-full backdrop-blur-md"

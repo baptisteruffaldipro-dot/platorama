@@ -5,6 +5,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import { hasARModel } from "@/lib/dishHasAR";
 import type { Dish } from "@/hooks/useDishes";
+import DishDetailsActions from "@/components/DishDetailsActions";
 
 interface Props {
   dishes: Dish[];
@@ -156,6 +157,7 @@ export default function SignatureView({
             >
               {dish.price.toFixed(2)} €
             </p>
+            <DishDetailsActions dish={dish} className="-mt-3 mb-3" />
           </motion.div>
         </AnimatePresence>
 

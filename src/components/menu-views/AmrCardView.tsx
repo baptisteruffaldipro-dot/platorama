@@ -4,8 +4,6 @@ import {
   ChevronLeft,
   ChevronRight,
   Star,
-  Info,
-  TriangleAlert,
   Box,
   Hand,
   X,
@@ -19,12 +17,7 @@ import ExpandableDescription from "@/components/ExpandableDescription";
 import { hasARModel } from "@/lib/dishHasAR";
 import type { Dish } from "@/hooks/useDishes";
 import { getBadge, BadgeMark } from "@/lib/badges";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import DishDetailsActions from "@/components/DishDetailsActions";
 
 interface Props {
   dishes: Dish[];
@@ -68,8 +61,6 @@ export default function AmrCardView({
   const { t } = useTranslation();
   const dish = dishes[activeIndex];
   const [showTooltip, setShowTooltip] = useState(false);
-  const [openInfo, setOpenInfo] = useState(false);
-  const [openAllergens, setOpenAllergens] = useState(false);
 
   useEffect(() => {
     const key = `ar_hint_v2_${restaurantId}`;
@@ -264,31 +255,7 @@ export default function AmrCardView({
             </div>
           )}
 
-          {/* Infos / Allergènes */}
-          <div className="flex justify-center gap-10 mt-6">
-            <button
-              onClick={() => setOpenInfo(true)}
-              className="flex flex-col items-center gap-2 active:scale-95 transition-transform"
-            >
-              <span className="w-[52px] h-[52px] rounded-full border border-foreground/20 flex items-center justify-center text-foreground/65">
-                <Info className="w-[22px] h-[22px]" strokeWidth={1.4} />
-              </span>
-              <span className="font-sans text-[13px] tracking-wide text-foreground/50">{t("Infos")}</span>
-            </button>
-            {dish.allergens?.length > 0 && (
-              <button
-                onClick={() => setOpenAllergens(true)}
-                className="flex flex-col items-center gap-2 active:scale-95 transition-transform"
-              >
-                <span className="w-[52px] h-[52px] rounded-full border border-foreground/20 flex items-center justify-center text-foreground/65">
-                  <TriangleAlert className="w-[22px] h-[22px]" strokeWidth={1.4} />
-                </span>
-                <span className="font-sans text-[13px] tracking-wide text-foreground/50">
-                  {t("Allergènes")}
-                </span>
-              </button>
-            )}
-          </div>
+          <DishDetailsActions dish={dish} className="mt-5 justify-center" />
 
           {/* Pastilles de progression dans la catégorie */}
           <div className="flex justify-center items-center gap-2 mt-5">
@@ -334,47 +301,6 @@ export default function AmrCardView({
         </div>
       </div>
 
-
-      {/* Dialogs */}
-      <Dialog open={openInfo} onOpenChange={setOpenInfo}>
-        <DialogContent className="bg-card border-border max-w-sm">
-          <DialogHeader>
-            <DialogTitle className="font-sans text-lg text-foreground text-center">
-              {t(dish.name)}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3 font-sans text-sm text-foreground/75 text-center">
-            <p>{t(dish.ingredients)}</p>
-            {dish.chef_note && <p className="italic text-accent">{t(dish.chef_note)}</p>}
-            {dish.prep_time ? (
-              <p className="text-foreground/50">{dish.prep_time} min</p>
-            ) : null}
-          </div>
-        </DialogContent>
-      </Dialog>
-
-      <Dialog open={openAllergens} onOpenChange={setOpenAllergens}>
-        <DialogContent className="bg-card border-border max-w-xs">
-          <DialogHeader>
-            <DialogTitle className="font-sans text-lg text-foreground text-center">
-              {t("Allergènes")}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="flex flex-wrap justify-center gap-2">
-            {dish.allergens?.map((a) => (
-              <span
-                key={a}
-                className="px-3 py-1 rounded-full border border-border font-sans text-xs text-foreground/80"
-              >
-                {t(a)}
-              </span>
-            ))}
-          </div>
-          <p className="font-sans text-xs text-foreground/50 text-center pt-1">
-            {t("N'hésitez pas à informer votre serveur de toute allergie ou intolérance alimentaire.")}
-          </p>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
