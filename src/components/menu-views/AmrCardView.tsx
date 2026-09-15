@@ -18,12 +18,6 @@ import { hasARModel } from "@/lib/dishHasAR";
 import type { Dish } from "@/hooks/useDishes";
 import { getBadge, BadgeMark } from "@/lib/badges";
 import DishDetailsActions from "@/components/DishDetailsActions";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 
 interface Props {
   dishes: Dish[];

@@ -6,6 +6,7 @@ import type { Dish } from "@/hooks/useDishes";
 import type { LayoutVariant } from "@/lib/menuTemplates";
 import { hasARModel } from "@/lib/dishHasAR";
 import ExpandableDescription from "@/components/ExpandableDescription";
+import DishDetailsActions from "@/components/DishDetailsActions";
 
 interface Props {
   dishes: Dish[];
@@ -130,6 +131,7 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                           <Clock className="w-2.5 h-2.5" /> {d.prep_time}min
                         </span>
                       )}
+                      <DishDetailsActions dish={d} />
                       <button onClick={() => onToggleFavorite(d.id)} aria-label="favori">
                         <Star className={`w-3.5 h-3.5 ${isFavorite(d.id) ? "fill-accent text-accent" : "text-muted-foreground"}`} />
                       </button>
@@ -198,6 +200,7 @@ function VintageList({ grouped, categories, t, onLaunchAR, isFavorite, onToggleF
                     {d.price.toFixed(2)} €
                   </span>
                   {d.badge && <BadgeChip badge={d.badge} />}
+                  <DishDetailsActions dish={d} />
                 </div>
                 {hasARModel(d) && (
                   <div className="mt-1">
@@ -268,6 +271,7 @@ function PopGrid({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavor
                     OPTION {String(i + 1).padStart(2, "0")}
                   </span>
                   {d.badge && <BadgeChip badge={d.badge} />}
+                  <DishDetailsActions dish={d} />
                 </div>
                 <p
                   className="text-sm font-bold text-foreground leading-snug"
@@ -367,6 +371,7 @@ function OrganicFeed({ grouped, categories, t, onLaunchAR, isFavorite, onToggleF
                     </h3>
                     <div className="flex items-center gap-2">
                       {d.badge && <BadgeChip badge={d.badge} />}
+                      <DishDetailsActions dish={d} />
                       <button onClick={() => onToggleFavorite(d.id)} aria-label="favori">
                         <Star className={`w-4 h-4 ${isFavorite(d.id) ? "fill-accent text-accent" : "text-muted-foreground"}`} />
                       </button>
