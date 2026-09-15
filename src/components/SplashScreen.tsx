@@ -25,6 +25,7 @@ const SplashScreen = ({
   return (
     <motion.div
       className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-background px-6"
+      style={settings?.splash_bg_color ? { backgroundColor: settings.splash_bg_color } : undefined}
       initial={{ opacity: 1 }}
       animate={{ opacity: ready ? 0 : 1 }}
       transition={{ delay: ready ? 1.2 : 0, duration: 0.6 }}
