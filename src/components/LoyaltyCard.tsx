@@ -14,6 +14,7 @@ import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useLoyalty } from "@/hooks/useLoyalty";
 import { supabase } from "@/integrations/supabase/client";
+import { useExclusiveOverlay } from "@/hooks/useExclusiveOverlay";
 
 const identitySchema = z.object({
   firstName: z.string().trim().min(1, "Indiquez votre prénom").max(60, "Prénom trop long"),
@@ -41,6 +42,7 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
   const [consentEmail, setConsentEmail] = useState(false);
   const [consentSms, setConsentSms] = useState(false);
   const [walletLoading, setWalletLoading] = useState<"apple" | "google" | null>(null);
+  useExclusiveOverlay("loyalty-card", open, setOpen);
 
   const member = data?.member;
   const threshold = data?.settings?.loyalty_reward_threshold ?? rewardThreshold;

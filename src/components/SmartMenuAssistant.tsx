@@ -10,6 +10,7 @@ import {
   type MenuPreferences,
 } from "@/lib/dietProfiles";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useExclusiveOverlay } from "@/hooks/useExclusiveOverlay";
 
 interface SmartMenuAssistantProps {
   dishes: Dish[];
@@ -34,6 +35,7 @@ const SmartMenuAssistant = ({
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [picked, setPicked] = useState<Dish | null>(null);
+  useExclusiveOverlay("smart-menu", open, setOpen);
 
   const allergenOptions = useMemo(() => {
     const set = new Set<string>();
