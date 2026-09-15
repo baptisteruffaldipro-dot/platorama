@@ -1,0 +1,1 @@
+ALTER TABLE public.site_settings ADD COLUMN IF NOT EXISTS splash_bg_color text NOT NULL DEFAULT '';
