@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Gift, Sparkles, Check, Loader2, LogOut, WalletCards, Smartphone } from "lucide-react";
+import { Gift, Sparkles, Check, Loader2, LogOut, WalletCards, Smartphone, Download } from "lucide-react";
 import { z } from "zod";
 import {
   Dialog,
@@ -76,6 +76,57 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
     }
   };
 
+  const downloadCardImage = () => {
+    if (!member) return;
+    const width = 1000;
+    const height = 620;
+    const canvas = document.createElement("canvas");
+    canvas.width = width;
+    canvas.height = height;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) {
+      toast.error("Enregistrement impossible sur cet appareil");
+      return;
+    }
+
+    ctx.fillStyle = "#111111";
+    ctx.fillRect(0, 0, width, height);
+    ctx.strokeStyle = "#b8943e";
+    ctx.lineWidth = 4;
+    ctx.strokeRect(24, 24, width - 48, height - 48);
+
+    ctx.textAlign = "center";
+    ctx.fillStyle = "#b8943e";
+    ctx.font = "600 34px Georgia, serif";
+    ctx.fillText(title, width / 2, 120);
+
+    ctx.fillStyle = "#f5f0e6";
+    ctx.font = "28px Helvetica, Arial, sans-serif";
+    ctx.fillText(`${member.first_name ?? ""} ${member.last_name ?? ""}`.trim(), width / 2, 190);
+
+    ctx.fillStyle = "#9a9a9a";
+    ctx.font = "22px Helvetica, Arial, sans-serif";
+    ctx.fillText("CODE À PRÉSENTER", width / 2, 290);
+
+    ctx.fillStyle = "#f5f0e6";
+    ctx.font = "700 82px 'Courier New', monospace";
+    ctx.fillText(member.card_code ?? "", width / 2, 380);
+
+    ctx.fillStyle = "#b8943e";
+    ctx.font = "24px Helvetica, Arial, sans-serif";
+    ctx.fillText(`${points} point(s) · ${member.visits} visite(s)`, width / 2, 450);
+
+    ctx.fillStyle = "#9a9a9a";
+    ctx.font = "20px Helvetica, Arial, sans-serif";
+    ctx.fillText("Présentez ce code au restaurant pour cumuler vos points.", width / 2, 520);
+
+    const link = document.createElement("a");
+    link.download = `carte-fidelite-${member.card_code ?? "platorama"}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+    toast.success("Carte enregistrée dans vos images");
+  };
+
   const addToWallet = async (provider: "apple" | "google") => {
     if (!data?.token) return;
     setWalletLoading(provider);
@@ -84,18 +135,16 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
         body: { provider, token: data.token },
       });
       if (error) throw error;
-      if (!walletData?.url) throw new Error(walletData?.error ?? "Wallet bientôt disponible");
+      if (!walletData?.url) throw new Error("not-configured");
       window.location.assign(walletData.url);
     } catch {
-      toast.info(
-        provider === "apple"
-          ? "Apple Wallet sera disponible après activation du certificat."
-          : "Google Wallet sera disponible après activation du compte émetteur.",
-      );
+      toast.info("Wallet pas encore activé : votre carte est enregistrée en image.");
+      downloadCardImage();
     } finally {
       setWalletLoading(null);
     }
   };
+
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -236,8 +285,13 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
                     Google Wallet
                   </Button>
                 )}
+                <Button variant="ghost" className="w-full text-xs" onClick={downloadCardImage}>
+                  <Download className="w-4 h-4" />
+                  Enregistrer ma carte en image
+                </Button>
               </div>
             </div>
+
 
             {data.rewards.length > 0 && (
               <div className="space-y-2">
