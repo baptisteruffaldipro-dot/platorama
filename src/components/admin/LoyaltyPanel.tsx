@@ -15,6 +15,7 @@ import {
 interface Member {
   id: string;
   first_name: string | null;
+  last_name: string | null;
   email: string | null;
   phone: string | null;
   card_code: string;
@@ -322,10 +323,12 @@ const LoyaltyPanel = ({ restaurantId }: { restaurantId: string | null }) => {
             <div className="flex items-center justify-between gap-2">
               <div>
                 <p className="text-sm">
-                  {m.first_name ?? "Client"}{" "}
+                  {[m.first_name, m.last_name].filter(Boolean).join(" ") || "Client"}{" "}
                   <span className="font-mono text-xs text-muted-foreground">{m.card_code}</span>
                 </p>
-                <p className="text-xs text-muted-foreground">{m.email ?? m.phone}</p>
+                <p className="text-xs text-muted-foreground">
+                  {[m.email, m.phone].filter(Boolean).join(" · ")}
+                </p>
               </div>
               <div className="text-right">
                 <p className="text-sm font-semibold text-accent">{m.points} pts</p>

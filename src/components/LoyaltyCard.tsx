@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Gift, Sparkles, Check, Loader2, LogOut } from "lucide-react";
+import { Gift, Sparkles, Check, Loader2, LogOut, WalletCards, Smartphone } from "lucide-react";
+import { z } from "zod";
 import {
   Dialog,
   DialogContent,
@@ -12,6 +13,15 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { useLoyalty } from "@/hooks/useLoyalty";
+import { supabase } from "@/integrations/supabase/client";
+
+const identitySchema = z.object({
+  firstName: z.string().trim().min(1, "Indiquez votre prénom").max(60, "Prénom trop long"),
+  lastName: z.string().trim().min(1, "Indiquez votre nom").max(80, "Nom trop long"),
+  email: z.string().trim().email("Adresse email invalide").max(180, "Adresse email trop longue"),
+  phone: z.string().trim().min(6, "Numéro de téléphone invalide").max(30, "Numéro de téléphone trop long")
+    .regex(/^\+?[0-9 ()'.-]+$/, "Numéro de téléphone invalide"),
+});
 
 interface Props {
   restaurantId: string;
@@ -25,9 +35,12 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
   const { data, loading, join, updatePrefs, forget } = useLoyalty(restaurantId);
   const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
-  const [contact, setContact] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [consentEmail, setConsentEmail] = useState(false);
   const [consentSms, setConsentSms] = useState(false);
+  const [walletLoading, setWalletLoading] = useState<"apple" | "google" | null>(null);
 
   const member = data?.member;
   const threshold = data?.settings?.loyalty_reward_threshold ?? rewardThreshold;
@@ -35,19 +48,22 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
   const points = member?.points ?? 0;
   const progress = threshold > 0 ? Math.min(100, Math.round((points / threshold) * 100)) : 0;
   const remaining = Math.max(0, threshold - points);
+  const userAgent = typeof navigator === "undefined" ? "" : navigator.userAgent;
+  const isAppleDevice = /iPhone|iPad|iPod|Macintosh/i.test(userAgent);
+  const isAndroidDevice = /Android/i.test(userAgent);
 
   const handleJoin = async () => {
-    const value = contact.trim();
-    const isEmail = value.includes("@");
-    if (!value) {
-      toast.error("Indiquez un email ou un téléphone");
+    const parsed = identitySchema.safeParse({ firstName, lastName, email, phone });
+    if (!parsed.success) {
+      toast.error(parsed.error.issues[0]?.message ?? "Vérifiez vos informations");
       return;
     }
     try {
       await join({
-        first_name: firstName.trim() || undefined,
-        email: isEmail ? value : undefined,
-        phone: !isEmail ? value : undefined,
+        first_name: parsed.data.firstName,
+        last_name: parsed.data.lastName,
+        email: parsed.data.email,
+        phone: parsed.data.phone,
         consent_email: consentEmail,
         consent_sms: consentSms,
         lang,
@@ -55,6 +71,27 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
       toast.success("Votre carte est prête !");
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Inscription impossible");
+    }
+  };
+
+  const addToWallet = async (provider: "apple" | "google") => {
+    if (!data?.token) return;
+    setWalletLoading(provider);
+    try {
+      const { data: walletData, error } = await supabase.functions.invoke("wallet-pass", {
+        body: { provider, token: data.token },
+      });
+      if (error) throw error;
+      if (!walletData?.url) throw new Error(walletData?.error ?? "Wallet bientôt disponible");
+      window.location.assign(walletData.url);
+    } catch {
+      toast.info(
+        provider === "apple"
+          ? "Apple Wallet sera disponible après activation du certificat."
+          : "Google Wallet sera disponible après activation du compte émetteur.",
+      );
+    } finally {
+      setWalletLoading(null);
     }
   };
 
@@ -82,15 +119,42 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
                 `Cumulez des points à chaque visite et recevez une récompense tous les ${threshold} points.`}
             </p>
             <Input
-              placeholder="Prénom (facultatif)"
+              aria-label="Prénom"
+              autoComplete="given-name"
+              placeholder="Prénom *"
               value={firstName}
               onChange={(e) => setFirstName(e.target.value)}
+              maxLength={60}
             />
             <Input
-              placeholder="Email ou téléphone"
-              value={contact}
-              onChange={(e) => setContact(e.target.value)}
+              aria-label="Nom"
+              autoComplete="family-name"
+              placeholder="Nom *"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              maxLength={80}
             />
+            <Input
+              aria-label="Email"
+              type="email"
+              inputMode="email"
+              autoComplete="email"
+              placeholder="Email *"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              maxLength={180}
+            />
+            <Input
+              aria-label="Téléphone"
+              type="tel"
+              inputMode="tel"
+              autoComplete="tel"
+              placeholder="Téléphone *"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              maxLength={30}
+            />
+            <p className="pt-1 text-[11px] font-medium text-foreground">Consentements marketing facultatifs</p>
             <label className="flex items-start gap-3 text-xs text-muted-foreground">
               <Switch checked={consentEmail} onCheckedChange={setConsentEmail} />
               <span>J'accepte de recevoir les nouveautés et offres par email.</span>
@@ -99,12 +163,22 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
               <Switch checked={consentSms} onCheckedChange={setConsentSms} />
               <span>J'accepte de recevoir les offres par SMS.</span>
             </label>
-            <Button className="w-full" onClick={handleJoin} disabled={loading}>
+            <Button
+              className="w-full bg-foreground text-background hover:bg-foreground/90"
+              onClick={handleJoin}
+              disabled={loading}
+            >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : "Créer ma carte"}
             </Button>
-            <p className="text-[11px] text-muted-foreground text-center">
-              Vos données servent uniquement au programme de fidélité du restaurant. Vous pouvez vous
-              désinscrire à tout moment depuis cette carte.
+            <p className="text-[11px] leading-relaxed text-muted-foreground text-center">
+              Vos nom, prénom, email et téléphone sont utilisés pour créer et gérer votre carte, éviter les
+              doublons et attribuer vos récompenses. Les offres ne sont envoyées qu'avec votre accord. Le
+              restaurant est responsable du traitement et Platorama l'accompagne comme prestataire. Vos
+              données sont conservées pendant la durée du programme, puis au maximum 3 ans après votre
+              dernière activité. Vous pouvez retirer votre accord, demander l'accès, la rectification,
+              l'effacement ou la portabilité de vos données à{" "}
+              <a className="underline" href="mailto:contact@platorama.fr">contact@platorama.fr</a>. Vous pouvez
+              également saisir la CNIL.
             </p>
           </div>
         ) : (
@@ -132,6 +206,34 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
                 <p className="text-2xl font-mono tracking-[0.3em] text-foreground">
                   {member.card_code}
                 </p>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-xs font-semibold text-foreground">Ajouter cette carte à votre téléphone</p>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                {!isAndroidDevice && (
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => addToWallet("apple")}
+                    disabled={walletLoading !== null}
+                  >
+                    {walletLoading === "apple" ? <Loader2 className="animate-spin" /> : <WalletCards />}
+                    Apple Wallet
+                  </Button>
+                )}
+                {!isAppleDevice && (
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => addToWallet("google")}
+                    disabled={walletLoading !== null}
+                  >
+                    {walletLoading === "google" ? <Loader2 className="animate-spin" /> : <Smartphone />}
+                    Google Wallet
+                  </Button>
+                )}
               </div>
             </div>
 
