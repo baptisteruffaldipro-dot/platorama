@@ -352,10 +352,13 @@ export type Database = {
           consent_sms: boolean
           created_at: string
           email: string | null
+          email_normalized: string | null
           first_name: string | null
           id: string
           lang: string | null
+          last_name: string | null
           phone: string | null
+          phone_normalized: string | null
           points: number
           restaurant_id: string
           unsubscribed_at: string | null
@@ -370,10 +373,13 @@ export type Database = {
           consent_sms?: boolean
           created_at?: string
           email?: string | null
+          email_normalized?: string | null
           first_name?: string | null
           id?: string
           lang?: string | null
+          last_name?: string | null
           phone?: string | null
+          phone_normalized?: string | null
           points?: number
           restaurant_id: string
           unsubscribed_at?: string | null
@@ -388,10 +394,13 @@ export type Database = {
           consent_sms?: boolean
           created_at?: string
           email?: string | null
+          email_normalized?: string | null
           first_name?: string | null
           id?: string
           lang?: string | null
+          last_name?: string | null
           phone?: string | null
+          phone_normalized?: string | null
           points?: number
           restaurant_id?: string
           unsubscribed_at?: string | null
