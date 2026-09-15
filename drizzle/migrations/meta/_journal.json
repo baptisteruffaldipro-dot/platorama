@@ -15,6 +15,13 @@
       "when": 1789465675573,
       "tag": "0001_add_splash_style_to_site_settings",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1789465927881,
+      "tag": "0002_add_splash_bg_color",
+      "breakpoints": true
     }
   ]
 }

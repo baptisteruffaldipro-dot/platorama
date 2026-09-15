@@ -881,6 +881,7 @@ export type Database = {
           logo_url: string
           restaurant_id: string | null
           restaurant_name: string
+          splash_bg_color: string
           splash_style: string
           subtitle: string
           template_id: string
@@ -904,6 +905,7 @@ export type Database = {
           logo_url?: string
           restaurant_id?: string | null
           restaurant_name?: string
+          splash_bg_color?: string
           splash_style?: string
           subtitle?: string
           template_id?: string
@@ -927,6 +929,7 @@ export type Database = {
           logo_url?: string
           restaurant_id?: string | null
           restaurant_name?: string
+          splash_bg_color?: string
           splash_style?: string
           subtitle?: string
           template_id?: string
