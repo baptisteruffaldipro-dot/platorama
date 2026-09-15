@@ -104,7 +104,7 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
     ctx.font = "28px Helvetica, Arial, sans-serif";
     ctx.fillText(`${member.first_name ?? ""} ${member.last_name ?? ""}`.trim(), width / 2, 190);
 
-    ctx.fillStyle = "#8f8madd".slice(0, 7);
+    ctx.fillStyle = "#9a9a9a";
     ctx.font = "22px Helvetica, Arial, sans-serif";
     ctx.fillText("CODE À PRÉSENTER", width / 2, 290);
 
