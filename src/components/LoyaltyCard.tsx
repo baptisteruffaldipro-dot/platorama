@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Gift, Sparkles, Check, Loader2, LogOut, WalletCards, Smartphone } from "lucide-react";
+import { Gift, Sparkles, Check, Loader2, LogOut, WalletCards, Smartphone, Download } from "lucide-react";
 import { z } from "zod";
 import {
   Dialog,
