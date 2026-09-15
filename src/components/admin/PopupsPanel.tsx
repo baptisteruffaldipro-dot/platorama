@@ -226,25 +226,6 @@ const PopupsPanel = ({ restaurantId }: { restaurantId: string | null }) => {
 
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
-              <Label>Texte du bouton</Label>
-              <Input
-                value={editing.cta_label}
-                onChange={(e) => setEditing({ ...editing, cta_label: e.target.value })}
-                placeholder="J'en profite"
-              />
-            </div>
-            <div className="space-y-1.5">
-              <Label>Lien du bouton</Label>
-              <Input
-                value={editing.cta_url}
-                onChange={(e) => setEditing({ ...editing, cta_url: e.target.value })}
-                placeholder="https://..."
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
               <Label>Début</Label>
               <Input
                 type="datetime-local"
