@@ -21,6 +21,7 @@ export interface SiteSettings {
   restaurant_name: string;
   subtitle: string;
   splash_style: SplashStyle;
+  splash_bg_color: string;
   is_draft: boolean;
   restaurant_id?: string | null;
   formulas: FormulaItem[];
@@ -42,6 +43,7 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   restaurant_name: "",
   subtitle: "",
   splash_style: "logo_text",
+  splash_bg_color: "",
   is_draft: false,
   formulas: [],
   template_id: "dark-luxe",
@@ -72,6 +74,7 @@ function parseRow(row: any): SiteSettings {
     formulas: Array.isArray(row.formulas) ? row.formulas : [],
     template_id: row.template_id || "dark-luxe",
     splash_style: (row.splash_style || "logo_text") as SplashStyle,
+    splash_bg_color: row.splash_bg_color || "",
     custom_font_name: row.custom_font_name || "",
     custom_font_url: row.custom_font_url || "",
     custom_font_name_2: row.custom_font_name_2 || "",

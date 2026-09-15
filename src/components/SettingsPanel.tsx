@@ -120,6 +120,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
     restaurant_name: initial.restaurant_name,
     subtitle: initial.subtitle,
     splash_style: initial.splash_style ?? "logo_text",
+    splash_bg_color: initial.splash_bg_color ?? "",
     formulas: initial.formulas ?? [],
     template_id: initial.template_id ?? "dark-luxe",
     custom_font_name: initial.custom_font_name ?? "",
@@ -142,6 +143,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
       restaurant_name: src.restaurant_name,
       subtitle: src.subtitle,
       splash_style: src.splash_style ?? "logo_text",
+      splash_bg_color: src.splash_bg_color ?? "",
       formulas: src.formulas ?? [],
       template_id: src.template_id ?? "dark-luxe",
       custom_font_name: src.custom_font_name ?? "",
@@ -440,6 +442,18 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
               <div className="text-xs text-muted-foreground mt-1">{opt.desc}</div>
             </button>
           ))}
+        </div>
+        <div className="mt-4 space-y-2">
+          <ColorInput
+            label="Couleur de fond de l'écran d'accueil"
+            value={form.splash_bg_color || form.background_color}
+            onChange={(v) => setForm((f) => ({ ...f, splash_bg_color: v }))}
+          />
+          {form.splash_bg_color && (
+            <Button variant="ghost" size="sm" onClick={() => setForm((f) => ({ ...f, splash_bg_color: "" }))}>
+              Utiliser la couleur du menu
+            </Button>
+          )}
         </div>
         {form.splash_style === "logo" && !form.logo_url && (
           <p className="text-xs text-amber-600 mt-2">
