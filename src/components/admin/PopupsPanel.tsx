@@ -367,12 +367,7 @@ const PopupsPanel = ({ restaurantId }: { restaurantId: string | null }) => {
                     {shown.body && (
                       <p className="text-sm text-muted-foreground whitespace-pre-line">{shown.body}</p>
                     )}
-                    <div className="pt-2 space-y-1.5">
-                      {shown.cta_label && (
-                        <span className="block w-full py-2.5 rounded-full bg-accent text-accent-foreground text-sm font-medium">
-                          {shown.cta_label}
-                        </span>
-                      )}
+                    <div className="pt-2">
                       <span className="block w-full py-2 text-xs text-muted-foreground">
                         Continuer vers la carte
                       </span>
