@@ -8,6 +8,13 @@
       "when": 1789464915718,
       "tag": "0000_strengthen_loyalty_member_identity",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1789465675573,
+      "tag": "0001_add_splash_style_to_site_settings",
+      "breakpoints": true
     }
   ]
 }

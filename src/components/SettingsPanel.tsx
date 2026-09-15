@@ -119,6 +119,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
     logo_url: initial.logo_url,
     restaurant_name: initial.restaurant_name,
     subtitle: initial.subtitle,
+    splash_style: initial.splash_style ?? "logo_text",
     formulas: initial.formulas ?? [],
     template_id: initial.template_id ?? "dark-luxe",
     custom_font_name: initial.custom_font_name ?? "",
@@ -140,6 +141,7 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
       logo_url: src.logo_url,
       restaurant_name: src.restaurant_name,
       subtitle: src.subtitle,
+      splash_style: src.splash_style ?? "logo_text",
       formulas: src.formulas ?? [],
       template_id: src.template_id ?? "dark-luxe",
       custom_font_name: src.custom_font_name ?? "",
@@ -410,7 +412,42 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
               Supprimer
             </Button>
           )}
+      </div>
+
+      {/* Écran d'accueil */}
+      <div>
+        <h3 className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">Écran d'accueil</h3>
+        <p className="text-xs text-muted-foreground mb-3">
+          Ce qui s'affiche à l'ouverture du menu, avant la carte.
+        </p>
+        <div className="grid gap-2 sm:grid-cols-3">
+          {[
+            { value: "logo_text", title: "Logo + nom", desc: "Logo, nom du restaurant et sous-titre" },
+            { value: "text", title: "Nom + sous-titre", desc: "Sans logo" },
+            { value: "logo", title: "Logo seul", desc: "Logo en très grand" },
+          ].map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setForm((f) => ({ ...f, splash_style: opt.value as typeof f.splash_style }))}
+              className={`text-left rounded-lg border p-3 transition ${
+                form.splash_style === opt.value
+                  ? "border-primary bg-primary/5"
+                  : "border-border hover:border-primary/40"
+              }`}
+            >
+              <div className="text-sm font-medium">{opt.title}</div>
+              <div className="text-xs text-muted-foreground mt-1">{opt.desc}</div>
+            </button>
+          ))}
         </div>
+        {form.splash_style === "logo" && !form.logo_url && (
+          <p className="text-xs text-amber-600 mt-2">
+            Ajoutez un logo ci-dessus, sinon le nom du restaurant sera affiché.
+          </p>
+        )}
+      </div>
+
       </div>
 
       {/* Formules tarifaires */}
