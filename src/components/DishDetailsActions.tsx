@@ -12,7 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 
 interface DishDetailsActionsProps {
-  dish: Pick<Dish, "allergens" | "chef_note">;
+  dish: Partial<Pick<Dish, "allergens" | "chef_note">>;
   className?: string;
   contrast?: "default" | "inherit";
 }
