@@ -285,8 +285,13 @@ const LoyaltyCard = ({ restaurantId, programName, welcomeText, rewardThreshold =
                     Google Wallet
                   </Button>
                 )}
+                <Button variant="ghost" className="w-full text-xs" onClick={downloadCardImage}>
+                  <Download className="w-4 h-4" />
+                  Enregistrer ma carte en image
+                </Button>
               </div>
             </div>
+
 
             {data.rewards.length > 0 && (
               <div className="space-y-2">
