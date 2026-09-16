@@ -39,6 +39,7 @@ const wasSeen = (p: Popup) => {
 };
 
 const markSeen = (p: Popup) => {
+  shownThisView.add(p.id);
   if (p.frequency === "always") return;
   if (p.frequency === "once_per_session") {
     sessionStorage.setItem(seenKey(p.id), "1");
