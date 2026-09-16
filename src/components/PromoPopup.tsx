@@ -21,7 +21,15 @@ export interface Popup {
 const seenKey = (id: string) => `popup_seen_${id}`;
 const today = () => new Date().toISOString().slice(0, 10);
 
+/**
+ * Pop-ups already displayed during this page view. Without this, a pop-up with
+ * frequency "always" re-opens right after the visitor closes it (any re-render
+ * that re-runs the effect, e.g. a language change, restarts the timer).
+ */
+const shownThisView = new Set<string>();
+
 const wasSeen = (p: Popup) => {
+  if (shownThisView.has(p.id)) return true;
   if (p.frequency === "always") return false;
   if (p.frequency === "once_per_session") return sessionStorage.getItem(seenKey(p.id)) === "1";
   const stored = localStorage.getItem(seenKey(p.id));
