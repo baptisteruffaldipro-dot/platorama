@@ -51,7 +51,7 @@ export default function GoldEleganceView({
 
   return (
     <div className="gold-elegance-theme h-full overflow-y-auto bg-background text-foreground">
-      <section className="relative h-52 overflow-hidden border-b border-accent/20 sm:h-64">
+      <section className="relative mb-6 h-52 border-b border-accent/20 sm:h-64">
         {coverImage ? (
           <img src={coverImage} alt="" className="h-full w-full object-cover opacity-70" />
         ) : (
@@ -119,7 +119,7 @@ export default function GoldEleganceView({
         </div>
       </nav>
 
-      <main className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-x-5 gap-y-9 px-4 py-7 sm:grid-cols-2 sm:px-8 sm:py-9">
+      <main className="mx-auto grid w-full max-w-5xl grid-cols-2 gap-x-3 gap-y-8 px-4 py-7 sm:gap-x-5 sm:px-8 sm:py-9">
         {visibleDishes.map((dish) => {
           const showViewer = viewerDishId === dish.id;
           return (
@@ -178,10 +178,10 @@ export default function GoldEleganceView({
 
               <div className="mt-4 min-w-0">
                 <div className="flex items-start justify-between gap-3">
-                  <h2 className="min-w-0 flex-1 break-words text-lg font-semibold leading-snug" style={{ fontFamily: "var(--font-serif)" }}>
+                  <h2 className="min-w-0 flex-1 break-words text-[15px] font-semibold leading-snug sm:text-lg" style={{ fontFamily: "var(--font-serif)" }}>
                     {t(dish.name)}
                   </h2>
-                  <span className="shrink-0 text-base font-semibold tabular-nums text-accent" style={{ fontFamily: "var(--font-serif)" }}>
+                  <span className="shrink-0 text-sm font-semibold tabular-nums text-accent sm:text-base" style={{ fontFamily: "var(--font-serif)" }}>
                     {dish.price.toFixed(2)} €
                   </span>
                 </div>
