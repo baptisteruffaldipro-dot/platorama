@@ -469,11 +469,6 @@ const Admin = () => {
       e.target.value = "";
       return;
     }
-    if (field === "thumbnail" && file.size > 10 * 1024 * 1024) {
-      toast.error("La photo ne doit pas dépasser 10 Mo");
-      e.target.value = "";
-      return;
-    }
     setUploadingField(field);
     try {
       if (field === "thumbnail") {
@@ -919,7 +914,7 @@ const Admin = () => {
             <section className="space-y-3 border-t border-border pt-4" aria-labelledby="dish-photo-title">
               <div>
                 <h3 id="dish-photo-title" className="text-sm font-semibold">Photo du plat</h3>
-                <p className="mt-1 text-xs text-muted-foreground">La photo est automatiquement optimisée pour un affichage rapide. JPG, PNG ou WebP, 10 Mo maximum.</p>
+                <p className="mt-1 text-xs text-muted-foreground">La photo est automatiquement réduite et optimisée avant son envoi. JPG, PNG ou WebP.</p>
               </div>
 
               {form.thumbnail ? (
