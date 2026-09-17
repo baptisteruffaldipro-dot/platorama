@@ -16,8 +16,8 @@ import { useTranslation } from "@/hooks/useTranslation";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import { hasARModel } from "@/lib/dishHasAR";
 import type { Dish } from "@/hooks/useDishes";
-import { getBadge, BadgeMark } from "@/lib/badges";
 import DishDetailsActions from "@/components/DishDetailsActions";
+import DishBadges from "@/components/DishBadges";
 
 interface Props {
   dishes: Dish[];
@@ -171,14 +171,10 @@ export default function AmrCardView({
               <span className="tracking-[0.28em] uppercase text-[12px] font-medium text-accent">
                 {t(dish.category)}
               </span>
-              {getBadge(dish.badge) && (
+              {(dish.badge || dish.is_most_loved) && (
                 <>
                   <span className="text-foreground/30 text-[13px]">•</span>
-                  {getBadge(dish.badge)!.image ? (
-                    <BadgeMark badge={getBadge(dish.badge)!} className="h-5" />
-                  ) : (
-                    <span className="text-foreground/70 text-[15px]">{t(getBadge(dish.badge)!.label)}</span>
-                  )}
+                  <DishBadges dish={dish} compact />
                 </>
               )}
             </div>

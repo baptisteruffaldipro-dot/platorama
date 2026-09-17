@@ -8,6 +8,7 @@ import DishViewer from "@/components/DishViewer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import DishDetailsActions from "@/components/DishDetailsActions";
+import DishBadges from "@/components/DishBadges";
 
 interface Props {
   dishes: Dish[];
@@ -145,6 +146,7 @@ export default function WalletStackView({
                       >
                         {t(d.name)}
                       </h3>
+                      <DishBadges dish={d} className="mt-1" compact />
                     </div>
                     <span
                       className="text-sm font-bold tabular-nums px-3 py-1.5 rounded-full whitespace-nowrap"

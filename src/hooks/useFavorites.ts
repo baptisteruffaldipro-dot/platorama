@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 const STORAGE_KEY = "dish-favorites";
@@ -12,6 +13,7 @@ const readFavorites = (): string[] => {
 };
 
 export const useFavorites = () => {
+  const queryClient = useQueryClient();
   const [favorites, setFavorites] = useState<string[]>(readFavorites);
 
   const toggle = useCallback((dishId: string) => {
@@ -27,12 +29,12 @@ export const useFavorites = () => {
         supabase
           .from("dish_events")
           .insert({ dish_id: dishId, event_type: "favorite" })
-          .then();
+          .then(() => queryClient.invalidateQueries({ queryKey: ["most-loved-dishes"] }));
       }
 
       return next;
     });
-  }, []);
+  }, [queryClient]);
 
   const isFavorite = useCallback(
     (dishId: string) => favorites.includes(dishId),

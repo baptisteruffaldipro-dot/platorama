@@ -19,6 +19,7 @@ export const BADGES: BadgeDef[] = [
   { value: "bestseller", label: "Best seller", shortLabel: "Best", emoji: "🔥", icon: Flame },
   { value: "coup_de_coeur", label: "Coup de cœur", shortLabel: "♥", emoji: "❤️", icon: Heart },
   { value: "nouveau", label: "Nouveau", shortLabel: "Nouveau", emoji: "✨", icon: Sparkles },
+  { value: "le_plus_aime", label: "Le plus aimé", shortLabel: "Le plus aimé", emoji: "♥", icon: Heart },
   {
     value: "viande_bovine_francaise",
     label: "Viande bovine française",

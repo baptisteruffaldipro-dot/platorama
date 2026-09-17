@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useRestaurantBySlug } from "@/hooks/useRestaurantBySlug";
 import { useDishes } from "@/hooks/useDishes";
@@ -6,6 +6,7 @@ import { usePublishedSettings } from "@/hooks/useSiteSettings";
 import { useSubscriptionFeatures } from "@/hooks/useSubscriptionFeatures";
 import { supabase } from "@/integrations/supabase/client";
 import { useFavorites } from "@/hooks/useFavorites";
+import { useMostLovedDishes } from "@/hooks/useMostLovedDishes";
 import { useTranslation } from "@/hooks/useTranslation";
 import DishCarousel from "@/components/DishCarousel";
 import DishInfo from "@/components/DishInfo";
@@ -72,8 +73,13 @@ const Index = () => {
     if (restaurantId) savePreferences(restaurantId, next);
     setActiveIndex(0);
   };
-  const filteredDishes = availableDishes ? filterDishes(availableDishes, prefs) : undefined;
-  const dishes = filteredDishes?.length ? filteredDishes : availableDishes;
+  const { data: mostLovedDishIds = [] } = useMostLovedDishes(restaurantId);
+  const decoratedDishes = useMemo(() => {
+    const mostLoved = new Set(mostLovedDishIds);
+    return availableDishes?.map((dish) => ({ ...dish, is_most_loved: mostLoved.has(dish.id) }));
+  }, [availableDishes, mostLovedDishIds]);
+  const filteredDishes = decoratedDishes ? filterDishes(decoratedDishes, prefs) : undefined;
+  const dishes = filteredDishes?.length ? filteredDishes : decoratedDishes;
   const { data: siteSettings } = usePublishedSettings(restaurantId);
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
   const { isFavorite, toggle } = useFavorites();
@@ -95,6 +101,7 @@ const Index = () => {
       "Voir le plat",
       "Allergènes",
       "Note du Chef",
+      "Le plus aimé",
       "Nos Formules",
       "Entrée / Plat / Dessert",
       "Entrée / Plat ou Plat / Dessert",

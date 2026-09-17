@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Star, Clock, Leaf, ChevronDown, ChevronUp } from "lucide-react";
-import { getBadge, BadgeMark } from "@/lib/badges";
 import { useTranslation } from "@/hooks/useTranslation";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import DishDetailsActions from "@/components/DishDetailsActions";
+import DishBadges from "@/components/DishBadges";
 import type { LayoutVariant } from "@/lib/menuTemplates";
 
 interface DishInfoProps {
@@ -18,32 +18,12 @@ interface DishInfoProps {
     chef_note?: string;
     prep_time?: number | null;
     badge?: string | null;
+    is_most_loved?: boolean;
   };
   isFavorite: boolean;
   onToggleFavorite: () => void;
   layout?: LayoutVariant;
 }
-
-const BADGE_STYLE: Record<string, string> = {
-  bestseller: "bg-orange-500/20 text-orange-400 border-orange-500/30",
-  coup_de_coeur: "bg-pink-500/20 text-pink-400 border-pink-500/30",
-  nouveau: "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  viande_bovine_francaise: "bg-foreground/10 text-foreground/80 border-foreground/20",
-};
-
-const BadgeChip = ({ badge }: { badge: string }) => {
-  const c = getBadge(badge);
-  if (!c) return null;
-  if (c.image) {
-    return <BadgeMark badge={c} className="h-6" />;
-  }
-  return (
-    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-semibold border ${BADGE_STYLE[badge] ?? "bg-foreground/10 text-foreground/80 border-foreground/20"}`}>
-      <BadgeMark badge={c} className="w-3 h-3" />
-      {c.label}
-    </span>
-  );
-};
 
 const FavBtn = ({ active, onClick }: { active: boolean; onClick: () => void }) => (
   <button onClick={onClick} className="transition-transform active:scale-90" aria-label={active ? "Retirer des favoris" : "Ajouter aux favoris"}>
@@ -163,7 +143,7 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
         >
           <div className="flex items-center justify-between mb-1">
             <span className="text-[10px] tracking-[0.4em] uppercase text-muted-foreground">{t(dish.category)}</span>
-            {dish.badge && <BadgeChip badge={dish.badge} />}
+            <DishBadges dish={dish} compact />
           </div>
           <div className="flex items-end gap-1 mb-2">
             <div className="flex-1 min-w-0 overflow-hidden">
@@ -208,7 +188,7 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
           transition={{ duration: 0.35, ease: "easeOut" }}
           className="flex flex-col items-center text-center px-6"
         >
-          {dish.badge && <div className="mb-1.5"><BadgeChip badge={dish.badge} /></div>}
+          <DishBadges dish={dish} className="mb-1.5 justify-center" />
           {/* Ornement */}
           <div className="flex items-center gap-2 mb-1.5 text-accent/60">
             <span className="block w-8 h-px bg-current" />
@@ -266,7 +246,7 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
                 {t(dish.ingredients)}
               </ExpandableDescription>
               <div className="flex items-center gap-2 mt-2 flex-wrap">
-                {dish.badge && <BadgeChip badge={dish.badge} />}
+                <DishBadges dish={dish} compact prominent />
                 {dish.prep_time && (
                   <span className="flex items-center gap-1 text-[11px] text-muted-foreground bg-muted/40 px-2 py-0.5 rounded-full">
                     <Clock className="w-3 h-3" /> {dish.prep_time}min
@@ -319,7 +299,7 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
             >
               {dish.price.toFixed(2)} €
             </span>
-            {dish.badge && <BadgeChip badge={dish.badge} />}
+            <DishBadges dish={dish} compact />
             {dish.prep_time && (
               <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
                 <Clock className="w-3 h-3" /> ~{dish.prep_time}min
@@ -342,11 +322,7 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
         transition={{ duration: 0.35, ease: "easeOut" }}
         className="flex flex-col items-center text-center px-6"
       >
-        {dish.badge && (
-          <div className="mb-1.5">
-            <BadgeChip badge={dish.badge} />
-          </div>
-        )}
+        <DishBadges dish={dish} className="mb-1.5 justify-center" />
         <span className="text-sm tracking-[0.3em] uppercase text-muted-foreground mb-1">
           {t(dish.category)}
         </span>

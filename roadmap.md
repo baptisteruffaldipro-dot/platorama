@@ -2,6 +2,7 @@
 
 ## Fait
 - [x] Traduction du menu réparée (backend réveillé, code langue corrigé, fonction redéployée)
+- [x] Mention « Le plus aimé » automatique selon les favoris et attribuable manuellement
 
 ## Évolution demandée (activable par restaurant, multi-établissement, RGPD)
 Priorité annoncée par le client :

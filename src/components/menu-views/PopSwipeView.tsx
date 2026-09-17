@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence, PanInfo } from "framer-motion";
 import { Rotate3d, Star } from "lucide-react";
-import { getBadge, BadgeMark } from "@/lib/badges";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
 import { hasARModel } from "@/lib/dishHasAR";
@@ -9,6 +8,7 @@ import DishViewer from "@/components/DishViewer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import DishDetailsActions from "@/components/DishDetailsActions";
+import DishBadges from "@/components/DishBadges";
 
 interface Props {
   dishes: Dish[];
@@ -16,25 +16,6 @@ interface Props {
   isFavorite: (id: string) => boolean;
   onToggleFavorite: (id: string) => void;
 }
-
-const POP_BADGE_CLS: Record<string, string> = {
-  bestseller: "bg-orange-500 text-white",
-  coup_de_coeur: "bg-pink-500 text-white",
-  nouveau: "bg-emerald-500 text-white",
-  viande_bovine_francaise: "bg-white text-slate-900",
-};
-
-const Badge = ({ badge }: { badge: string }) => {
-  const c = getBadge(badge);
-  if (!c) return null;
-  if (c.image) return <BadgeMark badge={c} className="h-5" />;
-  return (
-    <span className={`inline-flex items-center gap-1 text-xs font-black px-2 py-1 rounded-full ${POP_BADGE_CLS[badge] ?? "bg-white text-slate-900"}`}>
-      <BadgeMark badge={c} className="w-3 h-3" />
-      {c.shortLabel}
-    </span>
-  );
-};
 
 /**
  * Pop : swipe horizontal à la Tinder.
@@ -118,9 +99,9 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
                 />
               )}
               <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-card to-transparent pointer-events-none" />
-              {dish.badge && (
+              {(dish.badge || dish.is_most_loved) && (
                 <div className="absolute top-4 left-4 z-10">
-                  <Badge badge={dish.badge} />
+                  <DishBadges dish={dish} prominent />
                 </div>
               )}
               <button

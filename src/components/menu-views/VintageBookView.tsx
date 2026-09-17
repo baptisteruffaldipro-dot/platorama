@@ -5,6 +5,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
 import { hasARModel } from "@/lib/dishHasAR";
 import DishDetailsActions from "@/components/DishDetailsActions";
+import DishBadges from "@/components/DishBadges";
 
 interface Props {
   dishes: Dish[];
@@ -129,6 +130,7 @@ export default function VintageBookView({
                   >
                     {t(d.ingredients)}
                   </p>
+                  <DishBadges dish={d} className="mt-2 justify-center" compact />
                   <div className="flex items-center justify-center gap-3 mt-2">
                     <DishDetailsActions dish={d} />
                     <button onClick={() => onToggleFavorite(d.id)} aria-label="favori">

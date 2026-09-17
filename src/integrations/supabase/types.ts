@@ -1002,6 +1002,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_most_loved_dish_ids: {
+        Args: { _restaurant_id: string }
+        Returns: {
+          dish_id: string
+        }[]
+      }
       get_user_restaurant_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {

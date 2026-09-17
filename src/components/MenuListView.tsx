@@ -1,12 +1,12 @@
 import { motion } from "framer-motion";
 import { Rotate3d, Clock, Leaf, Star } from "lucide-react";
-import { getBadge, BadgeMark } from "@/lib/badges";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
 import type { LayoutVariant } from "@/lib/menuTemplates";
 import { hasARModel } from "@/lib/dishHasAR";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import DishDetailsActions from "@/components/DishDetailsActions";
+import DishBadges from "@/components/DishBadges";
 
 interface Props {
   dishes: Dish[];
@@ -15,25 +15,6 @@ interface Props {
   isFavorite: (id: string) => boolean;
   onToggleFavorite: (id: string) => void;
 }
-
-const BADGE_CLS: Record<string, string> = {
-  bestseller: "bg-orange-500/20 text-orange-500",
-  coup_de_coeur: "bg-pink-500/20 text-pink-500",
-  nouveau: "bg-emerald-500/20 text-emerald-500",
-  viande_bovine_francaise: "bg-foreground/10 text-foreground/80",
-};
-
-const BadgeChip = ({ badge }: { badge: string }) => {
-  const c = getBadge(badge);
-  if (!c) return null;
-  if (c.image) return <BadgeMark badge={c} className="h-4" />;
-  return (
-    <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded-full ${BADGE_CLS[badge] ?? "bg-foreground/10 text-foreground/80"}`}>
-      <BadgeMark badge={c} className="w-2.5 h-2.5" />
-      {c.shortLabel}
-    </span>
-  );
-};
 
 /**
  * Vue scroll-vertical : remplace le carrousel pour les templates
@@ -125,7 +106,7 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
                   </ExpandableDescription>
                   <div className="flex items-center justify-between mt-2 gap-2">
                     <div className="flex items-center gap-2">
-                      {d.badge && <BadgeChip badge={d.badge} />}
+                      <DishBadges dish={d} compact />
                       {d.prep_time && (
                         <span className="text-[10px] text-muted-foreground flex items-center gap-1">
                           <Clock className="w-2.5 h-2.5" /> {d.prep_time}min
@@ -199,7 +180,7 @@ function VintageList({ grouped, categories, t, onLaunchAR, isFavorite, onToggleF
                   <span className="text-sm font-bold text-accent tabular-nums" style={{ fontFamily: "var(--font-serif)" }}>
                     {d.price.toFixed(2)} €
                   </span>
-                  {d.badge && <BadgeChip badge={d.badge} />}
+                  <DishBadges dish={d} compact />
                   <DishDetailsActions dish={d} />
                 </div>
                 {hasARModel(d) && (
@@ -270,7 +251,7 @@ function PopGrid({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavor
                   <span className="text-[10px] font-black tracking-widest uppercase text-accent">
                     OPTION {String(i + 1).padStart(2, "0")}
                   </span>
-                  {d.badge && <BadgeChip badge={d.badge} />}
+                  <DishBadges dish={d} compact prominent />
                   <DishDetailsActions dish={d} />
                 </div>
                 <p
@@ -370,7 +351,7 @@ function OrganicFeed({ grouped, categories, t, onLaunchAR, isFavorite, onToggleF
                       {t(d.name)}
                     </h3>
                     <div className="flex items-center gap-2">
-                      {d.badge && <BadgeChip badge={d.badge} />}
+                      <DishBadges dish={d} compact />
                       <DishDetailsActions dish={d} />
                       <button onClick={() => onToggleFavorite(d.id)} aria-label="favori">
                         <Star className={`w-4 h-4 ${isFavorite(d.id) ? "fill-accent text-accent" : "text-muted-foreground"}`} />
