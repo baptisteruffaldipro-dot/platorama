@@ -11,6 +11,7 @@ import DishViewer from "@/components/DishViewer";
 import DishViewerErrorFallback from "@/components/DishViewerErrorFallback";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ExpandableDescription from "@/components/ExpandableDescription";
+import GoldEleganceDishSheet from "@/components/menu-views/GoldEleganceDishSheet";
 
 interface Props {
   dishes: Dish[];
