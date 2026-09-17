@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, type PanInfo } from "framer-motion";
-import { Box, ChevronLeft, ChevronRight, Clock, Heart, ImageOff, Rotate3d, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, Heart, ImageOff, Rotate3d, X } from "lucide-react";
 import type { Dish } from "@/hooks/useDishes";
 import { useTranslation } from "@/hooks/useTranslation";
 import { hasARModel } from "@/lib/dishHasAR";
@@ -9,9 +9,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import DishBadges from "@/components/DishBadges";
 import DishDetailsActions from "@/components/DishDetailsActions";
-import DishViewer from "@/components/DishViewer";
-import DishViewerErrorFallback from "@/components/DishViewerErrorFallback";
-import ErrorBoundary from "@/components/ErrorBoundary";
+
 
 interface Props {
   dishes: Dish[];
@@ -37,7 +35,7 @@ export default function GoldEleganceDishSheet({
 }: Props) {
   const { t } = useTranslation();
   const [direction, setDirection] = useState(0);
-  const [showViewer, setShowViewer] = useState(false);
+
 
   const dish = dishes[index];
 
@@ -45,11 +43,11 @@ export default function GoldEleganceDishSheet({
     (nextIndex: number) => {
       if (nextIndex < 0 || nextIndex >= dishes.length || nextIndex === index) return;
       setDirection(nextIndex > index ? 1 : -1);
-      setShowViewer(false);
       onIndexChange(nextIndex);
     },
     [dishes.length, index, onIndexChange],
   );
+
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -115,11 +113,7 @@ export default function GoldEleganceDishSheet({
             className="absolute inset-0 overflow-y-auto overscroll-contain pb-[calc(env(safe-area-inset-bottom)+5.5rem)] touch-pan-y"
           >
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-card">
-              {showViewer && showAR ? (
-                <ErrorBoundary fallback={<DishViewerErrorFallback dish={dish} />}>
-                  <DishViewer dish={dish} />
-                </ErrorBoundary>
-              ) : dish.thumbnail ? (
+              {dish.thumbnail ? (
                 <img src={dish.thumbnail} alt={t(dish.name)} className="h-full w-full object-cover" draggable={false} />
               ) : (
                 <div className="flex h-full flex-col items-center justify-center gap-2 bg-muted text-muted-foreground">
@@ -127,6 +121,7 @@ export default function GoldEleganceDishSheet({
                   <span className="text-xs">{t("Photo à venir")}</span>
                 </div>
               )}
+
 
               <DishBadges dish={dish} className="absolute left-4 top-4 max-w-[70%]" prominent />
 
@@ -141,19 +136,8 @@ export default function GoldEleganceDishSheet({
                 >
                   <Heart className={cn("h-4 w-4", isFavorite(dish.id) && "fill-accent text-accent")} />
                 </Button>
-                {showAR && (
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => setShowViewer((value) => !value)}
-                    className="h-11 w-11 rounded-full border border-accent/30 bg-card/90 text-accent shadow-md backdrop-blur-sm"
-                    aria-label={t(showViewer ? "Fermer la 3D" : "Voir en 3D")}
-                  >
-                    <Box className="h-4 w-4" />
-                  </Button>
-                )}
               </div>
+
             </div>
 
             <div className="mx-auto w-full max-w-2xl px-5 pt-6 sm:px-8">

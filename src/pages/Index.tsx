@@ -465,14 +465,12 @@ const Index = () => {
           {layout === "gold" && (
             <GoldEleganceView
               dishes={dishes}
-              restaurantName={siteSettings?.restaurant_name}
-              subtitle={siteSettings?.subtitle}
-              logoUrl={siteSettings?.logo_url}
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
             />
           )}
+
         </div>
       ) : (
         // Vue classique Dark Luxe : 3D + carrousel
