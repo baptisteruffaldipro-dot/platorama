@@ -108,6 +108,31 @@
   display: none;
 }
 
+.gold-elegance-theme {
+  --background: 43 36% 95%;
+  --foreground: 0 0% 9%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 9%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 9%;
+  --primary: 0 0% 9%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 43 24% 91%;
+  --secondary-foreground: 0 0% 9%;
+  --muted: 43 20% 89%;
+  --muted-foreground: 0 0% 38%;
+  --accent: 40 41% 60%;
+  --accent-foreground: 0 0% 9%;
+  --border: 40 24% 78%;
+  --input: 40 24% 78%;
+  --ring: 40 41% 60%;
+  font-family: var(--font-body);
+}
+
+.gold-elegance-cover {
+  background: linear-gradient(to top, hsl(var(--background)) 0%, hsl(var(--background) / 0.08) 58%, hsl(var(--foreground) / 0.5) 100%);
+}
+
 .animate-ping-slow {
   animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }

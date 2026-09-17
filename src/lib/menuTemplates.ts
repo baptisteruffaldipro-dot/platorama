@@ -2,7 +2,7 @@
 // Chaque template définit une palette + typographie + LAYOUT.
 // Sert de point de départ : couleurs/polices restent éditables ensuite.
 
-export type LayoutVariant = "classic" | "editorial" | "vintage" | "pop" | "organic" | "wallet" | "vision" | "signature" | "amr";
+export type LayoutVariant = "classic" | "editorial" | "vintage" | "pop" | "organic" | "wallet" | "vision" | "signature" | "amr" | "gold";
 
 export interface MenuTemplate {
   id: string;
@@ -204,6 +204,26 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
       button_text_color: "#241a08",
       heading_font: "DM Sans",
       body_font: "DM Sans",
+    },
+  },
+  {
+    id: "gold-elegance",
+    name: "Gold Elegance",
+    description: "Grande photo, catégories et grille élégante — premium et chaleureux",
+    layout: "gold",
+    preview: {
+      background: "#f7f4ec",
+      text: "#171717",
+      accent: "#c8a96b",
+      accentText: "#171717",
+    },
+    settings: {
+      background_color: "#f7f4ec",
+      text_color: "#171717",
+      button_bg_color: "#171717",
+      button_text_color: "#ffffff",
+      heading_font: "Outfit",
+      body_font: "Figtree",
     },
   },
 ];
