@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, type PanInfo } from "framer-motion";
-import { Box, ChevronLeft, ChevronRight, Clock, Heart, ImageOff, Rotate3d, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, Clock, Heart, ImageOff, Rotate3d, X } from "lucide-react";
 import type { Dish } from "@/hooks/useDishes";
 import { useTranslation } from "@/hooks/useTranslation";
 import { hasARModel } from "@/lib/dishHasAR";
