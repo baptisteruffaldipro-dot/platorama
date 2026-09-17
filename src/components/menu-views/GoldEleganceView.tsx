@@ -36,6 +36,7 @@ export default function GoldEleganceView({
   const [category, setCategory] = useState("all");
   const [query, setQuery] = useState("");
   const [viewerDishId, setViewerDishId] = useState<string | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const categories = useMemo(() => [...new Set(dishes.map((dish) => dish.category).filter(Boolean))], [dishes]);
   const visibleDishes = useMemo(() => {
