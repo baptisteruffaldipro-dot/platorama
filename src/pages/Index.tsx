@@ -24,6 +24,7 @@ import VintageBookView from "@/components/menu-views/VintageBookView";
 import WalletStackView from "@/components/menu-views/WalletStackView";
 import SignatureView from "@/components/menu-views/SignatureView";
 import AmrCardView from "@/components/menu-views/AmrCardView";
+import GoldEleganceView from "@/components/menu-views/GoldEleganceView";
 import type { Dish } from "@/hooks/useDishes";
 import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS, isInAppBrowser } from "@/lib/platform";
@@ -456,6 +457,17 @@ const Index = () => {
           {layout === "wallet" && (
             <WalletStackView
               dishes={dishes}
+              onLaunchAR={(d) => handleLaunchAR(d)}
+              isFavorite={isFavorite}
+              onToggleFavorite={toggle}
+            />
+          )}
+          {layout === "gold" && (
+            <GoldEleganceView
+              dishes={dishes}
+              restaurantName={siteSettings?.restaurant_name}
+              subtitle={siteSettings?.subtitle}
+              logoUrl={siteSettings?.logo_url}
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
