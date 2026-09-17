@@ -18,6 +18,7 @@ export interface Dish {
   prep_time: number | null;
   is_available: boolean;
   badge: string | null;
+  is_most_loved?: boolean;
   time_slot: string;
   story_text: string;
   story_image: string;
