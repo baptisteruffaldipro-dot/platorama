@@ -94,7 +94,6 @@ export default function GoldEleganceView({
 
       <main className="mx-auto grid w-full max-w-5xl grid-cols-2 gap-x-3 gap-y-8 px-4 py-7 sm:gap-x-5 sm:px-8 sm:py-9">
         {visibleDishes.map((dish, dishIndex) => {
-          const showViewer = viewerDishId === dish.id;
           return (
             <article key={dish.id} className="min-w-0">
               <div
@@ -110,11 +109,7 @@ export default function GoldEleganceView({
                 aria-label={t("Voir la fiche du plat")}
                 className="relative aspect-[4/5] cursor-pointer overflow-hidden rounded-lg border border-accent/20 bg-card shadow-md transition-transform active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
               >
-                {showViewer ? (
-                  <ErrorBoundary fallback={<DishViewerErrorFallback dish={dish} />}>
-                    <DishViewer dish={dish} />
-                  </ErrorBoundary>
-                ) : dish.thumbnail ? (
+                {dish.thumbnail ? (
                   <img src={dish.thumbnail} alt={t(dish.name)} loading="lazy" className="h-full w-full object-cover" />
                 ) : (
                   <div className="flex h-full flex-col items-center justify-center gap-2 bg-muted text-muted-foreground">
@@ -122,6 +117,7 @@ export default function GoldEleganceView({
                     <span className="text-xs">{t("Photo à venir")}</span>
                   </div>
                 )}
+
 
                 <DishBadges dish={dish} className="absolute left-3 top-3 max-w-[70%]" prominent />
                 <div className="absolute bottom-3 right-3 flex flex-col gap-2">
@@ -139,34 +135,20 @@ export default function GoldEleganceView({
                     <Heart className={cn("h-4 w-4", isFavorite(dish.id) && "fill-accent text-accent")} />
                   </Button>
                   {hasARModel(dish) && (
-                    <>
-                      <Button
-                        type="button"
-                        variant="secondary"
-                        size="icon"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          setViewerDishId(showViewer ? null : dish.id);
-                        }}
-                        className="h-10 w-10 rounded-full border border-accent/30 bg-card/90 text-accent shadow-md backdrop-blur-sm"
-                        aria-label={t(showViewer ? "Fermer la 3D" : "Voir en 3D")}
-                      >
-                        <Box className="h-4 w-4" />
-                      </Button>
-                      <Button
-                        type="button"
-                        size="icon"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          onLaunchAR(dish);
-                        }}
-                        className="h-10 w-10 rounded-full border border-accent/40 bg-primary text-accent shadow-lg"
-                        aria-label={t("Voir en réalité augmentée")}
-                      >
-                        <Rotate3d className="h-4 w-4" />
-                      </Button>
-                    </>
+                    <Button
+                      type="button"
+                      size="icon"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onLaunchAR(dish);
+                      }}
+                      className="h-10 w-10 rounded-full border border-accent/40 bg-primary text-accent shadow-lg"
+                      aria-label={t("Voir en réalité augmentée")}
+                    >
+                      <Rotate3d className="h-4 w-4" />
+                    </Button>
                   )}
+
                 </div>
               </div>
 
