@@ -1,29 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-export const useMostLovedDishes = (dishIds: string[]) => {
-  const stableIds = [...dishIds].sort();
-
+export const useMostLovedDishes = (restaurantId?: string | null) => {
   return useQuery({
-    queryKey: ["most-loved-dishes", stableIds],
-    enabled: stableIds.length > 0,
+    queryKey: ["most-loved-dishes", restaurantId],
+    enabled: Boolean(restaurantId),
     queryFn: async (): Promise<string[]> => {
-      const { data, error } = await supabase
-        .from("dish_events")
-        .select("dish_id")
-        .eq("event_type", "favorite")
-        .in("dish_id", stableIds);
+      if (!restaurantId) return [];
+      const { data, error } = await supabase.rpc("get_most_loved_dish_ids", {
+        _restaurant_id: restaurantId,
+      });
 
       if (error) throw error;
-
-      const counts = new Map<string, number>();
-      data?.forEach(({ dish_id }) => counts.set(dish_id, (counts.get(dish_id) ?? 0) + 1));
-      const highest = Math.max(0, ...counts.values());
-      if (highest === 0) return [];
-
-      return [...counts.entries()]
-        .filter(([, count]) => count === highest)
-        .map(([dishId]) => dishId);
+      return data?.map(({ dish_id }) => dish_id) ?? [];
     },
     staleTime: 60_000,
   });

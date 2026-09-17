@@ -73,7 +73,7 @@ const Index = () => {
     if (restaurantId) savePreferences(restaurantId, next);
     setActiveIndex(0);
   };
-  const { data: mostLovedDishIds = [] } = useMostLovedDishes(availableDishes?.map((dish) => dish.id) ?? []);
+  const { data: mostLovedDishIds = [] } = useMostLovedDishes(restaurantId);
   const decoratedDishes = useMemo(() => {
     const mostLoved = new Set(mostLovedDishIds);
     return availableDishes?.map((dish) => ({ ...dish, is_most_loved: mostLoved.has(dish.id) }));
