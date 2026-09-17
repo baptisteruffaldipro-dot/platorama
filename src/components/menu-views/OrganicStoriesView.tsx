@@ -8,6 +8,7 @@ import { hasARModel } from "@/lib/dishHasAR";
 import DishViewer from "@/components/DishViewer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import DishDetailsActions from "@/components/DishDetailsActions";
+import DishBadges from "@/components/DishBadges";
 
 interface Props {
   dishes: Dish[];
@@ -124,6 +125,7 @@ export default function OrganicStoriesView({
               >
                 {t(d.name)}
               </h2>
+              <DishBadges dish={d} className="mt-2" />
               <ExpandableDescription
                 lines={2}
                 className="text-sm italic text-foreground/80 mt-2 max-w-sm leading-relaxed"

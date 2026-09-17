@@ -1,6 +1,7 @@
 import type { Dish } from "@/hooks/useDishes";
 import { BadgeMark, getBadge } from "@/lib/badges";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface DishBadgesProps {
   dish: Partial<Pick<Dish, "badge" | "is_most_loved">>;
@@ -10,6 +11,7 @@ interface DishBadgesProps {
 }
 
 export default function DishBadges({ dish, className, compact = false, prominent = false }: DishBadgesProps) {
+  const { t } = useTranslation();
   const values = [dish.badge, dish.is_most_loved ? "le_plus_aime" : null].filter(
     (value, index, items): value is string => Boolean(value) && items.indexOf(value) === index,
   );
@@ -35,7 +37,7 @@ export default function DishBadges({ dish, className, compact = false, prominent
             )}
           >
             <BadgeMark badge={badge} className={compact ? "h-2.5 w-2.5" : "h-3.5 w-3.5"} />
-            {compact ? badge.shortLabel : badge.label}
+            {t(compact ? badge.shortLabel : badge.label)}
           </span>
         );
       })}

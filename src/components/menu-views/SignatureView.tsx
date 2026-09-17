@@ -6,6 +6,7 @@ import ExpandableDescription from "@/components/ExpandableDescription";
 import { hasARModel } from "@/lib/dishHasAR";
 import type { Dish } from "@/hooks/useDishes";
 import DishDetailsActions from "@/components/DishDetailsActions";
+import DishBadges from "@/components/DishBadges";
 
 interface Props {
   dishes: Dish[];
@@ -121,6 +122,7 @@ export default function SignatureView({
             <span className="text-[13px] tracking-[0.45em] uppercase text-foreground/70 mb-2 shrink-0">
               {t(dish.category)}
             </span>
+            <DishBadges dish={dish} className="mb-2 justify-center" />
 
             <div className="flex items-start justify-center gap-2 mb-3 shrink-0">
               <h1
