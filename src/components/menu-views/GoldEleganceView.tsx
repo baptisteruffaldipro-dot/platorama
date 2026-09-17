@@ -11,6 +11,7 @@ import DishViewer from "@/components/DishViewer";
 import DishViewerErrorFallback from "@/components/DishViewerErrorFallback";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import ExpandableDescription from "@/components/ExpandableDescription";
+import GoldEleganceDishSheet from "@/components/menu-views/GoldEleganceDishSheet";
 
 interface Props {
   dishes: Dish[];
@@ -35,6 +36,7 @@ export default function GoldEleganceView({
   const [category, setCategory] = useState("all");
   const [query, setQuery] = useState("");
   const [viewerDishId, setViewerDishId] = useState<string | null>(null);
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const categories = useMemo(() => [...new Set(dishes.map((dish) => dish.category).filter(Boolean))], [dishes]);
   const visibleDishes = useMemo(() => {
@@ -120,11 +122,23 @@ export default function GoldEleganceView({
       </nav>
 
       <main className="mx-auto grid w-full max-w-5xl grid-cols-2 gap-x-3 gap-y-8 px-4 py-7 sm:gap-x-5 sm:px-8 sm:py-9">
-        {visibleDishes.map((dish) => {
+        {visibleDishes.map((dish, dishIndex) => {
           const showViewer = viewerDishId === dish.id;
           return (
             <article key={dish.id} className="min-w-0">
-              <div className="relative aspect-[4/5] overflow-hidden rounded-lg border border-accent/20 bg-card shadow-md">
+              <div
+                role="button"
+                tabIndex={0}
+                onClick={() => setOpenIndex(dishIndex)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter" || event.key === " ") {
+                    event.preventDefault();
+                    setOpenIndex(dishIndex);
+                  }
+                }}
+                aria-label={t("Voir la fiche du plat")}
+                className="relative aspect-[4/5] cursor-pointer overflow-hidden rounded-lg border border-accent/20 bg-card shadow-md transition-transform active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+              >
                 {showViewer ? (
                   <ErrorBoundary fallback={<DishViewerErrorFallback dish={dish} />}>
                     <DishViewer dish={dish} />
@@ -144,7 +158,10 @@ export default function GoldEleganceView({
                     type="button"
                     variant="secondary"
                     size="icon"
-                    onClick={() => onToggleFavorite(dish.id)}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      onToggleFavorite(dish.id);
+                    }}
                     className="h-10 w-10 rounded-full border border-accent/20 bg-card/90 shadow-md backdrop-blur-sm"
                     aria-label={t("Ajouter aux favoris")}
                   >
@@ -156,7 +173,10 @@ export default function GoldEleganceView({
                         type="button"
                         variant="secondary"
                         size="icon"
-                        onClick={() => setViewerDishId(showViewer ? null : dish.id)}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setViewerDishId(showViewer ? null : dish.id);
+                        }}
                         className="h-10 w-10 rounded-full border border-accent/30 bg-card/90 text-accent shadow-md backdrop-blur-sm"
                         aria-label={t(showViewer ? "Fermer la 3D" : "Voir en 3D")}
                       >
@@ -165,7 +185,10 @@ export default function GoldEleganceView({
                       <Button
                         type="button"
                         size="icon"
-                        onClick={() => onLaunchAR(dish)}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          onLaunchAR(dish);
+                        }}
                         className="h-10 w-10 rounded-full border border-accent/40 bg-primary text-accent shadow-lg"
                         aria-label={t("Voir en réalité augmentée")}
                       >
@@ -179,7 +202,13 @@ export default function GoldEleganceView({
               <div className="mt-4 min-w-0">
                 <div className="flex items-start justify-between gap-3">
                   <h2 className="min-w-0 flex-1 break-words text-[15px] font-semibold leading-snug sm:text-lg" style={{ fontFamily: "var(--font-serif)" }}>
-                    {t(dish.name)}
+                    <button
+                      type="button"
+                      onClick={() => setOpenIndex(dishIndex)}
+                      className="text-left hover:text-accent focus-visible:underline focus-visible:outline-none"
+                    >
+                      {t(dish.name)}
+                    </button>
                   </h2>
                   <span className="shrink-0 text-sm font-semibold tabular-nums text-accent sm:text-base" style={{ fontFamily: "var(--font-serif)" }}>
                     {dish.price.toFixed(2)} €
@@ -208,6 +237,18 @@ export default function GoldEleganceView({
         <span className="h-1.5 w-1.5 rounded-full bg-accent" />
         <span className="h-px w-12 bg-accent/40" />
       </footer>
+
+      {openIndex !== null && visibleDishes[openIndex] && (
+        <GoldEleganceDishSheet
+          dishes={visibleDishes}
+          index={openIndex}
+          onIndexChange={setOpenIndex}
+          onClose={() => setOpenIndex(null)}
+          onLaunchAR={onLaunchAR}
+          isFavorite={isFavorite}
+          onToggleFavorite={onToggleFavorite}
+        />
+      )}
     </div>
   );
 }

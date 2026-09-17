@@ -5,6 +5,7 @@
 - [x] Mention « Le plus aimé » automatique selon les favoris et attribuable manuellement
 - [x] Nouveau thème « Gold Elegance » avec bandeau, recherche, catégories et grille photo
 - [x] Photos de plats avec compression automatique à l’envoi
+- [x] Gold Elegance : appui sur un plat pour ouvrir sa fiche, puis glissement entre les fiches (grille inchangée)
 
 ## Évolution demandée (activable par restaurant, multi-établissement, RGPD)
 Priorité annoncée par le client :
