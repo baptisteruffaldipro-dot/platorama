@@ -141,19 +141,8 @@ export default function GoldEleganceDishSheet({
                 >
                   <Heart className={cn("h-4 w-4", isFavorite(dish.id) && "fill-accent text-accent")} />
                 </Button>
-                {showAR && (
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => setShowViewer((value) => !value)}
-                    className="h-11 w-11 rounded-full border border-accent/30 bg-card/90 text-accent shadow-md backdrop-blur-sm"
-                    aria-label={t(showViewer ? "Fermer la 3D" : "Voir en 3D")}
-                  >
-                    <Box className="h-4 w-4" />
-                  </Button>
-                )}
               </div>
+
             </div>
 
             <div className="mx-auto w-full max-w-2xl px-5 pt-6 sm:px-8">
