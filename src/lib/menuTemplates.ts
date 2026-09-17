@@ -49,7 +49,7 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
   {
     id: "light-minimal",
     name: "Light Minimal",
-    description: "Épuré et lumineux — bistronomie moderne",
+    description: "Menu réalité augmentée — épuré et lumineux",
     layout: "editorial",
     preview: {
       background: "#fafaf7",
@@ -209,7 +209,7 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
   {
     id: "gold-elegance",
     name: "Gold Elegance",
-    description: "Grande photo, catégories et grille élégante — premium et chaleureux",
+    description: "Menu photo + réalité augmentée si disponible",
     layout: "gold",
     preview: {
       background: "#f7f4ec",
