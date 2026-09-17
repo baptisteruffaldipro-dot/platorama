@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Navigate } from "react-router-dom";
-import { LogOut, Plus, Pencil, Trash2, Upload, Star, Gift, Megaphone, CalendarDays, Rotate3d, BarChart3, FileText, Sparkles, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail, Send, ArrowLeft, ChevronDown, Printer, Building2 } from "lucide-react";
+import { LogOut, Plus, Pencil, Trash2, Upload, Star, Gift, Megaphone, CalendarDays, Rotate3d, BarChart3, FileText, Sparkles, UtensilsCrossed, GripVertical, Settings, Eye, Users, Mail, Send, ArrowLeft, ChevronDown, Printer, Building2, Image, X } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -289,9 +289,20 @@ const SortableRow = ({
       </td>
       <td className="py-2 px-3 text-muted-foreground">{dish.sort_order}</td>
       <td className="py-2 px-3">
-        {dish.thumbnail && (
-          <img src={dish.thumbnail} alt={dish.name} className="w-10 h-10 rounded-full object-contain bg-muted/20" />
-        )}
+        <div className="relative h-11 w-11">
+          {dish.thumbnail ? (
+            <img src={dish.thumbnail} alt={dish.name} className="h-11 w-11 rounded-md bg-muted/20 object-cover" />
+          ) : (
+            <div className="flex h-11 w-11 items-center justify-center rounded-md bg-muted text-muted-foreground" title="Aucune photo">
+              <Image className="h-4 w-4" />
+            </div>
+          )}
+          {(dish.model_ios?.trim() || dish.model_android?.trim()) && (
+            <span className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full border-2 border-background bg-primary text-primary-foreground" title="Réalité augmentée disponible">
+              <Rotate3d className="h-3 w-3" />
+            </span>
+          )}
+        </div>
       </td>
       <td className="py-2.5 px-3 text-sm tracking-wider text-muted-foreground">{dish.category}</td>
       <td className="py-2.5 px-3 font-medium text-sm">
@@ -329,6 +340,7 @@ const Admin = () => {
   const [isNew, setIsNew] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [uploadingField, setUploadingField] = useState<"thumbnail" | "model_ios" | "model_android" | null>(null);
   const [tab, setTab] = useState<"menu" | "stats" | "reports" | "reviews" | "loyalty" | "marketing" | "daily" | "smart" | "supports" | "settings" | "users" | "info">("menu");
   const [isResolvingRestaurant, setIsResolvingRestaurant] = useState(false);
   const [scopeError, setScopeError] = useState<string | null>(null);
@@ -451,6 +463,17 @@ const Admin = () => {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: "thumbnail" | "model_ios" | "model_android") => {
     let file = e.target.files?.[0];
     if (!file) return;
+    if (field === "thumbnail" && !file.type.startsWith("image/")) {
+      toast.error("Choisissez un fichier image");
+      e.target.value = "";
+      return;
+    }
+    if (field === "thumbnail" && file.size > 10 * 1024 * 1024) {
+      toast.error("La photo ne doit pas dépasser 10 Mo");
+      e.target.value = "";
+      return;
+    }
+    setUploadingField(field);
     try {
       // Auto-compress GLB files with Draco before upload
       if (field === "model_android" && file.name.endsWith(".glb")) {
@@ -461,9 +484,12 @@ const Admin = () => {
       const folder = field === "thumbnail" ? "thumbnails" : "models";
       const url = await uploadFile(file, folder);
       setForm((f) => ({ ...f, [field]: url }));
-      toast.success("Fichier uploadé");
+      toast.success(field === "thumbnail" ? "Photo ajoutée" : "Modèle 3D ajouté");
     } catch {
-      toast.error("Erreur lors de l'upload");
+      toast.error(field === "thumbnail" ? "Impossible d'ajouter cette photo" : "Impossible d'ajouter ce modèle 3D");
+    } finally {
+      setUploadingField(null);
+      e.target.value = "";
     }
   };
 
@@ -882,38 +908,84 @@ const Admin = () => {
               )}
             </div>
 
-            <div className="space-y-1">
-              <Label>Thumbnail</Label>
-              <div className="flex items-center gap-2">
-                <Input value={form.thumbnail} onChange={(e) => setForm((f) => ({ ...f, thumbnail: e.target.value }))} placeholder="URL ou upload" className="flex-1" />
-                <label className="cursor-pointer">
-                  <Upload className="w-5 h-5 text-muted-foreground hover:text-foreground" />
-                  <input type="file" accept="image/*" className="hidden" onChange={(e) => handleFileUpload(e, "thumbnail")} />
-                </label>
+            <section className="space-y-3 border-t border-border pt-4" aria-labelledby="dish-photo-title">
+              <div>
+                <h3 id="dish-photo-title" className="text-sm font-semibold">Photo du plat</h3>
+                <p className="mt-1 text-xs text-muted-foreground">La photo suffit pour afficher ce plat dans Gold Elegance. JPG, PNG ou WebP, 10 Mo maximum.</p>
               </div>
-            </div>
 
-            <div className="space-y-1">
-              <Label>Modèle iOS (.usdz)</Label>
-              <div className="flex items-center gap-2">
-                <Input value={form.model_ios} onChange={(e) => setForm((f) => ({ ...f, model_ios: e.target.value }))} placeholder="URL ou upload" className="flex-1" />
-                <label className="cursor-pointer">
-                  <Upload className="w-5 h-5 text-muted-foreground hover:text-foreground" />
-                  <input type="file" accept=".usdz" className="hidden" onChange={(e) => handleFileUpload(e, "model_ios")} />
-                </label>
-              </div>
-            </div>
+              {form.thumbnail ? (
+                <div className="relative overflow-hidden rounded-md border border-border bg-muted/30">
+                  <img src={form.thumbnail} alt="Aperçu du plat" className="h-48 w-full object-cover" />
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="icon"
+                    onClick={() => setForm((f) => ({ ...f, thumbnail: "" }))}
+                    className="absolute right-2 top-2 h-9 w-9 rounded-full shadow-md"
+                    aria-label="Retirer la photo"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex h-32 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-border bg-muted/20 text-muted-foreground">
+                  <Image className="h-7 w-7" />
+                  <span className="text-xs">Aucune photo ajoutée</span>
+                </div>
+              )}
 
-            <div className="space-y-1">
-              <Label>Modèle Android (.glb)</Label>
-              <div className="flex items-center gap-2">
-                <Input value={form.model_android} onChange={(e) => setForm((f) => ({ ...f, model_android: e.target.value }))} placeholder="URL ou upload" className="flex-1" />
+              <Button type="button" variant="outline" className="w-full" asChild disabled={uploadingField === "thumbnail"}>
                 <label className="cursor-pointer">
-                  <Upload className="w-5 h-5 text-muted-foreground hover:text-foreground" />
-                  <input type="file" accept=".glb" className="hidden" onChange={(e) => handleFileUpload(e, "model_android")} />
+                  <Upload className="h-4 w-4" />
+                  {uploadingField === "thumbnail" ? "Envoi en cours..." : form.thumbnail ? "Remplacer la photo" : "Choisir une photo"}
+                  <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={uploadingField === "thumbnail"} onChange={(e) => handleFileUpload(e, "thumbnail")} />
                 </label>
+              </Button>
+
+              <details className="text-xs text-muted-foreground">
+                <summary className="cursor-pointer hover:text-foreground">Utiliser plutôt l’adresse d’une image</summary>
+                <Input value={form.thumbnail} onChange={(e) => setForm((f) => ({ ...f, thumbnail: e.target.value }))} placeholder="https://…" className="mt-2" />
+              </details>
+            </section>
+
+            <section className="space-y-4 rounded-md border border-border bg-muted/20 p-4" aria-labelledby="dish-ar-title">
+              <div>
+                <h3 id="dish-ar-title" className="flex items-center gap-2 text-sm font-semibold">
+                  <Rotate3d className="h-4 w-4 text-accent" />
+                  Réalité augmentée <span className="font-normal text-muted-foreground">— facultatif</span>
+                </h3>
+                <p className="mt-1 text-xs text-muted-foreground">Sans fichier 3D, le plat reste présenté uniquement avec sa photo. Ajoutez les deux formats pour couvrir iPhone et Android.</p>
               </div>
-            </div>
+
+              <div className="space-y-2">
+                <Label>iPhone et iPad (.usdz)</Label>
+                <div className="flex items-center gap-2">
+                  <Input value={form.model_ios} onChange={(e) => setForm((f) => ({ ...f, model_ios: e.target.value }))} placeholder="Aucun modèle iOS" className="flex-1" />
+                  <Button type="button" variant="outline" size="icon" asChild disabled={uploadingField === "model_ios"}>
+                    <label className="cursor-pointer" title="Ajouter un modèle iOS">
+                      <Upload className="h-4 w-4" />
+                      <input type="file" accept=".usdz" className="hidden" disabled={uploadingField === "model_ios"} onChange={(e) => handleFileUpload(e, "model_ios")} />
+                    </label>
+                  </Button>
+                  {form.model_ios && <Button type="button" variant="ghost" size="icon" onClick={() => setForm((f) => ({ ...f, model_ios: "" }))} aria-label="Retirer le modèle iOS"><X className="h-4 w-4" /></Button>}
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label>Android (.glb)</Label>
+                <div className="flex items-center gap-2">
+                  <Input value={form.model_android} onChange={(e) => setForm((f) => ({ ...f, model_android: e.target.value }))} placeholder="Aucun modèle Android" className="flex-1" />
+                  <Button type="button" variant="outline" size="icon" asChild disabled={uploadingField === "model_android"}>
+                    <label className="cursor-pointer" title="Ajouter un modèle Android">
+                      <Upload className="h-4 w-4" />
+                      <input type="file" accept=".glb" className="hidden" disabled={uploadingField === "model_android"} onChange={(e) => handleFileUpload(e, "model_android")} />
+                    </label>
+                  </Button>
+                  {form.model_android && <Button type="button" variant="ghost" size="icon" onClick={() => setForm((f) => ({ ...f, model_android: "" }))} aria-label="Retirer le modèle Android"><X className="h-4 w-4" /></Button>}
+                </div>
+              </div>
+            </section>
 
             <Button onClick={handleSave} disabled={saving} className="w-full">
               {saving ? "Enregistrement..." : "Enregistrer"}
