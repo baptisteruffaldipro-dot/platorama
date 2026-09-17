@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Box, Heart, ImageOff, Rotate3d, Search, X } from "lucide-react";
+import { Heart, ImageOff, Rotate3d, Search, X } from "lucide-react";
 import type { Dish } from "@/hooks/useDishes";
 import { useTranslation } from "@/hooks/useTranslation";
 import { hasARModel } from "@/lib/dishHasAR";
@@ -7,17 +7,11 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import DishBadges from "@/components/DishBadges";
 import DishDetailsActions from "@/components/DishDetailsActions";
-import DishViewer from "@/components/DishViewer";
-import DishViewerErrorFallback from "@/components/DishViewerErrorFallback";
-import ErrorBoundary from "@/components/ErrorBoundary";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import GoldEleganceDishSheet from "@/components/menu-views/GoldEleganceDishSheet";
 
 interface Props {
   dishes: Dish[];
-  restaurantName?: string;
-  subtitle?: string;
-  logoUrl?: string;
   onLaunchAR: (dish: Dish) => void;
   isFavorite: (id: string) => boolean;
   onToggleFavorite: (id: string) => void;
@@ -25,9 +19,6 @@ interface Props {
 
 export default function GoldEleganceView({
   dishes,
-  restaurantName,
-  subtitle,
-  logoUrl,
   onLaunchAR,
   isFavorite,
   onToggleFavorite,
@@ -35,7 +26,6 @@ export default function GoldEleganceView({
   const { t } = useTranslation();
   const [category, setCategory] = useState("all");
   const [query, setQuery] = useState("");
-  const [viewerDishId, setViewerDishId] = useState<string | null>(null);
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const categories = useMemo(() => [...new Set(dishes.map((dish) => dish.category).filter(Boolean))], [dishes]);
@@ -49,53 +39,34 @@ export default function GoldEleganceView({
     });
   }, [category, dishes, query]);
 
-  const coverImage = dishes.find((dish) => dish.thumbnail)?.thumbnail;
-
   return (
     <div className="gold-elegance-theme h-full overflow-y-auto bg-background text-foreground">
-      <section className="relative mb-6 h-52 border-b border-accent/20 sm:h-64">
-        {coverImage ? (
-          <img src={coverImage} alt="" className="h-full w-full object-cover opacity-70" />
-        ) : (
-          <div className="h-full w-full bg-secondary" />
-        )}
-        <div className="gold-elegance-cover absolute inset-0" />
-        <div className="absolute inset-x-5 top-5 flex items-start justify-between gap-4 sm:inset-x-8 sm:top-8">
-          <div className="min-w-0 pt-2">
-            <h1 className="break-words text-3xl font-semibold leading-tight text-primary sm:text-4xl" style={{ fontFamily: "var(--font-serif)" }}>
-              {restaurantName || t("Notre carte")}
-            </h1>
-            {subtitle && <p className="mt-1 text-xs font-medium uppercase text-accent">{t(subtitle)}</p>}
-          </div>
-          {logoUrl && <img src={logoUrl} alt="" className="h-16 w-24 shrink-0 object-contain sm:h-20 sm:w-32" />}
-        </div>
+      <div className="relative inset-x-0 px-4 pt-4 sm:px-8">
+        <label className="relative block">
+          <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <input
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder={t("Rechercher un plat")}
+            className="h-12 w-full rounded-lg border border-accent/25 bg-card px-11 text-sm text-card-foreground shadow-lg outline-none placeholder:text-muted-foreground focus:border-accent focus:ring-2 focus:ring-accent/20"
+          />
+          {query && (
+            <Button
+              type="button"
+              variant="ghost"
+              size="icon"
+              onClick={() => setQuery("")}
+              className="absolute right-1 top-1 h-10 w-10 rounded-full text-muted-foreground"
+              aria-label={t("Effacer la recherche")}
+            >
+              <X className="h-4 w-4" />
+            </Button>
+          )}
+        </label>
+      </div>
 
-        <div className="absolute inset-x-4 bottom-0 translate-y-1/2 sm:inset-x-8">
-          <label className="relative block">
-            <Search className="absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <input
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder={t("Rechercher un plat")}
-              className="h-12 w-full rounded-lg border border-accent/25 bg-card px-11 text-sm text-card-foreground shadow-lg outline-none placeholder:text-muted-foreground focus:border-accent focus:ring-2 focus:ring-accent/20"
-            />
-            {query && (
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                onClick={() => setQuery("")}
-                className="absolute right-1 top-1 h-10 w-10 rounded-full text-muted-foreground"
-                aria-label={t("Effacer la recherche")}
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            )}
-          </label>
-        </div>
-      </section>
 
-      <nav className="sticky top-0 z-20 border-b border-accent/15 bg-background/95 px-4 pb-3 pt-9 backdrop-blur-lg sm:px-8" aria-label={t("Catégories")}>
+      <nav className="sticky top-0 z-20 border-b border-accent/15 bg-background/95 px-4 pb-3 pt-4 backdrop-blur-lg sm:px-8" aria-label={t("Catégories")}>
         <div className="no-scrollbar flex gap-2 overflow-x-auto py-1">
           <Button
             type="button"
