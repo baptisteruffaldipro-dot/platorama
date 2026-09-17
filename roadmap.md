@@ -4,6 +4,7 @@
 - [x] Traduction du menu réparée (backend réveillé, code langue corrigé, fonction redéployée)
 - [x] Mention « Le plus aimé » automatique selon les favoris et attribuable manuellement
 - [x] Nouveau thème « Gold Elegance » avec bandeau, recherche, catégories et grille photo
+- [x] Photos de plats avec compression automatique à l’envoi
 
 ## Évolution demandée (activable par restaurant, multi-établissement, RGPD)
 Priorité annoncée par le client :

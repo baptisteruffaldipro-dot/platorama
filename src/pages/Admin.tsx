@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { compressGlb } from "@/lib/compressGlb";
+import { compressDishImage } from "@/lib/compressImage";
 import { useAuth } from "@/hooks/useAuth";
 import { useDishes, type Dish } from "@/hooks/useDishes";
 import { useSubscriptionFeatures } from "@/hooks/useSubscriptionFeatures";
@@ -475,6 +476,13 @@ const Admin = () => {
     }
     setUploadingField(field);
     try {
+      if (field === "thumbnail") {
+        const originalSize = file.size;
+        toast.info("Optimisation de la photo en cours...");
+        file = await compressDishImage(file);
+        const savedPercent = originalSize > 0 ? Math.max(0, Math.round((1 - file.size / originalSize) * 100)) : 0;
+        toast.success(savedPercent > 0 ? `Photo optimisée — ${savedPercent} % plus légère` : "Photo optimisée");
+      }
       // Auto-compress GLB files with Draco before upload
       if (field === "model_android" && file.name.endsWith(".glb")) {
         toast.info("Compression du modèle 3D en cours...");
@@ -911,7 +919,7 @@ const Admin = () => {
             <section className="space-y-3 border-t border-border pt-4" aria-labelledby="dish-photo-title">
               <div>
                 <h3 id="dish-photo-title" className="text-sm font-semibold">Photo du plat</h3>
-                <p className="mt-1 text-xs text-muted-foreground">La photo suffit pour afficher ce plat dans Gold Elegance. JPG, PNG ou WebP, 10 Mo maximum.</p>
+                <p className="mt-1 text-xs text-muted-foreground">La photo est automatiquement optimisée pour un affichage rapide. JPG, PNG ou WebP, 10 Mo maximum.</p>
               </div>
 
               {form.thumbnail ? (
@@ -938,7 +946,7 @@ const Admin = () => {
               <Button type="button" variant="outline" className="w-full" asChild disabled={uploadingField === "thumbnail"}>
                 <label className="cursor-pointer">
                   <Upload className="h-4 w-4" />
-                  {uploadingField === "thumbnail" ? "Envoi en cours..." : form.thumbnail ? "Remplacer la photo" : "Choisir une photo"}
+                  {uploadingField === "thumbnail" ? "Optimisation et envoi..." : form.thumbnail ? "Remplacer la photo" : "Choisir une photo"}
                   <input type="file" accept="image/jpeg,image/png,image/webp" className="hidden" disabled={uploadingField === "thumbnail"} onChange={(e) => handleFileUpload(e, "thumbnail")} />
                 </label>
               </Button>
