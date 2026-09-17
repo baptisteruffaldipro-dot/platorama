@@ -9,9 +9,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import DishBadges from "@/components/DishBadges";
 import DishDetailsActions from "@/components/DishDetailsActions";
-import DishViewer from "@/components/DishViewer";
-import DishViewerErrorFallback from "@/components/DishViewerErrorFallback";
-import ErrorBoundary from "@/components/ErrorBoundary";
+
 
 interface Props {
   dishes: Dish[];
