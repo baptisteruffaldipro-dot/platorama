@@ -430,8 +430,7 @@ const Index = () => {
           />
         </div>
       ) : useListView ? (
-        <div className="flex-1 min-h-0 flex flex-col">
-          {showDisclaimerFooter && <DisclaimerFooter text={disclaimerText} className="!pb-1" />}
+        <div className="flex-1 min-h-0">
           {layout === "editorial" && (
             <MenuListView
               dishes={dishes}
