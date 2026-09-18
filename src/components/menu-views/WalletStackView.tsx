@@ -53,6 +53,7 @@ export default function WalletStackView({
   onLaunchAR,
   isFavorite,
   onToggleFavorite,
+  disclaimer,
 }: Props) {
   const { t } = useTranslation();
   // Première carte ouverte par défaut
@@ -277,6 +278,7 @@ export default function WalletStackView({
           />
         </div>
       </div>
+      {disclaimer && <DisclaimerFooter text={disclaimer} className="!pb-3 !pt-0" />}
     </div>
   );
 }

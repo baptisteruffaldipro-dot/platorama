@@ -183,6 +183,7 @@ export default function OrganicStoriesView({
           </section>
         ))}
       </div>
+      {disclaimer && <DisclaimerFooter text={disclaimer} className="!pb-3 !pt-0" />}
     </div>
   );
 }

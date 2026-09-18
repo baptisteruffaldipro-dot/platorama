@@ -200,6 +200,7 @@ export default function VintageBookView({
           <ChevronRight className="w-4 h-4" />
         </button>
       </div>
+      {disclaimer && <DisclaimerFooter text={disclaimer} className="!pb-3 !pt-0" />}
     </div>
   );
 }

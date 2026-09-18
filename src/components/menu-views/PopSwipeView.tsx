@@ -186,6 +186,7 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
       <p className="mt-3 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
         {t("Touchez le plat pour le faire pivoter")}
       </p>
+      {disclaimer && <DisclaimerFooter text={disclaimer} className="!pb-3 !pt-0" />}
     </div>
   );
 }
