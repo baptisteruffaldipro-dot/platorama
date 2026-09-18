@@ -51,10 +51,8 @@ export function DisclaimerPopup({ restaurantId, text }: { restaurantId: string; 
     let unsubscribe: (() => void) | undefined;
 
     const attempt = () => {
-      console.log("[disclaimer-debug] attempt", { cancelled, openRef: openRef.current });
       if (cancelled || openRef.current) return true;
       if (!tryOpenOverlay({ id: OVERLAY_ID, close: hide })) return false;
-      console.log("[disclaimer-debug] overlay acquired");
       openRef.current = true;
       setOpen(true);
       localStorage.setItem(seenKey(restaurantId), today());
@@ -63,9 +61,7 @@ export function DisclaimerPopup({ restaurantId, text }: { restaurantId: string; 
     };
 
     const timer = setTimeout(() => {
-      console.log("[disclaimer-debug] timer fired, openRef:", openRef.current);
       if (!attempt() && !cancelled) {
-        console.log("[disclaimer-debug] queued, waiting for overlay free");
         unsubscribe = onOverlayFree(() => {
           attempt();
         });
@@ -105,7 +101,7 @@ export function DisclaimerPopup({ restaurantId, text }: { restaurantId: string; 
           <p className="text-sm leading-relaxed text-foreground break-words">{t(text)}</p>
           <button
             onClick={close}
-            className="mt-1 w-full rounded-full bg-primary py-2.5 text-sm font-semibold text-primary-foreground active:scale-[0.98] transition-transform"
+            className="mt-1 w-full rounded-full bg-foreground py-2.5 text-sm font-semibold text-background active:scale-[0.98] transition-transform"
           >
             {t("J'ai compris")}
           </button>
