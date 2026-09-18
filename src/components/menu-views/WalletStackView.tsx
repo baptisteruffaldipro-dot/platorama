@@ -9,12 +9,14 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import DishDetailsActions from "@/components/DishDetailsActions";
 import DishBadges from "@/components/DishBadges";
+import { DisclaimerFooter } from "@/components/MenuDisclaimer";
 
 interface Props {
   dishes: Dish[];
   onLaunchAR: (dish: Dish) => void;
   isFavorite: (id: string) => boolean;
   onToggleFavorite: (id: string) => void;
+  disclaimer?: string;
 }
 
 // Palette pastel par catégorie (3 couleurs douces)

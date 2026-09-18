@@ -6,12 +6,14 @@ import type { Dish } from "@/hooks/useDishes";
 import { hasARModel } from "@/lib/dishHasAR";
 import DishDetailsActions from "@/components/DishDetailsActions";
 import DishBadges from "@/components/DishBadges";
+import { DisclaimerFooter } from "@/components/MenuDisclaimer";
 
 interface Props {
   dishes: Dish[];
   onLaunchAR: (dish: Dish) => void;
   isFavorite: (id: string) => boolean;
   onToggleFavorite: (id: string) => void;
+  disclaimer?: string;
 }
 
 /**
@@ -23,6 +25,7 @@ export default function VintageBookView({
   onLaunchAR,
   isFavorite,
   onToggleFavorite,
+  disclaimer,
 }: Props) {
   const { t } = useTranslation();
   const grouped = dishes.reduce<Record<string, Dish[]>>((acc, d) => {
