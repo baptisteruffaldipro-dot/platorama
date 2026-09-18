@@ -9,19 +9,21 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import DishDetailsActions from "@/components/DishDetailsActions";
 import DishBadges from "@/components/DishBadges";
+import { DisclaimerFooter } from "@/components/MenuDisclaimer";
 
 interface Props {
   dishes: Dish[];
   onLaunchAR: (dish: Dish) => void;
   isFavorite: (id: string) => boolean;
   onToggleFavorite: (id: string) => void;
+  disclaimer?: string;
 }
 
 /**
  * Pop : swipe horizontal à la Tinder.
  * Une carte par plat, on swipe gauche/droite pour explorer.
  */
-export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleFavorite }: Props) {
+export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleFavorite, disclaimer }: Props) {
   const { t } = useTranslation();
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState(0);
@@ -184,6 +186,7 @@ export default function PopSwipeView({ dishes, onLaunchAR, isFavorite, onToggleF
       <p className="mt-3 text-[10px] uppercase tracking-[0.3em] text-muted-foreground">
         {t("Touchez le plat pour le faire pivoter")}
       </p>
+      {disclaimer && <DisclaimerFooter text={disclaimer} className="!pb-3 !pt-0" />}
     </div>
   );
 }

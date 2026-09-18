@@ -4,10 +4,13 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Upload, Save, Send, Eye, CreditCard, Plus, Trash2 } from "lucide-react";
+import { Upload, Save, Send, Eye, CreditCard, Plus, Trash2, Info } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import QRCodePanel from "@/components/QRCodePanel";
 import TemplateGallery from "@/components/TemplateGallery";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
+import { DEFAULT_DISCLAIMER_TEXT } from "@/components/MenuDisclaimer";
 import {
   useDraftSettings,
   usePublishedSettings,
@@ -127,6 +130,9 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
     custom_font_url: initial.custom_font_url ?? "",
     custom_font_name_2: initial.custom_font_name_2 ?? "",
     custom_font_url_2: initial.custom_font_url_2 ?? "",
+    disclaimer_enabled: initial.disclaimer_enabled ?? false,
+    disclaimer_mode: initial.disclaimer_mode ?? "footer",
+    disclaimer_text: initial.disclaimer_text ?? "",
   });
 
   // Sync when draft/published loads
@@ -150,6 +156,9 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
       custom_font_url: src.custom_font_url ?? "",
       custom_font_name_2: src.custom_font_name_2 ?? "",
       custom_font_url_2: src.custom_font_url_2 ?? "",
+      disclaimer_enabled: src.disclaimer_enabled ?? false,
+      disclaimer_mode: src.disclaimer_mode ?? "footer",
+      disclaimer_text: src.disclaimer_text ?? "",
     });
   }, [draft, published]);
 
@@ -462,6 +471,71 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
         )}
       </div>
 
+      </div>
+
+      {/* Message de prévention */}
+      <div>
+        <div className="flex items-center justify-between mb-3">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Message de prévention</h3>
+          <Switch
+            checked={form.disclaimer_enabled}
+            onCheckedChange={(checked) => setForm((f) => ({ ...f, disclaimer_enabled: checked }))}
+            aria-label="Activer le message de prévention"
+          />
+        </div>
+        <p className="text-xs text-muted-foreground mb-3">
+          Informez vos clients que les photos virtuelles peuvent légèrement différer du plat servi (saisons, approvisionnement).
+        </p>
+
+        {form.disclaimer_enabled && (
+          <>
+            <div className="grid gap-2 sm:grid-cols-3">
+              {[
+                { value: "footer", title: "Pied de menu", desc: "En bas de la carte" },
+                { value: "popup", title: "Pop-up au début", desc: "Une fois par jour" },
+                { value: "both", title: "Les deux", desc: "Pied + pop-up" },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  type="button"
+                  onClick={() => setForm((f) => ({ ...f, disclaimer_mode: opt.value as typeof f.disclaimer_mode }))}
+                  className={`text-left rounded-lg border p-3 transition ${
+                    form.disclaimer_mode === opt.value
+                      ? "border-primary bg-primary/5"
+                      : "border-border hover:border-primary/40"
+                  }`}
+                >
+                  <div className="text-sm font-medium">{opt.title}</div>
+                  <div className="text-xs text-muted-foreground mt-1">{opt.desc}</div>
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-4 space-y-1">
+              <Label className="text-xs">Texte du message</Label>
+              <Textarea
+                value={form.disclaimer_text}
+                onChange={(e) => setForm((f) => ({ ...f, disclaimer_text: e.target.value }))}
+                placeholder={DEFAULT_DISCLAIMER_TEXT}
+                rows={3}
+              />
+              <p className="text-xs text-muted-foreground">
+                Laissez vide pour utiliser le message par défaut.
+              </p>
+            </div>
+
+            <div className="mt-3 rounded-lg border border-border p-4 bg-muted/20">
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-widest text-muted-foreground mb-2">
+                <Info className="w-3.5 h-3.5" />
+                Aperçu
+              </div>
+              <div className="flex items-start gap-2 text-xs leading-relaxed text-muted-foreground">
+                <Info className="mt-0.5 h-3 w-3 shrink-0 opacity-60" />
+                <p>{form.disclaimer_text.trim() || DEFAULT_DISCLAIMER_TEXT}</p>
+              </div>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Formules tarifaires */}

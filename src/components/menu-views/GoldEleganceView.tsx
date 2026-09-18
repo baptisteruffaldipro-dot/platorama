@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import DishBadges from "@/components/DishBadges";
 import DishDetailsActions from "@/components/DishDetailsActions";
 import ExpandableDescription from "@/components/ExpandableDescription";
+import { DisclaimerFooter } from "@/components/MenuDisclaimer";
 import GoldEleganceDishSheet from "@/components/menu-views/GoldEleganceDishSheet";
 
 interface Props {
@@ -15,6 +16,7 @@ interface Props {
   onLaunchAR: (dish: Dish) => void;
   isFavorite: (id: string) => boolean;
   onToggleFavorite: (id: string) => void;
+  disclaimer?: string;
 }
 
 export default function GoldEleganceView({
@@ -22,6 +24,7 @@ export default function GoldEleganceView({
   onLaunchAR,
   isFavorite,
   onToggleFavorite,
+  disclaimer,
 }: Props) {
   const { t } = useTranslation();
   const [category, setCategory] = useState("all");
@@ -190,6 +193,8 @@ export default function GoldEleganceView({
         <span className="h-1.5 w-1.5 rounded-full bg-accent" />
         <span className="h-px w-12 bg-accent/40" />
       </footer>
+
+      {disclaimer && <DisclaimerFooter text={disclaimer} className="!pb-4 !pt-0" />}
 
       {openIndex !== null && visibleDishes[openIndex] && (
         <GoldEleganceDishSheet

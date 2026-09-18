@@ -874,6 +874,9 @@ export type Database = {
           custom_font_name_2: string
           custom_font_url: string
           custom_font_url_2: string
+          disclaimer_enabled: boolean
+          disclaimer_mode: string
+          disclaimer_text: string
           formulas: Json
           heading_font: string
           id: string
@@ -898,6 +901,9 @@ export type Database = {
           custom_font_name_2?: string
           custom_font_url?: string
           custom_font_url_2?: string
+          disclaimer_enabled?: boolean
+          disclaimer_mode?: string
+          disclaimer_text?: string
           formulas?: Json
           heading_font?: string
           id?: string
@@ -922,6 +928,9 @@ export type Database = {
           custom_font_name_2?: string
           custom_font_url?: string
           custom_font_url_2?: string
+          disclaimer_enabled?: boolean
+          disclaimer_mode?: string
+          disclaimer_text?: string
           formulas?: Json
           heading_font?: string
           id?: string

@@ -9,12 +9,14 @@ import DishViewer from "@/components/DishViewer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import DishDetailsActions from "@/components/DishDetailsActions";
 import DishBadges from "@/components/DishBadges";
+import { DisclaimerFooter } from "@/components/MenuDisclaimer";
 
 interface Props {
   dishes: Dish[];
   onLaunchAR: (dish: Dish) => void;
   isFavorite: (id: string) => boolean;
   onToggleFavorite: (id: string) => void;
+  disclaimer?: string;
 }
 
 /**
@@ -26,6 +28,7 @@ export default function OrganicStoriesView({
   onLaunchAR,
   isFavorite,
   onToggleFavorite,
+  disclaimer,
 }: Props) {
   const { t } = useTranslation();
   const containerRef = useRef<HTMLDivElement>(null);
@@ -180,6 +183,7 @@ export default function OrganicStoriesView({
           </section>
         ))}
       </div>
+      {disclaimer && <DisclaimerFooter text={disclaimer} className="!pb-3 !pt-0" />}
     </div>
   );
 }

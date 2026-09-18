@@ -9,12 +9,14 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import DishDetailsActions from "@/components/DishDetailsActions";
 import DishBadges from "@/components/DishBadges";
+import { DisclaimerFooter } from "@/components/MenuDisclaimer";
 
 interface Props {
   dishes: Dish[];
   onLaunchAR: (dish: Dish) => void;
   isFavorite: (id: string) => boolean;
   onToggleFavorite: (id: string) => void;
+  disclaimer?: string;
 }
 
 // Palette pastel par catégorie (3 couleurs douces)
@@ -51,6 +53,7 @@ export default function WalletStackView({
   onLaunchAR,
   isFavorite,
   onToggleFavorite,
+  disclaimer,
 }: Props) {
   const { t } = useTranslation();
   // Première carte ouverte par défaut
@@ -275,6 +278,7 @@ export default function WalletStackView({
           />
         </div>
       </div>
+      {disclaimer && <DisclaimerFooter text={disclaimer} className="!pb-3 !pt-0" />}
     </div>
   );
 }

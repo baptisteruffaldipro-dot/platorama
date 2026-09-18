@@ -35,6 +35,7 @@ import LoyaltyCard from "@/components/LoyaltyCard";
 import PromoPopup from "@/components/PromoPopup";
 import DailyMenuBanner from "@/components/DailyMenuBanner";
 import SmartMenuAssistant from "@/components/SmartMenuAssistant";
+import { DisclaimerPopup, DisclaimerFooter, DEFAULT_DISCLAIMER_TEXT } from "@/components/MenuDisclaimer";
 import {
   filterDishes,
   loadPreferences,
@@ -83,6 +84,11 @@ const Index = () => {
   const dishes = filteredDishes?.length ? filteredDishes : decoratedDishes;
   const { data: siteSettings } = usePublishedSettings(restaurantId);
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
+  const disclaimerEnabled = siteSettings?.disclaimer_enabled ?? false;
+  const disclaimerMode = siteSettings?.disclaimer_mode ?? "footer";
+  const disclaimerText = siteSettings?.disclaimer_text?.trim() || DEFAULT_DISCLAIMER_TEXT;
+  const showDisclaimerFooter = disclaimerEnabled && (disclaimerMode === "footer" || disclaimerMode === "both");
+  const showDisclaimerPopup = disclaimerEnabled && (disclaimerMode === "popup" || disclaimerMode === "both");
   const { isFavorite, toggle } = useFavorites();
   const features = useSubscriptionFeatures(restaurantId);
   const { data: restoFeatures } = useRestaurantFeatures(restaurantId);
@@ -111,9 +117,10 @@ const Index = () => {
       "Dessert",
       "N'hésitez pas à informer votre serveur de toute allergie ou intolérance alimentaire."
     );
+    if (disclaimerEnabled) allTexts.push(disclaimerText, "J'ai compris");
     const unique = [...new Set(allTexts.filter(Boolean))];
     translateBatch(unique);
-  }, [lang, dishes, translateBatch]);
+  }, [lang, dishes, translateBatch, disclaimerEnabled, disclaimerText]);
 
   const safeIndex = Math.min(activeIndex, (dishes?.length ?? 1) - 1);
   const currentDish = dishes?.[safeIndex];
@@ -255,6 +262,9 @@ const Index = () => {
       )}
       {restaurantId && restoFeatures?.popups_enabled && !showSplash && (
         <PromoPopup restaurantId={restaurantId} lang={lang} />
+      )}
+      {restaurantId && showDisclaimerPopup && !showSplash && (
+        <DisclaimerPopup restaurantId={restaurantId} text={disclaimerText} />
       )}
 
       {/* Header ancré en haut */}
@@ -428,6 +438,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
           {layout === "vintage" && (
@@ -436,6 +447,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
           {layout === "pop" && (
@@ -444,6 +456,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
           {layout === "organic" && (
@@ -452,6 +465,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
           {layout === "wallet" && (
@@ -460,6 +474,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
           {layout === "gold" && (
@@ -468,6 +483,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
 
@@ -505,8 +521,16 @@ const Index = () => {
                 restaurantId={restaurantId}
               />
             )}
+
+            {showDisclaimerFooter && <DisclaimerFooter text={disclaimerText} className="!px-4 !pb-2 !pt-1" />}
           </div>
         </>
+      )}
+
+      {(isAmr || isSignature) && showDisclaimerFooter && (
+        <div className="shrink-0 relative z-10">
+          <DisclaimerFooter text={disclaimerText} className="!px-4 !pb-2 !pt-0" />
+        </div>
       )}
     </div>
   );

@@ -7,6 +7,7 @@ import { hasARModel } from "@/lib/dishHasAR";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import DishDetailsActions from "@/components/DishDetailsActions";
 import DishBadges from "@/components/DishBadges";
+import { DisclaimerFooter } from "@/components/MenuDisclaimer";
 
 interface Props {
   dishes: Dish[];
@@ -14,13 +15,14 @@ interface Props {
   onLaunchAR: (dish: Dish) => void;
   isFavorite: (id: string) => boolean;
   onToggleFavorite: (id: string) => void;
+  disclaimer?: string;
 }
 
 /**
  * Vue scroll-vertical : remplace le carrousel pour les templates
  * editorial, vintage, pop et organic. Chaque ligne expose un bouton AR direct.
  */
-export default function MenuListView({ dishes, layout, onLaunchAR, isFavorite, onToggleFavorite }: Props) {
+export default function MenuListView({ dishes, layout, onLaunchAR, isFavorite, onToggleFavorite, disclaimer }: Props) {
   const { t } = useTranslation();
 
   // Group by category, preserve sort_order
@@ -44,6 +46,7 @@ export default function MenuListView({ dishes, layout, onLaunchAR, isFavorite, o
       {layout === "organic" && (
         <OrganicFeed grouped={grouped} categories={categories} t={t} onLaunchAR={onLaunchAR} isFavorite={isFavorite} onToggleFavorite={onToggleFavorite} />
       )}
+      {disclaimer && <DisclaimerFooter text={disclaimer} className="!pb-28 !pt-0" />}
     </div>
   );
 }

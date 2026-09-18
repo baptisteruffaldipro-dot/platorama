@@ -8,6 +8,7 @@ export interface FormulaItem {
 }
 
 export type SplashStyle = "logo_text" | "text" | "logo";
+export type DisclaimerMode = "footer" | "popup" | "both";
 
 export interface SiteSettings {
   id?: string;
@@ -30,6 +31,9 @@ export interface SiteSettings {
   custom_font_url: string;
   custom_font_name_2: string;
   custom_font_url_2: string;
+  disclaimer_enabled: boolean;
+  disclaimer_mode: DisclaimerMode;
+  disclaimer_text: string;
 }
 
 export const DEFAULT_SETTINGS: SiteSettings = {
@@ -51,6 +55,9 @@ export const DEFAULT_SETTINGS: SiteSettings = {
   custom_font_url: "",
   custom_font_name_2: "",
   custom_font_url_2: "",
+  disclaimer_enabled: false,
+  disclaimer_mode: "footer",
+  disclaimer_text: "",
 };
 
 export const FONT_OPTIONS = [
@@ -79,6 +86,9 @@ function parseRow(row: any): SiteSettings {
     custom_font_url: row.custom_font_url || "",
     custom_font_name_2: row.custom_font_name_2 || "",
     custom_font_url_2: row.custom_font_url_2 || "",
+    disclaimer_enabled: row.disclaimer_enabled ?? false,
+    disclaimer_mode: (row.disclaimer_mode || "footer") as DisclaimerMode,
+    disclaimer_text: row.disclaimer_text || "",
   } as SiteSettings;
 }
 
