@@ -17,13 +17,6 @@ import SplashScreen from "@/components/SplashScreen";
 import LanguageSelector from "@/components/LanguageSelector";
 import ARButton from "@/components/ARButton";
 import MenuListView from "@/components/MenuListView";
-import CameraBackground from "@/components/CameraBackground";
-import PopSwipeView from "@/components/menu-views/PopSwipeView";
-import OrganicStoriesView from "@/components/menu-views/OrganicStoriesView";
-import VintageBookView from "@/components/menu-views/VintageBookView";
-import WalletStackView from "@/components/menu-views/WalletStackView";
-import SignatureView from "@/components/menu-views/SignatureView";
-import AmrCardView from "@/components/menu-views/AmrCardView";
 import GoldEleganceView from "@/components/menu-views/GoldEleganceView";
 import type { Dish } from "@/hooks/useDishes";
 import { getLayoutVariant } from "@/lib/menuTemplates";
@@ -243,18 +236,10 @@ const Index = () => {
   };
 
   const layout = getLayoutVariant(siteSettings?.template_id);
-  const useListView = layout !== "classic" && layout !== "vision" && layout !== "signature" && layout !== "amr";
-  const isVision = layout === "vision";
-  const isSignature = layout === "signature";
-  const isAmr = layout === "amr";
+  const useListView = layout !== "classic";
 
   return (
-    <div className={`h-full flex flex-col relative overflow-hidden ${isVision ? "bg-black" : "bg-background"}`}>
-      {isVision && (
-        <>
-          <CameraBackground />
-        </>
-      )}
+    <div className="h-full flex flex-col relative overflow-hidden bg-background">
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
       <OpenInBrowserDialog open={showBrowserHint} onOpenChange={setShowBrowserHint} />
       {restaurantId && restoFeatures && (
@@ -269,15 +254,11 @@ const Index = () => {
 
       {/* Header ancré en haut */}
       <header
-        className={`shrink-0 relative z-40 border-b ${
-          isVision
-            ? "border-white/10 bg-black/40"
-            : "border-border/60 bg-background/75"
-        } backdrop-blur-xl`}
+        className="shrink-0 relative z-40 border-b border-border/60 bg-background/75 backdrop-blur-xl"
       >
         <div className="px-4 pt-3 pb-1 relative flex items-start justify-between gap-2">
           {/* Icônes contextuelles (gauche) */}
-          <div className={`flex items-center gap-2 shrink-0 pt-1 ${isAmr ? "hidden" : ""}`}>
+          <div className="flex items-center gap-2 shrink-0 pt-1">
 
               {formulas.length > 0 && (
                 <Dialog>
@@ -323,7 +304,7 @@ const Index = () => {
               />
             ) : siteSettings?.restaurant_name ? (
               <span
-                className={`text-2xl tracking-wide uppercase text-center ${isVision ? "text-white/90" : "text-foreground"}`}
+                className="text-2xl tracking-wide uppercase text-center text-foreground"
                 style={{ fontFamily: "var(--font-serif)" }}
               >
                 {siteSettings.restaurant_name}
@@ -333,7 +314,7 @@ const Index = () => {
 
           {/* Icônes contextuelles (droite) + langue */}
           <div className="flex items-center gap-2 shrink-0 pt-1">
-            <div className={`flex items-center gap-2 ${isAmr ? "hidden" : ""}`}>
+            <div className="flex items-center gap-2">
               {/* Storytelling */}
               {dish?.story_text && (
                 <Dialog>
