@@ -117,9 +117,10 @@ const Index = () => {
       "Dessert",
       "N'hésitez pas à informer votre serveur de toute allergie ou intolérance alimentaire."
     );
+    if (disclaimerEnabled) allTexts.push(disclaimerText, "J'ai compris");
     const unique = [...new Set(allTexts.filter(Boolean))];
     translateBatch(unique);
-  }, [lang, dishes, translateBatch]);
+  }, [lang, dishes, translateBatch, disclaimerEnabled, disclaimerText]);
 
   const safeIndex = Math.min(activeIndex, (dishes?.length ?? 1) - 1);
   const currentDish = dishes?.[safeIndex];
@@ -261,6 +262,9 @@ const Index = () => {
       )}
       {restaurantId && restoFeatures?.popups_enabled && !showSplash && (
         <PromoPopup restaurantId={restaurantId} lang={lang} />
+      )}
+      {restaurantId && showDisclaimerPopup && !showSplash && (
+        <DisclaimerPopup restaurantId={restaurantId} text={disclaimerText} />
       )}
 
       {/* Header ancré en haut */}
