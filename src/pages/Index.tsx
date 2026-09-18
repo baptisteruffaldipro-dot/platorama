@@ -438,6 +438,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
           {layout === "vintage" && (
@@ -446,6 +447,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
           {layout === "pop" && (
@@ -454,6 +456,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
           {layout === "organic" && (
@@ -462,6 +465,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
           {layout === "wallet" && (
@@ -470,6 +474,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
           {layout === "gold" && (
@@ -478,6 +483,7 @@ const Index = () => {
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
+              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
             />
           )}
 
