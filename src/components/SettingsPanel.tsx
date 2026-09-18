@@ -568,6 +568,55 @@ export default function SettingsPanel({ restaurantId }: { restaurantId?: string 
       {/* ═══════════ INFORMATIONS ═══════════ */}
       {activeTab === "infos" && (
         <div className="space-y-6">
+          {/* Informations restaurant */}
+          <div>
+            <h3 className="text-sm font-semibold mb-3 uppercase tracking-wider text-muted-foreground">Informations restaurant</h3>
+            <p className="text-xs text-muted-foreground mb-3">
+              Coordonnées de votre établissement (adresse, téléphone, email, site web).
+            </p>
+            <div className="space-y-3">
+              <div className="space-y-1">
+                <Label className="text-xs flex items-center gap-1.5"><MapPin className="w-3.5 h-3.5" /> Adresse</Label>
+                <Input
+                  value={infoForm.address}
+                  onChange={(e) => setInfoForm((f) => ({ ...f, address: e.target.value }))}
+                  placeholder="12 rue des Lilas, 75011 Paris"
+                />
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="space-y-1">
+                  <Label className="text-xs flex items-center gap-1.5"><Phone className="w-3.5 h-3.5" /> Téléphone</Label>
+                  <Input
+                    value={infoForm.phone}
+                    onChange={(e) => setInfoForm((f) => ({ ...f, phone: e.target.value }))}
+                    placeholder="01 23 45 67 89"
+                  />
+                </div>
+                <div className="space-y-1">
+                  <Label className="text-xs flex items-center gap-1.5"><Mail className="w-3.5 h-3.5" /> Email</Label>
+                  <Input
+                    type="email"
+                    value={infoForm.contact_email}
+                    onChange={(e) => setInfoForm((f) => ({ ...f, contact_email: e.target.value }))}
+                    placeholder="contact@votre-restaurant.fr"
+                  />
+                </div>
+              </div>
+              <div className="space-y-1">
+                <Label className="text-xs flex items-center gap-1.5"><Globe className="w-3.5 h-3.5" /> Site web</Label>
+                <Input
+                  value={infoForm.website}
+                  onChange={(e) => setInfoForm((f) => ({ ...f, website: e.target.value }))}
+                  placeholder="https://www.votre-restaurant.fr"
+                />
+              </div>
+              <Button size="sm" onClick={handleSaveRestaurantInfo} disabled={savingInfo || !restaurantId}>
+                <Save className="w-4 h-4 mr-1" />
+                {savingInfo ? "Enregistrement..." : "Enregistrer les informations"}
+              </Button>
+            </div>
+          </div>
+
           {/* Message de prévention */}
           <div>
             <div className="flex items-center justify-between mb-3">
