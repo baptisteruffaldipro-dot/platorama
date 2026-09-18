@@ -194,6 +194,8 @@ export default function GoldEleganceView({
         <span className="h-px w-12 bg-accent/40" />
       </footer>
 
+      {disclaimer && <DisclaimerFooter text={disclaimer} className="!pb-4 !pt-0" />}
+
       {openIndex !== null && visibleDishes[openIndex] && (
         <GoldEleganceDishSheet
           dishes={visibleDishes}
