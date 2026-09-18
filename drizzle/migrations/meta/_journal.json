@@ -29,6 +29,13 @@
       "when": 1789636451188,
       "tag": "0003_add_public_most_loved_dishes_function",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1789715882309,
+      "tag": "0004_disclaimer_settings",
+      "breakpoints": true
     }
   ]
 }
