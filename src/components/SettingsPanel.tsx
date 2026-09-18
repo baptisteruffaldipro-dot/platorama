@@ -95,6 +95,58 @@ const TABS: { id: SettingsTab; label: string; icon: typeof Palette }[] = [
 export default function SettingsPanel({ restaurantId }: { restaurantId?: string | null }) {
   const [activeTab, setActiveTab] = useState<SettingsTab>("design");
 
+  // Fetch restaurant contact info
+  const { data: restaurantInfo } = useQuery({
+    queryKey: ["restaurant-info", restaurantId],
+    queryFn: async () => {
+      if (!restaurantId) return null;
+      const { data } = await supabase
+        .from("restaurants")
+        .select("address, phone, contact_email, website")
+        .eq("id", restaurantId)
+        .single();
+      return data;
+    },
+    enabled: !!restaurantId,
+  });
+  const [infoForm, setInfoForm] = useState({
+    address: "",
+    phone: "",
+    contact_email: "",
+    website: "",
+  });
+  const [savingInfo, setSavingInfo] = useState(false);
+
+  useEffect(() => {
+    setInfoForm({
+      address: restaurantInfo?.address ?? "",
+      phone: restaurantInfo?.phone ?? "",
+      contact_email: restaurantInfo?.contact_email ?? "",
+      website: restaurantInfo?.website ?? "",
+    });
+  }, [restaurantInfo]);
+
+  const handleSaveRestaurantInfo = async () => {
+    if (!restaurantId) return;
+    setSavingInfo(true);
+    const { error } = await supabase
+      .from("restaurants")
+      .update({
+        address: infoForm.address.trim() || null,
+        phone: infoForm.phone.trim() || null,
+        contact_email: infoForm.contact_email.trim() || null,
+        website: infoForm.website.trim() || null,
+      })
+      .eq("id", restaurantId);
+    setSavingInfo(false);
+    if (error) {
+      toast.error("Erreur lors de l'enregistrement");
+      return;
+    }
+    toast.success("Informations restaurant enregistrées");
+  };
+
+
   // Fetch active subscription for this restaurant
   const { data: subscriptionInfo } = useQuery({
     queryKey: ["restaurant-subscription", restaurantId],
