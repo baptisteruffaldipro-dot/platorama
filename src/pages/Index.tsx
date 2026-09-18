@@ -35,6 +35,7 @@ import LoyaltyCard from "@/components/LoyaltyCard";
 import PromoPopup from "@/components/PromoPopup";
 import DailyMenuBanner from "@/components/DailyMenuBanner";
 import SmartMenuAssistant from "@/components/SmartMenuAssistant";
+import { DisclaimerPopup, DisclaimerFooter, DEFAULT_DISCLAIMER_TEXT } from "@/components/MenuDisclaimer";
 import {
   filterDishes,
   loadPreferences,
@@ -83,6 +84,11 @@ const Index = () => {
   const dishes = filteredDishes?.length ? filteredDishes : decoratedDishes;
   const { data: siteSettings } = usePublishedSettings(restaurantId);
   const formulas = siteSettings?.formulas?.filter(f => f.label && f.price) ?? [];
+  const disclaimerEnabled = siteSettings?.disclaimer_enabled ?? false;
+  const disclaimerMode = siteSettings?.disclaimer_mode ?? "footer";
+  const disclaimerText = siteSettings?.disclaimer_text?.trim() || DEFAULT_DISCLAIMER_TEXT;
+  const showDisclaimerFooter = disclaimerEnabled && (disclaimerMode === "footer" || disclaimerMode === "both");
+  const showDisclaimerPopup = disclaimerEnabled && (disclaimerMode === "popup" || disclaimerMode === "both");
   const { isFavorite, toggle } = useFavorites();
   const features = useSubscriptionFeatures(restaurantId);
   const { data: restoFeatures } = useRestaurantFeatures(restaurantId);
