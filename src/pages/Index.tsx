@@ -386,72 +386,12 @@ const Index = () => {
         )}
       </header>
 
-      {isAmr ? (
+      {useListView ? (
         <div className="flex-1 min-h-0">
-          <AmrCardView
-            dishes={dishes}
-            activeIndex={safeIndex}
-            onSelect={setActiveIndex}
-            onLaunchAR={(d) => handleLaunchAR(d)}
-            isFavorite={isFavorite}
-            onToggleFavorite={toggle}
-            restaurantId={restaurantId!}
-          />
-        </div>
-      ) : isSignature ? (
-        <div className="flex-1 min-h-0">
-          <SignatureView
-            dishes={dishes}
-            activeIndex={safeIndex}
-            onSelect={setActiveIndex}
-            onLaunchAR={(d) => handleLaunchAR(d)}
-            isFavorite={isFavorite}
-            onToggleFavorite={toggle}
-            restaurantId={restaurantId!}
-          />
-        </div>
-      ) : useListView ? (
-        <div className="flex-1 min-h-0">
-          {layout === "editorial" && (
+          {(layout === "editorial" || layout === "pop") && (
             <MenuListView
               dishes={dishes}
               layout={layout}
-              onLaunchAR={(d) => handleLaunchAR(d)}
-              isFavorite={isFavorite}
-              onToggleFavorite={toggle}
-              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
-            />
-          )}
-          {layout === "vintage" && (
-            <VintageBookView
-              dishes={dishes}
-              onLaunchAR={(d) => handleLaunchAR(d)}
-              isFavorite={isFavorite}
-              onToggleFavorite={toggle}
-              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
-            />
-          )}
-          {layout === "pop" && (
-            <PopSwipeView
-              dishes={dishes}
-              onLaunchAR={(d) => handleLaunchAR(d)}
-              isFavorite={isFavorite}
-              onToggleFavorite={toggle}
-              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
-            />
-          )}
-          {layout === "organic" && (
-            <OrganicStoriesView
-              dishes={dishes}
-              onLaunchAR={(d) => handleLaunchAR(d)}
-              isFavorite={isFavorite}
-              onToggleFavorite={toggle}
-              disclaimer={showDisclaimerFooter ? disclaimerText : undefined}
-            />
-          )}
-          {layout === "wallet" && (
-            <WalletStackView
-              dishes={dishes}
               onLaunchAR={(d) => handleLaunchAR(d)}
               isFavorite={isFavorite}
               onToggleFavorite={toggle}
@@ -506,12 +446,6 @@ const Index = () => {
             {showDisclaimerFooter && <DisclaimerFooter text={disclaimerText} className="!px-4 !pb-2 !pt-1" />}
           </div>
         </>
-      )}
-
-      {(isAmr || isSignature) && showDisclaimerFooter && (
-        <div className="shrink-0 relative z-10">
-          <DisclaimerFooter text={disclaimerText} className="!px-4 !pb-2 !pt-0" />
-        </div>
       )}
     </div>
   );
