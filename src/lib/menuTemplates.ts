@@ -68,7 +68,7 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
   },
   {
     id: "modern-pop",
-    name: "Modern Pop",
+    name: "Slide (AR)",
     description: "Coloré et joyeux — street food, brunch, café",
     layout: "pop",
     preview: {
