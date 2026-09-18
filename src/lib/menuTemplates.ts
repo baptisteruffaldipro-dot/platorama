@@ -28,7 +28,7 @@ export interface MenuTemplate {
 export const MENU_TEMPLATES: MenuTemplate[] = [
   {
     id: "dark-luxe",
-    name: "Dark Luxe",
+    name: "Moderne (AR)",
     description: "Élégant et raffiné — gastronomie haut de gamme",
     layout: "classic",
     preview: {
@@ -48,7 +48,7 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
   },
   {
     id: "light-minimal",
-    name: "Light Minimal",
+    name: "Classique (AR)",
     description: "Menu réalité augmentée — épuré et lumineux",
     layout: "editorial",
     preview: {
@@ -88,7 +88,7 @@ export const MENU_TEMPLATES: MenuTemplate[] = [
   },
   {
     id: "gold-elegance",
-    name: "Gold Elegance",
+    name: "Carrousel (Photo + AR)",
     description: "Menu photo + réalité augmentée si disponible",
     layout: "gold",
     preview: {
