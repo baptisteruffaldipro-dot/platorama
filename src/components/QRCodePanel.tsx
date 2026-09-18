@@ -37,6 +37,25 @@ const QRCodePanel = ({ restaurantId, restaurantName, slug: slugProp }: QRCodePan
   }, [restaurantId, slugProp]);
 
   const menuUrl = slug ? buildMenuUrl(slug) : "";
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = async () => {
+    if (!menuUrl) return;
+    try {
+      await navigator.clipboard.writeText(menuUrl);
+    } catch {
+      // Fallback pour les navigateurs sans API clipboard
+      const ta = document.createElement("textarea");
+      ta.value = menuUrl;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      ta.remove();
+    }
+    setCopied(true);
+    toast.success("Lien du menu copié");
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleDownload = () => {
     const svg = svgRef.current?.querySelector("svg");
@@ -91,10 +110,16 @@ const QRCodePanel = ({ restaurantId, restaurantName, slug: slugProp }: QRCodePan
             Scannez ce QR code pour accéder directement au menu en réalité augmentée.
           </p>
           <p className="text-xs text-muted-foreground/60 break-all">{menuUrl}</p>
-          <Button variant="outline" size="sm" onClick={handleDownload}>
-            <Download className="w-4 h-4 mr-1" />
-            Télécharger le QR code
-          </Button>
+          <div className="flex flex-wrap gap-2 justify-center sm:justify-start">
+            <Button variant="outline" size="sm" onClick={handleDownload}>
+              <Download className="w-4 h-4 mr-1" />
+              Télécharger le QR code
+            </Button>
+            <Button variant="outline" size="sm" onClick={handleCopy} disabled={!menuUrl}>
+              {copied ? <Check className="w-4 h-4 mr-1" /> : <Copy className="w-4 h-4 mr-1" />}
+              {copied ? "Copié !" : "Copier le lien"}
+            </Button>
+          </div>
         </div>
       </div>
     </div>
