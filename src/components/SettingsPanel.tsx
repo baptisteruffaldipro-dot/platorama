@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Upload, Save, Send, Eye, CreditCard, Plus, Trash2, Info, Palette, FileText, Share2, Mail } from "lucide-react";
+import { Upload, Save, Send, Eye, CreditCard, Plus, Trash2, Info, Palette, FileText, Share2, Mail, MapPin, Phone, Globe } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import QRCodePanel from "@/components/QRCodePanel";
 import TemplateGallery from "@/components/TemplateGallery";
