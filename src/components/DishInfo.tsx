@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Clock, Leaf, ChevronDown, ChevronUp } from "lucide-react";
+import { Star, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import DishDetailsActions from "@/components/DishDetailsActions";
