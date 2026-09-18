@@ -51,8 +51,10 @@ export function DisclaimerPopup({ restaurantId, text }: { restaurantId: string; 
     let unsubscribe: (() => void) | undefined;
 
     const attempt = () => {
+      console.log("[disclaimer-debug] attempt", { cancelled, openRef: openRef.current });
       if (cancelled || openRef.current) return true;
       if (!tryOpenOverlay({ id: OVERLAY_ID, close: hide })) return false;
+      console.log("[disclaimer-debug] overlay acquired");
       openRef.current = true;
       setOpen(true);
       localStorage.setItem(seenKey(restaurantId), today());
