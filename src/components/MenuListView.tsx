@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Rotate3d, Clock, Leaf, Star } from "lucide-react";
+import { Rotate3d, Clock, Star } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { Dish } from "@/hooks/useDishes";
 import type { LayoutVariant } from "@/lib/menuTemplates";
@@ -20,7 +20,7 @@ interface Props {
 
 /**
  * Vue scroll-vertical : remplace le carrousel pour les templates
- * editorial, vintage, pop et organic. Chaque ligne expose un bouton AR direct.
+ * editorial et pop. Chaque ligne expose un bouton AR direct.
  */
 export default function MenuListView({ dishes, layout, onLaunchAR, isFavorite, onToggleFavorite, disclaimer }: Props) {
   const { t } = useTranslation();
@@ -37,14 +37,8 @@ export default function MenuListView({ dishes, layout, onLaunchAR, isFavorite, o
       {layout === "editorial" && (
         <EditorialList grouped={grouped} categories={categories} t={t} onLaunchAR={onLaunchAR} isFavorite={isFavorite} onToggleFavorite={onToggleFavorite} />
       )}
-      {layout === "vintage" && (
-        <VintageList grouped={grouped} categories={categories} t={t} onLaunchAR={onLaunchAR} isFavorite={isFavorite} onToggleFavorite={onToggleFavorite} />
-      )}
       {layout === "pop" && (
         <PopGrid grouped={grouped} categories={categories} t={t} onLaunchAR={onLaunchAR} isFavorite={isFavorite} onToggleFavorite={onToggleFavorite} />
-      )}
-      {layout === "organic" && (
-        <OrganicFeed grouped={grouped} categories={categories} t={t} onLaunchAR={onLaunchAR} isFavorite={isFavorite} onToggleFavorite={onToggleFavorite} />
       )}
       {disclaimer && <DisclaimerFooter text={disclaimer} className="!pb-28 !pt-0" />}
     </div>
@@ -140,83 +134,6 @@ function EditorialList({ grouped, categories, t, onLaunchAR, isFavorite, onToggl
   );
 }
 
-/* ─────────────────── VINTAGE — carte papier ornée ─────────────────── */
-function VintageList({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavorite }: SubProps) {
-  return (
-    <div className="max-w-md mx-auto space-y-10">
-      {categories.map((cat) => (
-        <section key={cat}>
-          <div className="flex items-center gap-3 mb-5 text-accent/70">
-            <span className="flex-1 h-px bg-current" />
-            <span className="text-xs tracking-[0.4em] uppercase" style={{ fontFamily: "var(--font-serif)" }}>
-              {t(cat)}
-            </span>
-            <span className="flex-1 h-px bg-current" />
-          </div>
-          <ul className="space-y-6">
-            {grouped[cat].map((d, i) => (
-              <motion.li
-                key={d.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="text-center"
-              >
-                <div className="flex items-center justify-center gap-2 mb-1">
-                  <h3
-                    className="text-xl text-foreground"
-                    style={{ fontFamily: "var(--font-serif)", fontStyle: "italic" }}
-                  >
-                    {t(d.name)}
-                  </h3>
-                  <button onClick={() => onToggleFavorite(d.id)} aria-label="favori">
-                    <Star className={`w-3.5 h-3.5 ${isFavorite(d.id) ? "fill-accent text-accent" : "text-muted-foreground"}`} />
-                  </button>
-                </div>
-                <p
-                  className="text-xs text-foreground/70 leading-relaxed max-w-[300px] mx-auto mb-2 italic"
-                  style={{ fontFamily: "var(--font-body)" }}
-                >
-                  {t(d.ingredients)}
-                </p>
-                <div className="inline-flex items-center gap-3 px-3 py-1 border border-accent/40 rounded-sm mb-2">
-                  <span className="text-sm font-bold text-accent tabular-nums" style={{ fontFamily: "var(--font-serif)" }}>
-                    {d.price.toFixed(2)} €
-                  </span>
-                  <DishBadges dish={d} compact />
-                  <DishDetailsActions dish={d} />
-                </div>
-                {hasARModel(d) && (
-                  <div className="mt-1">
-                    <motion.button
-                      onClick={() => onLaunchAR(d)}
-                      animate={{ scale: [1, 1.04, 1] }}
-                      transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-                      whileTap={{ scale: 0.96 }}
-                      className="inline-flex items-center gap-2 text-[11px] uppercase tracking-[0.25em] px-5 py-2.5 rounded-full font-bold shadow-lg shadow-accent/30"
-                      style={{
-                        fontFamily: "var(--font-serif)",
-                        background: "hsl(var(--accent))",
-                        color: "hsl(var(--accent-foreground))",
-                      }}
-                    >
-                      <Rotate3d className="w-3.5 h-3.5" />
-                      Voir le plat
-                    </motion.button>
-                  </div>
-                )}
-                {i < grouped[cat].length - 1 && (
-                  <div className="mt-6 text-accent/40 text-sm tracking-widest">✦ ✦ ✦</div>
-                )}
-              </motion.li>
-            ))}
-          </ul>
-        </section>
-      ))}
-    </div>
-  );
-}
-
 /* ─────────────────── POP — grille options numérotées ─────────────────── */
 function PopGrid({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavorite }: SubProps) {
   // Flatten with global numbering (OPTION 1, 2, 3, …)
@@ -294,82 +211,3 @@ function PopGrid({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavor
   );
 }
 
-/* ─────────────────── ORGANIC — feed grandes photos ─────────────────── */
-function OrganicFeed({ grouped, categories, t, onLaunchAR, isFavorite, onToggleFavorite }: SubProps) {
-  return (
-    <div className="max-w-md mx-auto space-y-8">
-      {categories.map((cat) => (
-        <section key={cat}>
-          <div className="flex items-center gap-2 mb-4">
-            <Leaf className="w-3.5 h-3.5 text-accent" />
-            <span className="text-[11px] tracking-[0.3em] uppercase text-accent" style={{ fontFamily: "var(--font-body)" }}>
-              {t(cat)}
-            </span>
-          </div>
-          <div className="space-y-6">
-            {grouped[cat].map((d, i) => (
-              <motion.article
-                key={d.id}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.06 }}
-                className="rounded-3xl overflow-hidden bg-card/40"
-              >
-                <div className="relative">
-                  <img
-                    src={d.thumbnail}
-                    alt={d.name}
-                    className="w-full aspect-[4/3] object-cover"
-                    loading="lazy"
-                  />
-                  {/* Floating price pill */}
-                  <span
-                    className="absolute top-3 right-3 px-3 py-1 rounded-full text-xs font-semibold tabular-nums backdrop-blur-md"
-                    style={{ background: "hsl(var(--accent) / 0.9)", color: "hsl(var(--accent-foreground))" }}
-                  >
-                    {d.price.toFixed(2)} €
-                  </span>
-                  {d.prep_time && (
-                    <span className="absolute top-3 left-3 px-2 py-0.5 rounded-full text-[10px] font-medium bg-background/80 backdrop-blur-md text-foreground flex items-center gap-1">
-                      <Clock className="w-2.5 h-2.5" /> {d.prep_time}min
-                    </span>
-                  )}
-                  {/* AR CTA on image — masqué si pas de modèle 3D */}
-                  {hasARModel(d) && (
-                    <button
-                      onClick={() => onLaunchAR(d)}
-                      className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 px-3 py-2 rounded-full bg-foreground text-background text-xs font-semibold shadow-xl active:scale-95"
-                    >
-                      <Rotate3d className="w-3.5 h-3.5" />
-                      Voir le plat
-                    </button>
-                  )}
-                </div>
-                <div className="px-4 py-3">
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <h3
-                      className="text-lg text-foreground"
-                      style={{ fontFamily: "var(--font-serif)" }}
-                    >
-                      {t(d.name)}
-                    </h3>
-                    <div className="flex items-center gap-2">
-                      <DishBadges dish={d} compact />
-                      <DishDetailsActions dish={d} />
-                      <button onClick={() => onToggleFavorite(d.id)} aria-label="favori">
-                        <Star className={`w-4 h-4 ${isFavorite(d.id) ? "fill-accent text-accent" : "text-muted-foreground"}`} />
-                      </button>
-                    </div>
-                  </div>
-                  <p className="text-xs italic text-foreground/70 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
-                    {t(d.ingredients)}
-                  </p>
-                </div>
-              </motion.article>
-            ))}
-          </div>
-        </section>
-      ))}
-    </div>
-  );
-}

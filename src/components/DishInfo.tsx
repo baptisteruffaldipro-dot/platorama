@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Star, Clock, Leaf, ChevronDown, ChevronUp } from "lucide-react";
+import { Star, Clock, ChevronDown, ChevronUp } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 import ExpandableDescription from "@/components/ExpandableDescription";
 import DishDetailsActions from "@/components/DishDetailsActions";
@@ -176,49 +176,6 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
     );
   }
 
-  /* ─── VINTAGE : carte avec ornements, prix encadré ─── */
-  if (layout === "vintage") {
-    return (
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={dish.id}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="flex flex-col items-center text-center px-6"
-        >
-          <DishBadges dish={dish} className="mb-1.5 justify-center" />
-          {/* Ornement */}
-          <div className="flex items-center gap-2 mb-1.5 text-accent/60">
-            <span className="block w-8 h-px bg-current" />
-            <span className="text-[10px] tracking-[0.3em] uppercase">{t(dish.category)}</span>
-            <span className="block w-8 h-px bg-current" />
-          </div>
-          <div className="flex items-center gap-2 mb-2">
-            <h1 className="text-2xl sm:text-3xl text-foreground" style={{ fontFamily: "var(--font-serif)", fontStyle: "italic" }}>
-              {t(dish.name)}
-            </h1>
-            <FavBtn active={isFavorite} onClick={onToggleFavorite} />
-          </div>
-          <ExpandableDescription lines={2} className="text-sm text-foreground/80 leading-relaxed max-w-[320px] mb-2" style={{ fontFamily: "var(--font-body)" }}>
-            {t(dish.ingredients)}
-          </ExpandableDescription>
-          <div className="inline-flex items-center gap-3 px-4 py-1 border-2 border-accent/40 rounded-sm">
-            <p className="text-xl font-bold text-accent tabular-nums" style={{ fontFamily: "var(--font-serif)" }}>
-              {dish.price.toFixed(2)} €
-            </p>
-            {dish.prep_time && (
-              <span className="flex items-center gap-1 text-[11px] text-muted-foreground border-l border-accent/20 pl-3">
-                <Clock className="w-3 h-3" /> ~{dish.prep_time}min
-              </span>
-            )}
-          </div>
-        </motion.div>
-      </AnimatePresence>
-    );
-  }
-
   /* ─── POP : gros prix coloré encadré, badges arrondis, énergique ─── */
   if (layout === "pop") {
     return (
@@ -261,50 +218,6 @@ const DishInfo = ({ dish, isFavorite, onToggleFavorite, layout = "classic" }: Di
               </p>
               <p className="text-[9px] font-bold opacity-80" style={{ color: "hsl(var(--accent-foreground))" }}>EUROS</p>
             </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
-    );
-  }
-
-  /* ─── ORGANIC : aéré, prix en pastille, icône feuille ─── */
-  if (layout === "organic") {
-    return (
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={dish.id}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="flex flex-col items-center text-center px-6"
-        >
-          <span className="inline-flex items-center gap-1.5 text-[11px] tracking-wider uppercase text-accent mb-1.5">
-            <Leaf className="w-3 h-3" />
-            {t(dish.category)}
-          </span>
-          <div className="flex items-center gap-2 mb-1.5">
-            <h1 className="text-2xl sm:text-3xl font-normal text-foreground" style={{ fontFamily: "var(--font-serif)" }}>
-              {t(dish.name)}
-            </h1>
-            <FavBtn active={isFavorite} onClick={onToggleFavorite} />
-          </div>
-          <ExpandableDescription lines={2} className="text-sm text-foreground/70 italic leading-relaxed max-w-[320px] mb-2.5" style={{ fontFamily: "var(--font-body)" }}>
-            {t(dish.ingredients)}
-          </ExpandableDescription>
-          <div className="flex items-center gap-2">
-            <span
-              className="inline-flex items-center justify-center px-4 py-1 rounded-full text-sm font-semibold tabular-nums"
-              style={{ background: "hsl(var(--accent) / 0.15)", color: "hsl(var(--accent))" }}
-            >
-              {dish.price.toFixed(2)} €
-            </span>
-            <DishBadges dish={dish} compact />
-            {dish.prep_time && (
-              <span className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                <Clock className="w-3 h-3" /> ~{dish.prep_time}min
-              </span>
-            )}
           </div>
         </motion.div>
       </AnimatePresence>
