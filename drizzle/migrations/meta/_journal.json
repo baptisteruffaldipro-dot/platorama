@@ -36,6 +36,13 @@
       "when": 1789715882309,
       "tag": "0004_disclaimer_settings",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1789716640700,
+      "tag": "0005_members_can_update_own_restaurant",
+      "breakpoints": true
     }
   ]
 }
