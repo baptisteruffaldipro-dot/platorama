@@ -63,7 +63,9 @@ export function DisclaimerPopup({ restaurantId, text }: { restaurantId: string; 
     };
 
     const timer = setTimeout(() => {
+      console.log("[disclaimer-debug] timer fired, openRef:", openRef.current);
       if (!attempt() && !cancelled) {
+        console.log("[disclaimer-debug] queued, waiting for overlay free");
         unsubscribe = onOverlayFree(() => {
           attempt();
         });
