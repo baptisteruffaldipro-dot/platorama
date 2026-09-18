@@ -526,6 +526,12 @@ const Index = () => {
           </div>
         </>
       )}
+
+      {(isAmr || isSignature) && showDisclaimerFooter && (
+        <div className="shrink-0 relative z-10">
+          <DisclaimerFooter text={disclaimerText} className="!px-4 !pb-2 !pt-0" />
+        </div>
+      )}
     </div>
   );
 };
