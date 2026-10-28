@@ -192,6 +192,7 @@ const Index = () => {
     // Les webviews intégrées (Instagram, Facebook…) ne peuvent pas lancer
     // AR Quick Look / Scene Viewer : on invite à ouvrir dans Safari/Chrome.
     if (isInAppBrowser()) {
+      setBrowserHintReason("ar");
       setShowBrowserHint(true);
       supabase
         .from("dish_events")
@@ -261,7 +262,7 @@ const Index = () => {
   return (
     <div className="h-full flex flex-col relative overflow-hidden bg-background">
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
-      <OpenInBrowserDialog open={showBrowserHint} onOpenChange={setShowBrowserHint} />
+      <OpenInBrowserDialog open={showBrowserHint} onOpenChange={handleBrowserHintChange} reason={browserHintReason} />
       {restaurantId && restoFeatures && (
         <ReviewFlow restaurantId={restaurantId} features={restoFeatures} lang={lang} />
       )}
