@@ -23,6 +23,7 @@ import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS, isInAppBrowser } from "@/lib/platform";
 import { hasARModel } from "@/lib/dishHasAR";
 import OpenInBrowserDialog from "@/components/OpenInBrowserDialog";
+import { forceOpenOverlay, releaseOverlay } from "@/lib/popupQueue";
 import ReviewFlow from "@/components/ReviewFlow";
 import LoyaltyCard from "@/components/LoyaltyCard";
 import PromoPopup from "@/components/PromoPopup";
@@ -55,6 +56,25 @@ const Index = () => {
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
   const [showBrowserHint, setShowBrowserHint] = useState(false);
+  const [browserHintReason, setBrowserHintReason] = useState<"arrival" | "ar">("ar");
+
+  // Arrivée depuis Instagram/Facebook… : proposer tout de suite d'ouvrir
+  // dans le vrai navigateur (une fois par visite), avant les autres pop-ups.
+  useEffect(() => {
+    if (showSplash || !isInAppBrowser()) return;
+    try {
+      if (sessionStorage.getItem("inapp_prompt_shown")) return;
+      sessionStorage.setItem("inapp_prompt_shown", "1");
+    } catch { /* ignore */ }
+    forceOpenOverlay({ id: "inapp-browser", close: () => setShowBrowserHint(false) });
+    setBrowserHintReason("arrival");
+    setShowBrowserHint(true);
+  }, [showSplash]);
+
+  const handleBrowserHintChange = (open: boolean) => {
+    setShowBrowserHint(open);
+    if (!open) releaseOverlay("inapp-browser");
+  };
   const { data: allDishes, isLoading } = useDishes(restaurantId);
   // Filter out unavailable dishes for the public menu
   const availableDishes = allDishes?.filter(d => d.is_available);
@@ -172,6 +192,7 @@ const Index = () => {
     // Les webviews intégrées (Instagram, Facebook…) ne peuvent pas lancer
     // AR Quick Look / Scene Viewer : on invite à ouvrir dans Safari/Chrome.
     if (isInAppBrowser()) {
+      setBrowserHintReason("ar");
       setShowBrowserHint(true);
       supabase
         .from("dish_events")
@@ -241,7 +262,7 @@ const Index = () => {
   return (
     <div className="h-full flex flex-col relative overflow-hidden bg-background">
       {showSplash && <SplashScreen restaurantId={restaurantId} onDone={() => setShowSplash(false)} />}
-      <OpenInBrowserDialog open={showBrowserHint} onOpenChange={setShowBrowserHint} />
+      <OpenInBrowserDialog open={showBrowserHint} onOpenChange={handleBrowserHintChange} reason={browserHintReason} />
       {restaurantId && restoFeatures && (
         <ReviewFlow restaurantId={restaurantId} features={restoFeatures} lang={lang} />
       )}
