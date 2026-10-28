@@ -23,6 +23,7 @@ import { getLayoutVariant } from "@/lib/menuTemplates";
 import { isIOS, isInAppBrowser } from "@/lib/platform";
 import { hasARModel } from "@/lib/dishHasAR";
 import OpenInBrowserDialog from "@/components/OpenInBrowserDialog";
+import { forceOpenOverlay, releaseOverlay } from "@/lib/popupQueue";
 import ReviewFlow from "@/components/ReviewFlow";
 import LoyaltyCard from "@/components/LoyaltyCard";
 import PromoPopup from "@/components/PromoPopup";
