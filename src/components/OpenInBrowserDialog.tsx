@@ -12,13 +12,14 @@ import { inAppBrowserName, isIOS, openInSystemBrowser } from "@/lib/platform";
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  reason?: "arrival" | "ar";
 }
 
 /**
  * Affiché quand la page est ouverte dans un navigateur intégré (Instagram,
  * Facebook…) : ces webviews ne peuvent pas lancer la réalité augmentée.
  */
-export default function OpenInBrowserDialog({ open, onOpenChange }: Props) {
+export default function OpenInBrowserDialog({ open, onOpenChange, reason = "ar" }: Props) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const appName = inAppBrowserName();
@@ -53,8 +54,10 @@ export default function OpenInBrowserDialog({ open, onOpenChange }: Props) {
         </DialogHeader>
 
         <p className="text-sm text-muted-foreground text-center leading-relaxed">
-          {t("La réalité augmentée ne fonctionne pas dans le navigateur intégré de")}{" "}
-          {appName}. {t("Ouvrez le menu dans Safari ou Chrome pour voir le plat sur votre table.")}
+          {reason === "arrival"
+            ? t("Pour profiter de la réalité augmentée, ouvrez le menu dans Safari ou Chrome.")
+            : <>{t("La réalité augmentée ne fonctionne pas dans le navigateur intégré de")}{" "}
+              {appName}. {t("Ouvrez le menu dans Safari ou Chrome pour voir le plat sur votre table.")}</>}
         </p>
 
         <button

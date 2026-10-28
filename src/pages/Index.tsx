@@ -55,6 +55,25 @@ const Index = () => {
   const [activeIndex, setActiveIndex] = useState(2);
   const [showSplash, setShowSplash] = useState(true);
   const [showBrowserHint, setShowBrowserHint] = useState(false);
+  const [browserHintReason, setBrowserHintReason] = useState<"arrival" | "ar">("ar");
+
+  // Arrivée depuis Instagram/Facebook… : proposer tout de suite d'ouvrir
+  // dans le vrai navigateur (une fois par visite), avant les autres pop-ups.
+  useEffect(() => {
+    if (showSplash || !isInAppBrowser()) return;
+    try {
+      if (sessionStorage.getItem("inapp_prompt_shown")) return;
+      sessionStorage.setItem("inapp_prompt_shown", "1");
+    } catch { /* ignore */ }
+    forceOpenOverlay({ id: "inapp-browser", close: () => setShowBrowserHint(false) });
+    setBrowserHintReason("arrival");
+    setShowBrowserHint(true);
+  }, [showSplash]);
+
+  const handleBrowserHintChange = (open: boolean) => {
+    setShowBrowserHint(open);
+    if (!open) releaseOverlay("inapp-browser");
+  };
   const { data: allDishes, isLoading } = useDishes(restaurantId);
   // Filter out unavailable dishes for the public menu
   const availableDishes = allDishes?.filter(d => d.is_available);
